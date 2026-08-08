@@ -1,0 +1,50 @@
+{
+    "users": [
+        {
+            "username": "classA",
+            "arn": "arn:aws:iam::535659317649:user/classA",
+            "created": "2026-07-24 04:42:26+00:00",
+            "attached_policies": [
+                "AmazonEC2FullAccess",
+                "AdministratorAccess",
+                "IAMUserChangePassword"
+            ],
+            "inline_policies": []
+        }
+    ],
+    "roles": [
+        {
+            "name": "AWSServiceRoleForAmazonElasticFileSystem",
+            "arn": "arn:aws:iam::535659317649:role/aws-service-role/elasticfilesystem.amazonaws.com/AWSServiceRoleForAmazonElasticFileSystem",
+            "created": "2026-07-31 04:46:38+00:00"
+        },
+        {
+            "name": "AWSServiceRoleForBackup",
+            "arn": "arn:aws:iam::535659317649:role/aws-service-role/backup.amazonaws.com/AWSServiceRoleForBackup",
+            "created": "2026-07-31 04:47:15+00:00"
+        },
+        {
+            "name": "AWSServiceRoleForResourceExplorer",
+            "arn": "arn:aws:iam::535659317649:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer",
+            "created": "2026-07-13 09:29:55+00:00"
+        },
+        {
+            "name": "AWSServiceRoleForSupport",
+            "arn": "arn:aws:iam::535659317649:role/aws-service-role/support.amazonaws.com/AWSServiceRoleForSupport",
+            "created": "2026-07-13 09:00:06+00:00"
+        },
+        {
+            "name": "AWSServiceRoleForTrustedAdvisor",
+            "arn": "arn:aws:iam::535659317649:role/aws-service-role/trustedadvisor.amazonaws.com/AWSServiceRoleForTrustedAdvisor",
+            "created": "2026-07-13 09:00:06+00:00"
+        }
+    ],
+    "groups": [
+        {
+            "name": "classa",
+            "arn": "arn:aws:iam::535659317649:group/classa",
+            "created": "2026-07-24 04:46:18+00:00"
+        }
+    ],
+    "managed_policies": []
+}

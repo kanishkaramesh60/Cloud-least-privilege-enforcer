@@ -1,0 +1,65 @@
+{
+    "scoring_model": {
+        "permission_max": 50,
+        "usage_max": 20,
+        "orphan_max": 20,
+        "temporal_max": 10,
+        "total_max": 100
+    },
+    "users": [
+        {
+            "username": "Unknown",
+            "risk_score": {
+                "permission": 0,
+                "usage": 20,
+                "orphan": 0,
+                "temporal": 10,
+                "total": 30
+            },
+            "risk_level": {
+                "permission": "Low",
+                "usage": "High",
+                "orphan": "Low",
+                "temporal": "High",
+                "overall": "Medium"
+            },
+            "policies": []
+        },
+        {
+            "username": "classA",
+            "risk_score": {
+                "permission": 0,
+                "usage": 20,
+                "orphan": 0,
+                "temporal": 10,
+                "total": 30
+            },
+            "risk_level": {
+                "permission": "Low",
+                "usage": "High",
+                "orphan": "Low",
+                "temporal": "High",
+                "overall": "Medium"
+            },
+            "policies": []
+        },
+        {
+            "username": "resource-explorer-2",
+            "risk_score": {
+                "permission": 0,
+                "usage": 20,
+                "orphan": 0,
+                "temporal": 10,
+                "total": 30
+            },
+            "risk_level": {
+                "permission": "Low",
+                "usage": "High",
+                "orphan": "Low",
+                "temporal": "High",
+                "overall": "Medium"
+            },
+            "policies": []
+        }
+    ]
+}

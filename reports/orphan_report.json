@@ -1,0 +1,14 @@
+[
+    {
+        "username": "classA",
+        "status": "Active",
+        "last_activity": "2026-08-07 21:21:30+05:30",
+        "inactive_days": 0,
+        "attached_policies": [
+            "AmazonEC2FullAccess",
+            "AdministratorAccess",
+            "IAMUserChangePassword"
+        ],
+        "risk": "High"
+    }
+]

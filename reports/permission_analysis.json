@@ -1,0 +1,56 @@
+{
+    "module": "Least-Privilege Permission Analysis",
+    "description": "Compares assigned IAM policies with observed CloudTrail usage.",
+    "users": [
+        {
+            "username": "classA",
+            "assigned_policies": [],
+            "observed_api_calls": 0,
+            "observed_services": [
+                "CLOUDTRAIL"
+            ],
+            "analysis": {
+                "broad_policies": [],
+                "potentially_excessive_policies": [],
+                "used_services": [
+                    "CLOUDTRAIL"
+                ],
+                "unused_services": [],
+                "least_privilege_status": "No Policies"
+            }
+        },
+        {
+            "username": "resource-explorer-2",
+            "assigned_policies": [],
+            "observed_api_calls": 0,
+            "observed_services": [
+                "AIRFLOW",
+                "AUTOSCALING",
+                "CLOUDTRAIL",
+                "CODEARTIFACT",
+                "EKS",
+                "EMR-CONTAINERS",
+                "GLUE",
+                "MEDIACONNECT",
+                "MEDIATAILOR"
+            ],
+            "analysis": {
+                "broad_policies": [],
+                "potentially_excessive_policies": [],
+                "used_services": [
+                    "AIRFLOW",
+                    "AUTOSCALING",
+                    "CLOUDTRAIL",
+                    "CODEARTIFACT",
+                    "EKS",
+                    "EMR-CONTAINERS",
+                    "GLUE",
+                    "MEDIACONNECT",
+                    "MEDIATAILOR"
+                ],
+                "unused_services": [],
+                "least_privilege_status": "No Policies"
+            }
+        }
+    ]
+}
