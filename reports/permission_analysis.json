@@ -1,28 +1,41 @@
 {
     "module": "Least-Privilege Permission Analysis",
-    "description": "Compares assigned IAM policies with observed CloudTrail usage.",
+    "description": "Compares assigned IAM policies with observed CloudTrail usage and extracts observed IAM actions.",
     "users": [
         {
             "username": "classA",
-            "assigned_policies": [],
-            "observed_api_calls": 0,
+            "assigned_policies": [
+                "AmazonEC2FullAccess",
+                "AdministratorAccess",
+                "IAMUserChangePassword"
+            ],
+            "observed_api_calls": 2,
             "observed_services": [
                 "CLOUDTRAIL"
             ],
+            "observed_iam_actions": [
+                "cloudtrail:LookupEvents"
+            ],
             "analysis": {
-                "broad_policies": [],
-                "potentially_excessive_policies": [],
+                "broad_policies": [
+                    "AmazonEC2FullAccess",
+                    "AdministratorAccess"
+                ],
+                "potentially_excessive_policies": [
+                    "AmazonEC2FullAccess",
+                    "AdministratorAccess"
+                ],
                 "used_services": [
                     "CLOUDTRAIL"
                 ],
                 "unused_services": [],
-                "least_privilege_status": "No Policies"
+                "least_privilege_status": "Potentially Over-Privileged"
             }
         },
         {
             "username": "resource-explorer-2",
             "assigned_policies": [],
-            "observed_api_calls": 0,
+            "observed_api_calls": 10,
             "observed_services": [
                 "AIRFLOW",
                 "AUTOSCALING",
@@ -33,6 +46,18 @@
                 "GLUE",
                 "MEDIACONNECT",
                 "MEDIATAILOR"
+            ],
+            "observed_iam_actions": [
+                "airflow:ListEnvironments",
+                "autoscaling:DescribeAutoScalingGroups",
+                "cloudtrail:DescribeTrails",
+                "codeartifact:ListRepositories",
+                "eks:ListEksAnywhereSubscriptions",
+                "emr-containers:ListSecurityConfigurations",
+                "glue:GetDatabases",
+                "mediaconnect:ListFlows",
+                "mediatailor:ListChannels",
+                "mediatailor:ListSourceLocations"
             ],
             "analysis": {
                 "broad_policies": [],

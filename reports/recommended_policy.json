@@ -1,0 +1,79 @@
+{
+    "module": "Policy Recommendation Engine",
+    "description": "Generates a least-privilege policy based on observed IAM actions.",
+    "recommendations": [
+        {
+            "username": "classA",
+            "current_broad_policies": [],
+            "observed_actions": [
+                "cloudtrail:LookupEvents"
+            ],
+            "recommended_actions": [
+                "cloudtrail:LookupEvents"
+            ],
+            "recommended_policy": {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Effect": "Allow",
+                        "Action": [
+                            "cloudtrail:LookupEvents"
+                        ],
+                        "Resource": "*"
+                    }
+                ]
+            },
+            "status": "Least-privilege policy generated"
+        },
+        {
+            "username": "resource-explorer-2",
+            "current_broad_policies": [],
+            "observed_actions": [
+                "airflow:ListEnvironments",
+                "autoscaling:DescribeAutoScalingGroups",
+                "cloudtrail:DescribeTrails",
+                "codeartifact:ListRepositories",
+                "eks:ListEksAnywhereSubscriptions",
+                "emr-containers:ListSecurityConfigurations",
+                "glue:GetDatabases",
+                "mediaconnect:ListFlows",
+                "mediatailor:ListChannels",
+                "mediatailor:ListSourceLocations"
+            ],
+            "recommended_actions": [
+                "airflow:ListEnvironments",
+                "autoscaling:DescribeAutoScalingGroups",
+                "cloudtrail:DescribeTrails",
+                "codeartifact:ListRepositories",
+                "eks:ListEksAnywhereSubscriptions",
+                "emr-containers:ListSecurityConfigurations",
+                "glue:GetDatabases",
+                "mediaconnect:ListFlows",
+                "mediatailor:ListChannels",
+                "mediatailor:ListSourceLocations"
+            ],
+            "recommended_policy": {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Effect": "Allow",
+                        "Action": [
+                            "airflow:ListEnvironments",
+                            "autoscaling:DescribeAutoScalingGroups",
+                            "cloudtrail:DescribeTrails",
+                            "codeartifact:ListRepositories",
+                            "eks:ListEksAnywhereSubscriptions",
+                            "emr-containers:ListSecurityConfigurations",
+                            "glue:GetDatabases",
+                            "mediaconnect:ListFlows",
+                            "mediatailor:ListChannels",
+                            "mediatailor:ListSourceLocations"
+                        ],
+                        "Resource": "*"
+                    }
+                ]
+            },
+            "status": "Least-privilege policy generated"
+        }
+    ]
+}
