@@ -1,35 +1,29 @@
 [
     {
-        "username": null,
-        "total_api_calls": 38,
+        "username": "resource-explorer-2",
+        "total_api_calls": 25,
         "services_used": [
-            "S3",
+            "CLOUDCONTROLAPI",
+            "DETECTIVE",
+            "EC2",
+            "ELASTICACHE",
+            "EMR-CONTAINERS",
+            "EVENTS",
+            "GLUE",
+            "KMS",
+            "RDS",
+            "SAGEMAKER",
+            "VERIFIEDPERMISSIONS"
+        ],
+        "last_activity": "2026-08-20 21:38:48+05:30"
+    },
+    {
+        "username": null,
+        "total_api_calls": 25,
+        "services_used": [
+            "BACKUP",
             "STS"
         ],
-        "last_activity": "2026-08-08 07:36:46+05:30"
-    },
-    {
-        "username": "resource-explorer-2",
-        "total_api_calls": 10,
-        "services_used": [
-            "AIRFLOW",
-            "AUTOSCALING",
-            "CLOUDTRAIL",
-            "CODEARTIFACT",
-            "EKS",
-            "EMR-CONTAINERS",
-            "GLUE",
-            "MEDIACONNECT",
-            "MEDIATAILOR"
-        ],
-        "last_activity": "2026-08-08 05:38:51+05:30"
-    },
-    {
-        "username": "classA",
-        "total_api_calls": 2,
-        "services_used": [
-            "CLOUDTRAIL"
-        ],
-        "last_activity": "2026-08-07 21:21:30+05:30"
+        "last_activity": "2026-08-20 21:38:48+05:30"
     }
 ]

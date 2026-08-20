@@ -2,6 +2,21 @@ import boto3
 import json
 import os
 
+session = boto3.Session(
+    profile_name="leastprivilege",
+    region_name="ap-south-1"
+)
+
+sts = session.client("sts")
+
+identity = sts.get_caller_identity()
+
+print("======================================")
+print("AWS ACCOUNT CONNECTED")
+print("Account ID:", identity["Account"])
+print("ARN:", identity["Arn"])
+print("======================================")
+
 iam = boto3.client("iam")
 data = {
     "users": [],

@@ -13,14 +13,14 @@
                 "permission": 0,
                 "usage": 20,
                 "orphan": 0,
-                "temporal": 10,
-                "total": 30
+                "temporal": 5,
+                "total": 25
             },
             "risk_level": {
                 "permission": "Low",
                 "usage": "High",
                 "orphan": "Low",
-                "temporal": "High",
+                "temporal": "Medium",
                 "overall": "Medium"
             },
             "policies": []
@@ -30,15 +30,15 @@
             "risk_score": {
                 "permission": 0,
                 "usage": 20,
-                "orphan": 0,
-                "temporal": 10,
-                "total": 30
+                "orphan": 5,
+                "temporal": 0,
+                "total": 25
             },
             "risk_level": {
                 "permission": "Low",
                 "usage": "High",
-                "orphan": "Low",
-                "temporal": "High",
+                "orphan": "Medium",
+                "temporal": "Low",
                 "overall": "Medium"
             },
             "policies": []
@@ -49,14 +49,14 @@
                 "permission": 0,
                 "usage": 20,
                 "orphan": 0,
-                "temporal": 10,
-                "total": 30
+                "temporal": 5,
+                "total": 25
             },
             "risk_level": {
                 "permission": "Low",
                 "usage": "High",
                 "orphan": "Low",
-                "temporal": "High",
+                "temporal": "Medium",
                 "overall": "Medium"
             },
             "policies": []

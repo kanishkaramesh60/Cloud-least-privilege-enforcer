@@ -1,9 +1,9 @@
 [
     {
         "username": "classA",
-        "status": "Active",
-        "last_activity": "2026-08-07 21:21:30+05:30",
-        "inactive_days": 0,
+        "status": "Orphan",
+        "last_activity": "Never",
+        "inactive_days": 999,
         "attached_policies": [
             "AmazonEC2FullAccess",
             "AdministratorAccess",

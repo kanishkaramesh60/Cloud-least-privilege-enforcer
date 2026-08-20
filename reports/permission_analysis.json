@@ -9,13 +9,9 @@
                 "AdministratorAccess",
                 "IAMUserChangePassword"
             ],
-            "observed_api_calls": 2,
-            "observed_services": [
-                "CLOUDTRAIL"
-            ],
-            "observed_iam_actions": [
-                "cloudtrail:LookupEvents"
-            ],
+            "observed_api_calls": 0,
+            "observed_services": [],
+            "observed_iam_actions": [],
             "analysis": {
                 "broad_policies": [
                     "AmazonEC2FullAccess",
@@ -25,53 +21,61 @@
                     "AmazonEC2FullAccess",
                     "AdministratorAccess"
                 ],
-                "used_services": [
-                    "CLOUDTRAIL"
-                ],
+                "used_services": [],
                 "unused_services": [],
-                "least_privilege_status": "Potentially Over-Privileged"
+                "least_privilege_status": "No Observed Usage"
             }
         },
         {
             "username": "resource-explorer-2",
             "assigned_policies": [],
-            "observed_api_calls": 10,
+            "observed_api_calls": 25,
             "observed_services": [
-                "AIRFLOW",
-                "AUTOSCALING",
-                "CLOUDTRAIL",
-                "CODEARTIFACT",
-                "EKS",
+                "CLOUDCONTROLAPI",
+                "DETECTIVE",
+                "EC2",
+                "ELASTICACHE",
                 "EMR-CONTAINERS",
+                "EVENTS",
                 "GLUE",
-                "MEDIACONNECT",
-                "MEDIATAILOR"
+                "KMS",
+                "RDS",
+                "SAGEMAKER",
+                "VERIFIEDPERMISSIONS"
             ],
             "observed_iam_actions": [
-                "airflow:ListEnvironments",
-                "autoscaling:DescribeAutoScalingGroups",
-                "cloudtrail:DescribeTrails",
-                "codeartifact:ListRepositories",
-                "eks:ListEksAnywhereSubscriptions",
+                "cloudcontrolapi:ListResources",
+                "detective:ListGraphs",
+                "ec2:DescribeInstances",
+                "ec2:DescribeKeyPairs",
+                "ec2:DescribeSecurityGroupRules",
+                "elasticache:DescribeUsers",
                 "emr-containers:ListSecurityConfigurations",
+                "emr-containers:ListVirtualClusters",
+                "events:ListEventBuses",
+                "events:ListRules",
                 "glue:GetDatabases",
-                "mediaconnect:ListFlows",
-                "mediatailor:ListChannels",
-                "mediatailor:ListSourceLocations"
+                "kms:ListKeys",
+                "rds:DescribeDBProxies",
+                "sagemaker:ListArtifacts",
+                "sagemaker:ListClusters",
+                "verifiedpermissions:ListPolicyStores"
             ],
             "analysis": {
                 "broad_policies": [],
                 "potentially_excessive_policies": [],
                 "used_services": [
-                    "AIRFLOW",
-                    "AUTOSCALING",
-                    "CLOUDTRAIL",
-                    "CODEARTIFACT",
-                    "EKS",
+                    "CLOUDCONTROLAPI",
+                    "DETECTIVE",
+                    "EC2",
+                    "ELASTICACHE",
                     "EMR-CONTAINERS",
+                    "EVENTS",
                     "GLUE",
-                    "MEDIACONNECT",
-                    "MEDIATAILOR"
+                    "KMS",
+                    "RDS",
+                    "SAGEMAKER",
+                    "VERIFIEDPERMISSIONS"
                 ],
                 "unused_services": [],
                 "least_privilege_status": "No Policies"
