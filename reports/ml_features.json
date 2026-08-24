@@ -1,16 +1,9 @@
 {
-    "module": "XGBoost ML Risk Scoring",
-    "description": "Predicts IAM risk using features generated from IAM policies, CloudTrail usage, permission analysis, orphan detection and temporal analysis.",
+    "module": "ML Feature Engineering",
+    "description": "Features generated from IAM, CloudTrail, permission, orphan and temporal analysis.",
     "users": [
         {
             "username": "classA",
-            "risk_score": 95.27,
-            "risk_level": "HIGH",
-            "probabilities": {
-                "LOW": 0.0245,
-                "MEDIUM": 0.0456,
-                "HIGH": 0.9299
-            },
             "features": {
                 "policy_count": 3,
                 "broad_policy_count": 2,
@@ -26,13 +19,6 @@
         },
         {
             "username": "resource-explorer-2",
-            "risk_score": 5.46,
-            "risk_level": "LOW",
-            "probabilities": {
-                "LOW": 0.9225,
-                "MEDIUM": 0.0459,
-                "HIGH": 0.0316
-            },
             "features": {
                 "policy_count": 0,
                 "broad_policy_count": 0,
