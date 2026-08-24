@@ -1,56 +1,66 @@
 {
-    "module": "Policy Recommendation Engine",
-    "description": "Generates a least-privilege policy based on observed IAM actions.",
-    "recommendations": [
+    "module": "ML-Based Least-Privilege Policy Recommendation",
+    "description": "Generates IAM policies using observed CloudTrail actions and ML-based IAM risk scores.",
+    "users": [
         {
             "username": "classA",
-            "current_broad_policies": [],
-            "observed_actions": [
-                "cloudtrail:LookupEvents"
+            "risk_score": 95.27,
+            "risk_level": "HIGH",
+            "current_policies": [
+                "AmazonEC2FullAccess",
+                "AdministratorAccess",
+                "IAMUserChangePassword"
             ],
-            "recommended_actions": [
-                "cloudtrail:LookupEvents"
+            "current_broad_policies": [
+                "AmazonEC2FullAccess",
+                "AdministratorAccess"
             ],
-            "recommended_policy": {
-                "Version": "2012-10-17",
-                "Statement": [
-                    {
-                        "Effect": "Allow",
-                        "Action": [
-                            "cloudtrail:LookupEvents"
-                        ],
-                        "Resource": "*"
-                    }
-                ]
-            },
-            "status": "Least-privilege policy generated"
+            "observed_actions": [],
+            "recommended_actions": [],
+            "recommended_policy": null,
+            "status": "Manual review required - no observed actions"
         },
         {
             "username": "resource-explorer-2",
+            "risk_score": 5.46,
+            "risk_level": "LOW",
+            "current_policies": [],
             "current_broad_policies": [],
             "observed_actions": [
-                "airflow:ListEnvironments",
-                "autoscaling:DescribeAutoScalingGroups",
-                "cloudtrail:DescribeTrails",
-                "codeartifact:ListRepositories",
-                "eks:ListEksAnywhereSubscriptions",
+                "cloudcontrolapi:ListResources",
+                "detective:ListGraphs",
+                "ec2:DescribeInstances",
+                "ec2:DescribeKeyPairs",
+                "ec2:DescribeSecurityGroupRules",
+                "elasticache:DescribeUsers",
                 "emr-containers:ListSecurityConfigurations",
+                "emr-containers:ListVirtualClusters",
+                "events:ListEventBuses",
+                "events:ListRules",
                 "glue:GetDatabases",
-                "mediaconnect:ListFlows",
-                "mediatailor:ListChannels",
-                "mediatailor:ListSourceLocations"
+                "kms:ListKeys",
+                "rds:DescribeDBProxies",
+                "sagemaker:ListArtifacts",
+                "sagemaker:ListClusters",
+                "verifiedpermissions:ListPolicyStores"
             ],
             "recommended_actions": [
-                "airflow:ListEnvironments",
-                "autoscaling:DescribeAutoScalingGroups",
-                "cloudtrail:DescribeTrails",
-                "codeartifact:ListRepositories",
-                "eks:ListEksAnywhereSubscriptions",
+                "cloudcontrolapi:ListResources",
+                "detective:ListGraphs",
+                "ec2:DescribeInstances",
+                "ec2:DescribeKeyPairs",
+                "ec2:DescribeSecurityGroupRules",
+                "elasticache:DescribeUsers",
                 "emr-containers:ListSecurityConfigurations",
+                "emr-containers:ListVirtualClusters",
+                "events:ListEventBuses",
+                "events:ListRules",
                 "glue:GetDatabases",
-                "mediaconnect:ListFlows",
-                "mediatailor:ListChannels",
-                "mediatailor:ListSourceLocations"
+                "kms:ListKeys",
+                "rds:DescribeDBProxies",
+                "sagemaker:ListArtifacts",
+                "sagemaker:ListClusters",
+                "verifiedpermissions:ListPolicyStores"
             ],
             "recommended_policy": {
                 "Version": "2012-10-17",
@@ -58,16 +68,22 @@
                     {
                         "Effect": "Allow",
                         "Action": [
-                            "airflow:ListEnvironments",
-                            "autoscaling:DescribeAutoScalingGroups",
-                            "cloudtrail:DescribeTrails",
-                            "codeartifact:ListRepositories",
-                            "eks:ListEksAnywhereSubscriptions",
+                            "cloudcontrolapi:ListResources",
+                            "detective:ListGraphs",
+                            "ec2:DescribeInstances",
+                            "ec2:DescribeKeyPairs",
+                            "ec2:DescribeSecurityGroupRules",
+                            "elasticache:DescribeUsers",
                             "emr-containers:ListSecurityConfigurations",
+                            "emr-containers:ListVirtualClusters",
+                            "events:ListEventBuses",
+                            "events:ListRules",
                             "glue:GetDatabases",
-                            "mediaconnect:ListFlows",
-                            "mediatailor:ListChannels",
-                            "mediatailor:ListSourceLocations"
+                            "kms:ListKeys",
+                            "rds:DescribeDBProxies",
+                            "sagemaker:ListArtifacts",
+                            "sagemaker:ListClusters",
+                            "verifiedpermissions:ListPolicyStores"
                         ],
                         "Resource": "*"
                     }

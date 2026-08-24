@@ -1,0 +1,28 @@
+{
+    "module": "CloudTrail IAM Action Extraction",
+    "description": "Converts CloudTrail eventName and eventSource values into IAM-style API actions.",
+    "users": [
+        {
+            "username": "resource-explorer-2",
+            "observed_actions": [
+                "cloudcontrolapi:ListResources",
+                "detective:ListGraphs",
+                "ec2:DescribeInstances",
+                "ec2:DescribeKeyPairs",
+                "ec2:DescribeSecurityGroupRules",
+                "elasticache:DescribeUsers",
+                "emr-containers:ListSecurityConfigurations",
+                "emr-containers:ListVirtualClusters",
+                "events:ListEventBuses",
+                "events:ListRules",
+                "glue:GetDatabases",
+                "kms:ListKeys",
+                "rds:DescribeDBProxies",
+                "sagemaker:ListArtifacts",
+                "sagemaker:ListClusters",
+                "verifiedpermissions:ListPolicyStores"
+            ],
+            "action_count": 16
+        }
+    ]
+}
