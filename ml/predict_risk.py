@@ -1,122 +1,174 @@
 import json
 from pathlib import Path
 import joblib
-import numpy as np
-MODEL_FILE = Path("ml/model/risk_model.pkl")
-FEATURE_FILE = Path("reports/ml_features.json")
-OUTPUT_FILE = Path("reports/risk_report.json")
-FEATURE_NAMES = [
-    "policy_count",
-    "broad_policy_count",
-    "has_admin_access",
-    "has_full_access",
-    "api_call_count",
-    "service_count",
-    "inactive_days",
-    "odd_hour_activity",
-    "rare_activity",
-    "unused_service_count"
-]
-LABELS = {
-    0: "LOW",
-    1: "MEDIUM",
-    2: "HIGH"
-}
+import pandas as pd
+MODEL_FILE = Path("ml/xgboost_risk_model.pkl")
+PREPROCESSOR_FILE = Path("ml/risk_preprocessor.pkl")
+RISK_FILE = Path("reports/risk_report.json")
+IDENTITY_FILE = Path("reports/identity_report.json")
+OUTPUT_FILE = Path("reports/ml_risk_predictions.json")
+def load_json(path):
+    if not path.exists():
+        print(f"ERROR: {path} not found.")
+        return None
+    try:
+        with open(path, "r", encoding="utf-8") as file:
+            return json.load(file)
+    except json.JSONDecodeError:
+        print(f"ERROR: Invalid JSON: {path}")
+        return None
+def get_identity_type(identity_report, username):
+    if not identity_report:
+        return "Unknown"
+    identities = identity_report.get("identities", [])
+    for identity in identities:
+        if not isinstance(identity, dict):
+            continue
+        name = (
+            identity.get("identity")
+            or identity.get("username")
+            or identity.get("name")
+        )
+        if name == username:
+            return (
+                identity.get("type")
+                or identity.get("identity_type")
+                or "Unknown"
+            )
+    return "Unknown"
 def main():
     print("=" * 60)
-    print("          ML RISK PREDICTION")
+    print("          XGBOOST RISK PREDICTION")
     print("=" * 60)
     if not MODEL_FILE.exists():
-        print("ERROR: XGBoost model not found:")
-        print(MODEL_FILE)
+        print(
+            f"ERROR: Model not found: {MODEL_FILE}"
+        )
+        print(
+            "Run: python ml\\train_model.py"
+        )
         return
-    if not FEATURE_FILE.exists():
-        print("ERROR: ML feature file not found:")
-        print(FEATURE_FILE)
+    if not PREPROCESSOR_FILE.exists():
+        print(
+            f"ERROR: Preprocessor not found: "
+            f"{PREPROCESSOR_FILE}"
+        )
         return
     model = joblib.load(MODEL_FILE)
-    with open(
-        FEATURE_FILE,
-        "r",
-        encoding="utf-8"
-    ) as file:
-        data = json.load(file)
-    users = data.get("users", [])
-    if not users:
-        print("ERROR: No users found in ml_features.json")
+    preprocessor = joblib.load(
+        PREPROCESSOR_FILE
+    )
+    risk_data = load_json(RISK_FILE)
+    identity_data = load_json(IDENTITY_FILE)
+    if risk_data is None:
         return
-    results = []
+    if isinstance(risk_data, dict):
+        users = (
+            risk_data.get("users")
+            or risk_data.get("results")
+            or []
+        )
+    elif isinstance(risk_data, list):
+        users = risk_data
+    else:
+        users = []
+    predictions = []
     for user in users:
-        username = user.get("username")
-        features = user.get("features", {})
-        values = []
-        for feature in FEATURE_NAMES:
-            value = features.get(feature, 0)
-            try:
-                value = float(value)
-            except (ValueError, TypeError):
-                value = 0
-            values.append(value)
-        X = np.array([values])
-        probabilities = model.predict_proba(X)[0]
-        predicted_class = int(
-            model.predict(X)[0]
+        if not isinstance(user, dict):
+            continue
+        username = (
+            user.get("username")
+            or user.get("user")
+            or user.get("identity")
+            or "Unknown"
         )
-        risk_level = LABELS.get(
-            predicted_class,
-            "UNKNOWN"
+        permission_risk = float(
+            user.get("permission_risk", 0)
         )
-        low_probability = float(probabilities[0])
-        medium_probability = float(probabilities[1])
-        high_probability = float(probabilities[2])
-        risk_score = round(
-            (
-                low_probability * 0
-                + medium_probability * 50
-                + high_probability * 100
-            ),
-            2
+        usage_risk = float(
+            user.get("usage_risk", 0)
         )
+        orphan_risk = float(
+            user.get("orphan_risk", 0)
+        )
+        temporal_risk = float(
+            user.get("temporal_risk", 0)
+        )
+        identity_type = get_identity_type(
+            identity_data,
+            username
+        )
+        features = {
+            "permission_risk":
+                permission_risk,
+            "usage_risk":
+                usage_risk,
+            "orphan_risk":
+                orphan_risk,
+            "temporal_risk":
+                temporal_risk,
+            "admin_access": 0,
+            "full_access_policies": 0,
+            "policy_count": 0,
+            "unused_permissions_pct": 0,
+            "api_calls_7d": 0,
+            "services_used": 0,
+            "inactive_days": 0,
+            "unusual_hour_access": 0,
+            "new_source_ip": 0,
+            "failed_auth_attempts": 0,
+            "sensitive_actions": 0,
+            "cross_service_access": 0,
+            "identity_type": identity_type
+        }
+        X = pd.DataFrame([features])
+        X_processed = preprocessor.transform(X)
+        predicted_score = model.predict(
+            X_processed
+        )[0]
+        predicted_score = max(
+            0,
+            min(100, float(predicted_score))
+        )
+        if predicted_score >= 70:
+            risk_level = "High"
+        elif predicted_score >= 40:
+            risk_level = "Medium"
+        else:
+            risk_level = "Low"
         result = {
             "username": username,
-            "risk_score": risk_score,
-            "risk_level": risk_level,
-            "probabilities": {
-                "LOW": round(low_probability, 4),
-                "MEDIUM": round(medium_probability, 4),
-                "HIGH": round(high_probability, 4)
-            },
-            "features": features
+            "identity_type": identity_type,
+            "ml_risk_score":
+                round(predicted_score, 2),
+            "risk_level":
+                risk_level
         }
-        results.append(result)
+        predictions.append(result)
         print()
-        print("User:", username)
-        print("Risk Score:", risk_score)
-        print("Risk Level:", risk_level)
+        print("Identity:", username)
+        print("Identity Type:", identity_type)
         print(
-            "LOW:",
-            round(low_probability * 100, 2),
-            "%"
+            "ML Risk Score:",
+            round(predicted_score, 2)
         )
         print(
-            "MEDIUM:",
-            round(medium_probability * 100, 2),
-            "%"
+            "Risk Level:",
+            risk_level
         )
-        print(
-            "HIGH:",
-            round(high_probability * 100, 2),
-            "%"
-        )
+    OUTPUT_FILE.parent.mkdir(
+        parents=True,
+        exist_ok=True
+    )
     report = {
-        "module": "XGBoost ML Risk Scoring",
-        "description": (
-            "Predicts IAM risk using features generated "
-            "from IAM policies, CloudTrail usage, "
-            "permission analysis, orphan detection "
-            "and temporal analysis."
-        ),
-        "users": results
+        "module":
+            "XGBoost ML Risk Prediction",
+        "model":
+            "XGBoost Regressor",
+        "description":
+            "Predicts IAM identity risk using the trained XGBoost model.",
+        "predictions":
+            predictions
     }
     with open(
         OUTPUT_FILE,
@@ -130,8 +182,11 @@ def main():
         )
     print()
     print("=" * 60)
-    print("ML Risk Prediction Completed")
-    print("Report saved to:", OUTPUT_FILE)
+    print("ML RISK PREDICTION COMPLETED")
+    print(
+        "Report saved to:",
+        OUTPUT_FILE
+    )
     print("=" * 60)
 if __name__ == "__main__":
     main()

@@ -9,7 +9,7 @@
                 "AdministratorAccess",
                 "IAMUserChangePassword"
             ],
-            "observed_api_calls": 2,
+            "observed_api_calls": 3,
             "observed_services": [
                 "CLOUDTRAIL"
             ],
@@ -35,7 +35,7 @@
         {
             "username": "resource-explorer-2",
             "assigned_policies": [],
-            "observed_api_calls": 20,
+            "observed_api_calls": 19,
             "observed_services": [
                 "CLOUDCONTROLAPI",
                 "DATABREW",

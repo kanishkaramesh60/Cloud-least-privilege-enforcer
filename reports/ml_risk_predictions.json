@@ -1,0 +1,19 @@
+{
+    "module": "XGBoost ML Risk Prediction",
+    "model": "XGBoost Regressor",
+    "description": "Predicts IAM identity risk using the trained XGBoost model.",
+    "predictions": [
+        {
+            "username": "classA",
+            "identity_type": "IAM User",
+            "ml_risk_score": 44.76,
+            "risk_level": "Medium"
+        },
+        {
+            "username": "resource-explorer-2",
+            "identity_type": "AWS Service Identity",
+            "ml_risk_score": 33.16,
+            "risk_level": "Low"
+        }
+    ]
+}

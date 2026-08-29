@@ -2,6 +2,14 @@
     {
         "username": "classA",
         "event_name": "LookupEvents",
+        "event_time": "2026-08-29 09:18:59+05:30",
+        "event_source": "cloudtrail.amazonaws.com",
+        "aws_region": null,
+        "resources": []
+    },
+    {
+        "username": "classA",
+        "event_name": "LookupEvents",
         "event_time": "2026-08-29 09:10:07+05:30",
         "event_source": "cloudtrail.amazonaws.com",
         "aws_region": null,
@@ -936,13 +944,5 @@
                 "resource_name": "arn:aws:iam::535659317649:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
             }
         ]
-    },
-    {
-        "username": "resource-explorer-2",
-        "event_name": "ListResources",
-        "event_time": "2026-08-28 15:06:59+05:30",
-        "event_source": "cloudcontrolapi.amazonaws.com",
-        "aws_region": null,
-        "resources": []
     }
 ]
