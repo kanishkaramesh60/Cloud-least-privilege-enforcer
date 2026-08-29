@@ -2,6 +2,14 @@
     {
         "username": "classA",
         "event_name": "LookupEvents",
+        "event_time": "2026-08-29 09:10:07+05:30",
+        "event_source": "cloudtrail.amazonaws.com",
+        "aws_region": null,
+        "resources": []
+    },
+    {
+        "username": "classA",
+        "event_name": "LookupEvents",
         "event_time": "2026-08-29 09:05:55+05:30",
         "event_source": "cloudtrail.amazonaws.com",
         "aws_region": null,
@@ -934,14 +942,6 @@
         "event_name": "ListResources",
         "event_time": "2026-08-28 15:06:59+05:30",
         "event_source": "cloudcontrolapi.amazonaws.com",
-        "aws_region": null,
-        "resources": []
-    },
-    {
-        "username": "resource-explorer-2",
-        "event_name": "DescribeInsightRules",
-        "event_time": "2026-08-28 15:06:59+05:30",
-        "event_source": "monitoring.amazonaws.com",
         "aws_region": null,
         "resources": []
     }

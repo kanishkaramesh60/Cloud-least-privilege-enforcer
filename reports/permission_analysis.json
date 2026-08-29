@@ -9,9 +9,13 @@
                 "AdministratorAccess",
                 "IAMUserChangePassword"
             ],
-            "observed_api_calls": 0,
-            "observed_services": [],
-            "observed_iam_actions": [],
+            "observed_api_calls": 2,
+            "observed_services": [
+                "CLOUDTRAIL"
+            ],
+            "observed_iam_actions": [
+                "cloudtrail:LookupEvents"
+            ],
             "analysis": {
                 "broad_policies": [
                     "AmazonEC2FullAccess",
@@ -21,73 +25,71 @@
                     "AmazonEC2FullAccess",
                     "AdministratorAccess"
                 ],
-                "used_services": [],
+                "used_services": [
+                    "CLOUDTRAIL"
+                ],
                 "unused_services": [],
-                "least_privilege_status": "No Observed Usage"
+                "least_privilege_status": "Potentially Over-Privileged"
             }
         },
         {
             "username": "resource-explorer-2",
             "assigned_policies": [],
-            "observed_api_calls": 25,
+            "observed_api_calls": 20,
             "observed_services": [
-                "APPCONFIG",
                 "CLOUDCONTROLAPI",
-                "COGNITO-IDP",
+                "DATABREW",
+                "EC2",
                 "EKS",
                 "EMR-CONTAINERS",
+                "FORECAST",
                 "GLUE",
+                "GREENGRASS",
                 "IOT",
-                "IVSCHAT",
-                "KAFKA",
-                "LAMBDA",
+                "IOTSITEWISE",
+                "MEDIAPACKAGE",
+                "QUICKSIGHT",
                 "RDS",
-                "SAGEMAKER",
-                "SNS",
                 "SSM",
-                "TRANSFER",
                 "VPC-LATTICE"
             ],
             "observed_iam_actions": [
-                "appconfig:ListDeploymentStrategies",
                 "cloudcontrolapi:ListResources",
-                "cognito-idp:ListUserPools",
+                "databrew:ListJobs",
+                "ec2:DescribeNetworkInterfaces",
                 "eks:ListEksAnywhereSubscriptions",
                 "emr-containers:ListSecurityConfigurations",
-                "emr-containers:ListVirtualClusters",
+                "forecast:ListForecasts",
                 "glue:GetDatabases",
-                "glue:ListRegistries",
-                "iot:ListTopicRules",
-                "ivschat:ListRooms",
-                "kafka:ListConfigurations",
-                "lambda:ListCodeSigningConfigs",
-                "rds:DescribeDBClusterSnapshots",
-                "sagemaker:ListUserProfiles",
-                "sns:ListTopics",
-                "ssm:DescribeMaintenanceWindows",
-                "transfer:ListConnectors",
-                "transfer:ListProfiles",
-                "vpc-lattice:ListServices"
+                "greengrass:ListGroups",
+                "iot:ListJobs",
+                "iot:ListThings",
+                "iotsitewise:ListPortals",
+                "mediapackage:ListOriginEndpoints",
+                "quicksight:DescribeAccountSubscription",
+                "rds:DescribeDBParameterGroups",
+                "rds:DescribeDBSubnetGroups",
+                "ssm:ListAssociations",
+                "vpc-lattice:ListServiceNetworks"
             ],
             "analysis": {
                 "broad_policies": [],
                 "potentially_excessive_policies": [],
                 "used_services": [
-                    "APPCONFIG",
                     "CLOUDCONTROLAPI",
-                    "COGNITO-IDP",
+                    "DATABREW",
+                    "EC2",
                     "EKS",
                     "EMR-CONTAINERS",
+                    "FORECAST",
                     "GLUE",
+                    "GREENGRASS",
                     "IOT",
-                    "IVSCHAT",
-                    "KAFKA",
-                    "LAMBDA",
+                    "IOTSITEWISE",
+                    "MEDIAPACKAGE",
+                    "QUICKSIGHT",
                     "RDS",
-                    "SAGEMAKER",
-                    "SNS",
                     "SSM",
-                    "TRANSFER",
                     "VPC-LATTICE"
                 ],
                 "unused_services": [],

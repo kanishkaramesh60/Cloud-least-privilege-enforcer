@@ -1,65 +1,30 @@
 {
-    "scoring_model": {
-        "permission_max": 50,
-        "usage_max": 20,
-        "orphan_max": 20,
-        "temporal_max": 10,
-        "total_max": 100
-    },
+    "module": "Identity-Aware Risk Scoring",
+    "description": "Calculates risk using permission, usage, orphan, temporal and identity classification data.",
     "users": [
         {
-            "username": "Unknown",
-            "risk_score": {
-                "permission": 0,
-                "usage": 20,
-                "orphan": 0,
-                "temporal": 10,
-                "total": 30
-            },
-            "risk_level": {
-                "permission": "Low",
-                "usage": "High",
-                "orphan": "Low",
-                "temporal": "High",
-                "overall": "Medium"
-            },
-            "policies": []
-        },
-        {
             "username": "classA",
-            "risk_score": {
-                "permission": 0,
-                "usage": 20,
-                "orphan": 5,
-                "temporal": 0,
-                "total": 25
-            },
-            "risk_level": {
-                "permission": "Low",
-                "usage": "High",
-                "orphan": "Medium",
-                "temporal": "Low",
-                "overall": "Medium"
-            },
-            "policies": []
+            "identity_type": "IAM User",
+            "identity_confidence": "High",
+            "permission_risk": 80,
+            "usage_risk": 20,
+            "orphan_risk": 30,
+            "temporal_risk": 0,
+            "identity_adjustment": 0,
+            "total_risk": 100,
+            "risk_level": "High"
         },
         {
             "username": "resource-explorer-2",
-            "risk_score": {
-                "permission": 0,
-                "usage": 20,
-                "orphan": 0,
-                "temporal": 10,
-                "total": 30
-            },
-            "risk_level": {
-                "permission": "Low",
-                "usage": "High",
-                "orphan": "Low",
-                "temporal": "High",
-                "overall": "Medium"
-            },
-            "policies": []
+            "identity_type": "AWS Service Identity",
+            "identity_confidence": "Medium",
+            "permission_risk": 0,
+            "usage_risk": 60,
+            "orphan_risk": 0,
+            "temporal_risk": 0,
+            "identity_adjustment": 0,
+            "total_risk": 60,
+            "risk_level": "Medium"
         }
     ]
 }

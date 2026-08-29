@@ -1,0 +1,11 @@
+{
+    "model": "XGBoost Regressor",
+    "dataset": "ml\\risk_dataset.csv",
+    "samples": 1500,
+    "features": 17,
+    "training_samples": 1200,
+    "testing_samples": 300,
+    "target": "risk_score",
+    "mean_absolute_error": 4.5956,
+    "r2_score": 0.8298
+}
