@@ -1,50 +1,65 @@
 {
-    "module": "XGBoost ML Risk Scoring",
-    "description": "Predicts IAM risk using features generated from IAM policies, CloudTrail usage, permission analysis, orphan detection and temporal analysis.",
+    "scoring_model": {
+        "permission_max": 50,
+        "usage_max": 20,
+        "orphan_max": 20,
+        "temporal_max": 10,
+        "total_max": 100
+    },
     "users": [
         {
-            "username": "classA",
-            "risk_score": 95.27,
-            "risk_level": "HIGH",
-            "probabilities": {
-                "LOW": 0.0245,
-                "MEDIUM": 0.0456,
-                "HIGH": 0.9299
+            "username": "Unknown",
+            "risk_score": {
+                "permission": 0,
+                "usage": 20,
+                "orphan": 0,
+                "temporal": 10,
+                "total": 30
             },
-            "features": {
-                "policy_count": 3,
-                "broad_policy_count": 2,
-                "has_admin_access": 1,
-                "has_full_access": 1,
-                "api_call_count": 0,
-                "service_count": 0,
-                "unused_service_count": 0,
-                "inactive_days": 999,
-                "rare_activity": 1,
-                "odd_hour_activity": 0
-            }
+            "risk_level": {
+                "permission": "Low",
+                "usage": "High",
+                "orphan": "Low",
+                "temporal": "High",
+                "overall": "Medium"
+            },
+            "policies": []
+        },
+        {
+            "username": "classA",
+            "risk_score": {
+                "permission": 0,
+                "usage": 20,
+                "orphan": 5,
+                "temporal": 0,
+                "total": 25
+            },
+            "risk_level": {
+                "permission": "Low",
+                "usage": "High",
+                "orphan": "Medium",
+                "temporal": "Low",
+                "overall": "Medium"
+            },
+            "policies": []
         },
         {
             "username": "resource-explorer-2",
-            "risk_score": 5.46,
-            "risk_level": "LOW",
-            "probabilities": {
-                "LOW": 0.9225,
-                "MEDIUM": 0.0459,
-                "HIGH": 0.0316
+            "risk_score": {
+                "permission": 0,
+                "usage": 20,
+                "orphan": 0,
+                "temporal": 10,
+                "total": 30
             },
-            "features": {
-                "policy_count": 0,
-                "broad_policy_count": 0,
-                "has_admin_access": 0,
-                "has_full_access": 0,
-                "api_call_count": 25,
-                "service_count": 11,
-                "unused_service_count": 0,
-                "inactive_days": 0,
-                "rare_activity": 0,
-                "odd_hour_activity": 0
-            }
+            "risk_level": {
+                "permission": "Low",
+                "usage": "High",
+                "orphan": "Low",
+                "temporal": "High",
+                "overall": "Medium"
+            },
+            "policies": []
         }
     ]
 }

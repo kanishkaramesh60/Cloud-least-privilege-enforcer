@@ -1,0 +1,51 @@
+{
+    "module": "Identity Classification",
+    "description": "Classifies IAM and CloudTrail identities as IAM users, IAM roles, AWS service identities, or unresolved identities.",
+    "identities": [
+        {
+            "identity": "AWSServiceRoleForAmazonElasticFileSystem",
+            "identity_type": "IAM Role",
+            "confidence": "High"
+        },
+        {
+            "identity": "AWSServiceRoleForBackup",
+            "identity_type": "IAM Role",
+            "confidence": "High"
+        },
+        {
+            "identity": "AWSServiceRoleForRDS",
+            "identity_type": "IAM Role",
+            "confidence": "High"
+        },
+        {
+            "identity": "AWSServiceRoleForResourceExplorer",
+            "identity_type": "IAM Role",
+            "confidence": "High"
+        },
+        {
+            "identity": "AWSServiceRoleForSupport",
+            "identity_type": "IAM Role",
+            "confidence": "High"
+        },
+        {
+            "identity": "AWSServiceRoleForTrustedAdvisor",
+            "identity_type": "IAM Role",
+            "confidence": "High"
+        },
+        {
+            "identity": "classA",
+            "identity_type": "IAM User",
+            "confidence": "High"
+        },
+        {
+            "identity": "resource-explorer-2",
+            "identity_type": "AWS Service Identity",
+            "confidence": "Medium"
+        },
+        {
+            "identity": "Unknown",
+            "identity_type": "Unknown",
+            "confidence": "Low"
+        }
+    ]
+}
