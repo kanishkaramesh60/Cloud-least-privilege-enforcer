@@ -20,7 +20,7 @@
         {
             "username": "resource-explorer-2",
             "observed_actions": [
-                "cloudcontrolapi:ListResources",
+                "cloudformation:ListResources",
                 "databrew:ListJobs",
                 "ec2:DescribeNetworkInterfaces",
                 "eks:ListEksAnywhereSubscriptions",

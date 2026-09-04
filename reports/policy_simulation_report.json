@@ -1,0 +1,468 @@
+{
+    "module": "IAM Policy Simulation",
+    "description": "Simulates recommended IAM policies against observed actions without attaching the policies.",
+    "users": [
+        {
+            "username": "Unknown",
+            "status": "SUCCESS",
+            "verification_status": "PASS",
+            "total_actions": 2,
+            "allowed_count": 2,
+            "denied_count": 0,
+            "allowed_actions": [
+                "kms:Decrypt",
+                "sts:AssumeRole"
+            ],
+            "denied_actions": [],
+            "other_results": [],
+            "evaluation_results": [
+                {
+                    "EvalActionName": "kms:Decrypt",
+                    "EvalResourceName": "*",
+                    "EvalDecision": "allowed",
+                    "MatchedStatements": [
+                        {
+                            "SourcePolicyId": "PolicyInputList.1",
+                            "SourcePolicyType": "IAM Policy",
+                            "StartPosition": {
+                                "Line": 1,
+                                "Column": 38
+                            },
+                            "EndPosition": {
+                                "Line": 1,
+                                "Column": 113
+                            }
+                        }
+                    ],
+                    "MissingContextValues": []
+                },
+                {
+                    "EvalActionName": "sts:AssumeRole",
+                    "EvalResourceName": "*",
+                    "EvalDecision": "allowed",
+                    "MatchedStatements": [
+                        {
+                            "SourcePolicyId": "PolicyInputList.1",
+                            "SourcePolicyType": "IAM Policy",
+                            "StartPosition": {
+                                "Line": 1,
+                                "Column": 38
+                            },
+                            "EndPosition": {
+                                "Line": 1,
+                                "Column": 113
+                            }
+                        }
+                    ],
+                    "MissingContextValues": []
+                }
+            ]
+        },
+        {
+            "username": "classA",
+            "status": "SUCCESS",
+            "verification_status": "PASS",
+            "total_actions": 1,
+            "allowed_count": 1,
+            "denied_count": 0,
+            "allowed_actions": [
+                "cloudtrail:LookupEvents"
+            ],
+            "denied_actions": [],
+            "other_results": [],
+            "evaluation_results": [
+                {
+                    "EvalActionName": "cloudtrail:LookupEvents",
+                    "EvalResourceName": "*",
+                    "EvalDecision": "allowed",
+                    "MatchedStatements": [
+                        {
+                            "SourcePolicyId": "PolicyInputList.1",
+                            "SourcePolicyType": "IAM Policy",
+                            "StartPosition": {
+                                "Line": 1,
+                                "Column": 38
+                            },
+                            "EndPosition": {
+                                "Line": 1,
+                                "Column": 108
+                            }
+                        }
+                    ],
+                    "MissingContextValues": []
+                }
+            ]
+        },
+        {
+            "username": "resource-explorer-2",
+            "status": "SUCCESS",
+            "verification_status": "PASS",
+            "total_actions": 17,
+            "allowed_count": 17,
+            "denied_count": 0,
+            "allowed_actions": [
+                "cloudformation:ListResources",
+                "databrew:ListJobs",
+                "ec2:DescribeNetworkInterfaces",
+                "eks:ListEksAnywhereSubscriptions",
+                "emr-containers:ListSecurityConfigurations",
+                "forecast:ListForecasts",
+                "glue:GetDatabases",
+                "greengrass:ListGroups",
+                "iot:ListJobs",
+                "iot:ListThings",
+                "iotsitewise:ListPortals",
+                "mediapackage:ListOriginEndpoints",
+                "quicksight:DescribeAccountSubscription",
+                "rds:DescribeDBParameterGroups",
+                "rds:DescribeDBSubnetGroups",
+                "ssm:ListAssociations",
+                "vpc-lattice:ListServiceNetworks"
+            ],
+            "denied_actions": [],
+            "other_results": [],
+            "evaluation_results": [
+                {
+                    "EvalActionName": "cloudformation:ListResources",
+                    "EvalResourceName": "*",
+                    "EvalDecision": "allowed",
+                    "MatchedStatements": [
+                        {
+                            "SourcePolicyId": "PolicyInputList.1",
+                            "SourcePolicyType": "IAM Policy",
+                            "StartPosition": {
+                                "Line": 1,
+                                "Column": 38
+                            },
+                            "EndPosition": {
+                                "Line": 1,
+                                "Column": 565
+                            }
+                        }
+                    ],
+                    "MissingContextValues": []
+                },
+                {
+                    "EvalActionName": "databrew:ListJobs",
+                    "EvalResourceName": "*",
+                    "EvalDecision": "allowed",
+                    "MatchedStatements": [
+                        {
+                            "SourcePolicyId": "PolicyInputList.1",
+                            "SourcePolicyType": "IAM Policy",
+                            "StartPosition": {
+                                "Line": 1,
+                                "Column": 38
+                            },
+                            "EndPosition": {
+                                "Line": 1,
+                                "Column": 565
+                            }
+                        }
+                    ],
+                    "MissingContextValues": []
+                },
+                {
+                    "EvalActionName": "ec2:DescribeNetworkInterfaces",
+                    "EvalResourceName": "*",
+                    "EvalDecision": "allowed",
+                    "MatchedStatements": [
+                        {
+                            "SourcePolicyId": "PolicyInputList.1",
+                            "SourcePolicyType": "IAM Policy",
+                            "StartPosition": {
+                                "Line": 1,
+                                "Column": 38
+                            },
+                            "EndPosition": {
+                                "Line": 1,
+                                "Column": 565
+                            }
+                        }
+                    ],
+                    "MissingContextValues": []
+                },
+                {
+                    "EvalActionName": "eks:ListEksAnywhereSubscriptions",
+                    "EvalResourceName": "*",
+                    "EvalDecision": "allowed",
+                    "MatchedStatements": [
+                        {
+                            "SourcePolicyId": "PolicyInputList.1",
+                            "SourcePolicyType": "IAM Policy",
+                            "StartPosition": {
+                                "Line": 1,
+                                "Column": 38
+                            },
+                            "EndPosition": {
+                                "Line": 1,
+                                "Column": 565
+                            }
+                        }
+                    ],
+                    "MissingContextValues": []
+                },
+                {
+                    "EvalActionName": "emr-containers:ListSecurityConfigurations",
+                    "EvalResourceName": "*",
+                    "EvalDecision": "allowed",
+                    "MatchedStatements": [
+                        {
+                            "SourcePolicyId": "PolicyInputList.1",
+                            "SourcePolicyType": "IAM Policy",
+                            "StartPosition": {
+                                "Line": 1,
+                                "Column": 38
+                            },
+                            "EndPosition": {
+                                "Line": 1,
+                                "Column": 565
+                            }
+                        }
+                    ],
+                    "MissingContextValues": []
+                },
+                {
+                    "EvalActionName": "forecast:ListForecasts",
+                    "EvalResourceName": "*",
+                    "EvalDecision": "allowed",
+                    "MatchedStatements": [
+                        {
+                            "SourcePolicyId": "PolicyInputList.1",
+                            "SourcePolicyType": "IAM Policy",
+                            "StartPosition": {
+                                "Line": 1,
+                                "Column": 38
+                            },
+                            "EndPosition": {
+                                "Line": 1,
+                                "Column": 565
+                            }
+                        }
+                    ],
+                    "MissingContextValues": []
+                },
+                {
+                    "EvalActionName": "glue:GetDatabases",
+                    "EvalResourceName": "*",
+                    "EvalDecision": "allowed",
+                    "MatchedStatements": [
+                        {
+                            "SourcePolicyId": "PolicyInputList.1",
+                            "SourcePolicyType": "IAM Policy",
+                            "StartPosition": {
+                                "Line": 1,
+                                "Column": 38
+                            },
+                            "EndPosition": {
+                                "Line": 1,
+                                "Column": 565
+                            }
+                        }
+                    ],
+                    "MissingContextValues": []
+                },
+                {
+                    "EvalActionName": "greengrass:ListGroups",
+                    "EvalResourceName": "*",
+                    "EvalDecision": "allowed",
+                    "MatchedStatements": [
+                        {
+                            "SourcePolicyId": "PolicyInputList.1",
+                            "SourcePolicyType": "IAM Policy",
+                            "StartPosition": {
+                                "Line": 1,
+                                "Column": 38
+                            },
+                            "EndPosition": {
+                                "Line": 1,
+                                "Column": 565
+                            }
+                        }
+                    ],
+                    "MissingContextValues": []
+                },
+                {
+                    "EvalActionName": "iot:ListJobs",
+                    "EvalResourceName": "*",
+                    "EvalDecision": "allowed",
+                    "MatchedStatements": [
+                        {
+                            "SourcePolicyId": "PolicyInputList.1",
+                            "SourcePolicyType": "IAM Policy",
+                            "StartPosition": {
+                                "Line": 1,
+                                "Column": 38
+                            },
+                            "EndPosition": {
+                                "Line": 1,
+                                "Column": 565
+                            }
+                        }
+                    ],
+                    "MissingContextValues": []
+                },
+                {
+                    "EvalActionName": "iot:ListThings",
+                    "EvalResourceName": "*",
+                    "EvalDecision": "allowed",
+                    "MatchedStatements": [
+                        {
+                            "SourcePolicyId": "PolicyInputList.1",
+                            "SourcePolicyType": "IAM Policy",
+                            "StartPosition": {
+                                "Line": 1,
+                                "Column": 38
+                            },
+                            "EndPosition": {
+                                "Line": 1,
+                                "Column": 565
+                            }
+                        }
+                    ],
+                    "MissingContextValues": []
+                },
+                {
+                    "EvalActionName": "iotsitewise:ListPortals",
+                    "EvalResourceName": "*",
+                    "EvalDecision": "allowed",
+                    "MatchedStatements": [
+                        {
+                            "SourcePolicyId": "PolicyInputList.1",
+                            "SourcePolicyType": "IAM Policy",
+                            "StartPosition": {
+                                "Line": 1,
+                                "Column": 38
+                            },
+                            "EndPosition": {
+                                "Line": 1,
+                                "Column": 565
+                            }
+                        }
+                    ],
+                    "MissingContextValues": []
+                },
+                {
+                    "EvalActionName": "mediapackage:ListOriginEndpoints",
+                    "EvalResourceName": "*",
+                    "EvalDecision": "allowed",
+                    "MatchedStatements": [
+                        {
+                            "SourcePolicyId": "PolicyInputList.1",
+                            "SourcePolicyType": "IAM Policy",
+                            "StartPosition": {
+                                "Line": 1,
+                                "Column": 38
+                            },
+                            "EndPosition": {
+                                "Line": 1,
+                                "Column": 565
+                            }
+                        }
+                    ],
+                    "MissingContextValues": []
+                },
+                {
+                    "EvalActionName": "quicksight:DescribeAccountSubscription",
+                    "EvalResourceName": "*",
+                    "EvalDecision": "allowed",
+                    "MatchedStatements": [
+                        {
+                            "SourcePolicyId": "PolicyInputList.1",
+                            "SourcePolicyType": "IAM Policy",
+                            "StartPosition": {
+                                "Line": 1,
+                                "Column": 38
+                            },
+                            "EndPosition": {
+                                "Line": 1,
+                                "Column": 565
+                            }
+                        }
+                    ],
+                    "MissingContextValues": []
+                },
+                {
+                    "EvalActionName": "rds:DescribeDBParameterGroups",
+                    "EvalResourceName": "*",
+                    "EvalDecision": "allowed",
+                    "MatchedStatements": [
+                        {
+                            "SourcePolicyId": "PolicyInputList.1",
+                            "SourcePolicyType": "IAM Policy",
+                            "StartPosition": {
+                                "Line": 1,
+                                "Column": 38
+                            },
+                            "EndPosition": {
+                                "Line": 1,
+                                "Column": 565
+                            }
+                        }
+                    ],
+                    "MissingContextValues": []
+                },
+                {
+                    "EvalActionName": "rds:DescribeDBSubnetGroups",
+                    "EvalResourceName": "*",
+                    "EvalDecision": "allowed",
+                    "MatchedStatements": [
+                        {
+                            "SourcePolicyId": "PolicyInputList.1",
+                            "SourcePolicyType": "IAM Policy",
+                            "StartPosition": {
+                                "Line": 1,
+                                "Column": 38
+                            },
+                            "EndPosition": {
+                                "Line": 1,
+                                "Column": 565
+                            }
+                        }
+                    ],
+                    "MissingContextValues": []
+                },
+                {
+                    "EvalActionName": "ssm:ListAssociations",
+                    "EvalResourceName": "*",
+                    "EvalDecision": "allowed",
+                    "MatchedStatements": [
+                        {
+                            "SourcePolicyId": "PolicyInputList.1",
+                            "SourcePolicyType": "IAM Policy",
+                            "StartPosition": {
+                                "Line": 1,
+                                "Column": 38
+                            },
+                            "EndPosition": {
+                                "Line": 1,
+                                "Column": 565
+                            }
+                        }
+                    ],
+                    "MissingContextValues": []
+                },
+                {
+                    "EvalActionName": "vpc-lattice:ListServiceNetworks",
+                    "EvalResourceName": "*",
+                    "EvalDecision": "allowed",
+                    "MatchedStatements": [
+                        {
+                            "SourcePolicyId": "PolicyInputList.1",
+                            "SourcePolicyType": "IAM Policy",
+                            "StartPosition": {
+                                "Line": 1,
+                                "Column": 38
+                            },
+                            "EndPosition": {
+                                "Line": 1,
+                                "Column": 565
+                            }
+                        }
+                    ],
+                    "MissingContextValues": []
+                }
+            ]
+        }
+    ]
+}

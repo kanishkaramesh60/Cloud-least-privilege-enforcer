@@ -58,7 +58,7 @@
             "current_policies": [],
             "broad_policies": [],
             "observed_actions": [
-                "cloudcontrolapi:ListResources",
+                "cloudformation:ListResources",
                 "databrew:ListJobs",
                 "ec2:DescribeNetworkInterfaces",
                 "eks:ListEksAnywhereSubscriptions",
@@ -82,7 +82,7 @@
                     {
                         "Effect": "Allow",
                         "Action": [
-                            "cloudcontrolapi:ListResources",
+                            "cloudformation:ListResources",
                             "databrew:ListJobs",
                             "ec2:DescribeNetworkInterfaces",
                             "eks:ListEksAnywhereSubscriptions",

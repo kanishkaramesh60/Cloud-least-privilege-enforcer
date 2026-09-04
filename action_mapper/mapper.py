@@ -25,6 +25,9 @@ def get_action(event):
 
     service = event_source.split(".")[0]
 
+    if service == "cloudcontrolapi":
+        service = "cloudformation"
+
     return f"{service}:{event_name}"
 
 def main():

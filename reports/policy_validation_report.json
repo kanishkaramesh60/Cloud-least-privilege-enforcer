@@ -1,0 +1,54 @@
+{
+    "module": "IAM Policy Validation",
+    "description": "Validates recommended IAM policies using local checks and AWS IAM Access Analyzer.",
+    "users": [
+        {
+            "username": "Unknown",
+            "local_validation": {
+                "status": "PASS",
+                "findings": [
+                    {
+                        "type": "WARNING",
+                        "message": "Statement 0 uses Resource '*'. Resource-level restriction should be reviewed."
+                    }
+                ]
+            },
+            "access_analyzer": {
+                "status": "SUCCESS",
+                "findings": []
+            }
+        },
+        {
+            "username": "classA",
+            "local_validation": {
+                "status": "PASS",
+                "findings": [
+                    {
+                        "type": "WARNING",
+                        "message": "Statement 0 uses Resource '*'. Resource-level restriction should be reviewed."
+                    }
+                ]
+            },
+            "access_analyzer": {
+                "status": "SUCCESS",
+                "findings": []
+            }
+        },
+        {
+            "username": "resource-explorer-2",
+            "local_validation": {
+                "status": "PASS",
+                "findings": [
+                    {
+                        "type": "WARNING",
+                        "message": "Statement 0 uses Resource '*'. Resource-level restriction should be reviewed."
+                    }
+                ]
+            },
+            "access_analyzer": {
+                "status": "SUCCESS",
+                "findings": []
+            }
+        }
+    ]
+}
