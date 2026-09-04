@@ -1,28 +1,44 @@
 {
     "module": "CloudTrail IAM Action Extraction",
-    "description": "Converts CloudTrail eventName and eventSource values into IAM-style API actions.",
+    "description": "Extracts IAM-style actions from CloudTrail event_source and event_name.",
     "users": [
+        {
+            "username": "Unknown",
+            "observed_actions": [
+                "kms:Decrypt",
+                "sts:AssumeRole"
+            ],
+            "action_count": 2
+        },
+        {
+            "username": "classA",
+            "observed_actions": [
+                "cloudtrail:LookupEvents"
+            ],
+            "action_count": 1
+        },
         {
             "username": "resource-explorer-2",
             "observed_actions": [
                 "cloudcontrolapi:ListResources",
-                "detective:ListGraphs",
-                "ec2:DescribeInstances",
-                "ec2:DescribeKeyPairs",
-                "ec2:DescribeSecurityGroupRules",
-                "elasticache:DescribeUsers",
+                "databrew:ListJobs",
+                "ec2:DescribeNetworkInterfaces",
+                "eks:ListEksAnywhereSubscriptions",
                 "emr-containers:ListSecurityConfigurations",
-                "emr-containers:ListVirtualClusters",
-                "events:ListEventBuses",
-                "events:ListRules",
+                "forecast:ListForecasts",
                 "glue:GetDatabases",
-                "kms:ListKeys",
-                "rds:DescribeDBProxies",
-                "sagemaker:ListArtifacts",
-                "sagemaker:ListClusters",
-                "verifiedpermissions:ListPolicyStores"
+                "greengrass:ListGroups",
+                "iot:ListJobs",
+                "iot:ListThings",
+                "iotsitewise:ListPortals",
+                "mediapackage:ListOriginEndpoints",
+                "quicksight:DescribeAccountSubscription",
+                "rds:DescribeDBParameterGroups",
+                "rds:DescribeDBSubnetGroups",
+                "ssm:ListAssociations",
+                "vpc-lattice:ListServiceNetworks"
             ],
-            "action_count": 16
+            "action_count": 17
         }
     ]
 }

@@ -7,10 +7,22 @@
         "total_events": 50,
         "within_access_window": 9,
         "outside_access_window": 41,
-        "weekend_events": 19,
+        "weekend_events": 20,
         "invalid_timestamps": 0
     },
     "events": [
+        {
+            "username": "classA",
+            "event_name": "LookupEvents",
+            "event_source": "cloudtrail.amazonaws.com",
+            "event_time": "2026-08-29 10:01:01+05:30",
+            "hour": 10,
+            "day": "Saturday",
+            "inside_access_window": true,
+            "outside_access_window": false,
+            "weekend_activity": true,
+            "status": "Within Access Window"
+        },
         {
             "username": "classA",
             "event_name": "LookupEvents",
@@ -592,18 +604,6 @@
             "event_name": "ListPortals",
             "event_source": "iotsitewise.amazonaws.com",
             "event_time": "2026-08-28 15:34:00+05:30",
-            "hour": 15,
-            "day": "Friday",
-            "inside_access_window": true,
-            "outside_access_window": false,
-            "weekend_activity": false,
-            "status": "Within Access Window"
-        },
-        {
-            "username": "Unknown",
-            "event_name": "AssumeRole",
-            "event_source": "sts.amazonaws.com",
-            "event_time": "2026-08-28 15:06:59+05:30",
             "hour": 15,
             "day": "Friday",
             "inside_access_window": true,

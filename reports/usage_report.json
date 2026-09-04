@@ -1,11 +1,11 @@
 [
     {
         "username": "classA",
-        "total_api_calls": 3,
+        "total_api_calls": 4,
         "services_used": [
             "CLOUDTRAIL"
         ],
-        "last_activity": "2026-08-29 09:18:59+05:30"
+        "last_activity": "2026-08-29 10:01:01+05:30"
     },
     {
         "username": "resource-explorer-2",
@@ -31,7 +31,7 @@
     },
     {
         "username": null,
-        "total_api_calls": 28,
+        "total_api_calls": 27,
         "services_used": [
             "KMS",
             "STS"

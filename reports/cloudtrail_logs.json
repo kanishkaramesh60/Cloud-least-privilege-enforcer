@@ -2,6 +2,14 @@
     {
         "username": "classA",
         "event_name": "LookupEvents",
+        "event_time": "2026-08-29 10:01:01+05:30",
+        "event_source": "cloudtrail.amazonaws.com",
+        "aws_region": null,
+        "resources": []
+    },
+    {
+        "username": "classA",
+        "event_name": "LookupEvents",
         "event_time": "2026-08-29 09:18:59+05:30",
         "event_source": "cloudtrail.amazonaws.com",
         "aws_region": null,
@@ -915,34 +923,5 @@
         "event_source": "iotsitewise.amazonaws.com",
         "aws_region": null,
         "resources": []
-    },
-    {
-        "username": null,
-        "event_name": "AssumeRole",
-        "event_time": "2026-08-28 15:06:59+05:30",
-        "event_source": "sts.amazonaws.com",
-        "aws_region": null,
-        "resources": [
-            {
-                "resource_type": "AWS::IAM::AccessKey",
-                "resource_name": "ASIAXZN6IRGI5M7A5NZG"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "arn:aws:sts::535659317649:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "AROAXZN6IRGIQJFULN6J2:resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::IAM::Role",
-                "resource_name": "arn:aws:iam::535659317649:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
-            }
-        ]
     }
 ]

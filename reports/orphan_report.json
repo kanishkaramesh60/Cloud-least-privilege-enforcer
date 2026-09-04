@@ -2,7 +2,7 @@
     {
         "username": "classA",
         "status": "Active",
-        "last_activity": "2026-08-29 09:18:59+05:30",
+        "last_activity": "2026-08-29 10:01:01+05:30",
         "inactive_days": 0,
         "attached_policies": [
             "AmazonEC2FullAccess",

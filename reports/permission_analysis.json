@@ -9,7 +9,7 @@
                 "AdministratorAccess",
                 "IAMUserChangePassword"
             ],
-            "observed_api_calls": 3,
+            "observed_api_calls": 4,
             "observed_services": [
                 "CLOUDTRAIL"
             ],
