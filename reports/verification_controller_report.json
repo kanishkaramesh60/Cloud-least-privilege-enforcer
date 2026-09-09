@@ -1,0 +1,31 @@
+{
+    "module": "Cloud Least Privilege Verification Controller",
+    "identity": {
+        "name": "classA",
+        "type": "IAM User",
+        "risk_level": "High",
+        "risk_score": 100
+    },
+    "max_attempts": 3,
+    "attempts": [
+        {
+            "attempt": 1,
+            "access_analyzer": {
+                "status": "PASS",
+                "findings": []
+            },
+            "iam_simulator": {
+                "status": "PASS",
+                "results": [
+                    {
+                        "action": "cloudtrail:LookupEvents",
+                        "decision": "allowed"
+                    }
+                ]
+            },
+            "result": "PASS"
+        }
+    ],
+    "final_status": "VERIFIED",
+    "deployment_allowed": true
+}

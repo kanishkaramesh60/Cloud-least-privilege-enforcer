@@ -1,0 +1,35 @@
+{
+    "module": "AI Policy Simulation",
+    "identity": {
+        "name": "classA",
+        "type": "IAM User",
+        "risk_level": "High",
+        "risk_score": 100
+    },
+    "policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "cloudtrail:LookupEvents"
+                ],
+                "Resource": "*"
+            }
+        ]
+    },
+    "simulated_actions": [
+        "cloudtrail:LookupEvents"
+    ],
+    "simulation": {
+        "identity": "classA",
+        "results": [
+            {
+                "action": "cloudtrail:LookupEvents",
+                "decision": "allowed"
+            }
+        ],
+        "all_required_actions_allowed": true,
+        "status": "PASS"
+    }
+}
