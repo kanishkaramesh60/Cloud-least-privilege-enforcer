@@ -1,0 +1,37 @@
+{
+    "identity": {
+        "name": "classA",
+        "type": "IAM User",
+        "risk_level": "High",
+        "risk_score": 100
+    },
+    "excessive_permissions": [
+        "AmazonEC2FullAccess",
+        "AdministratorAccess"
+    ],
+    "required_permissions": [
+        "cloudtrail:LookupEvents"
+    ],
+    "recommendation": {
+        "action": "Remove broad permissions",
+        "reason": "Excessive permissions identified"
+    },
+    "recommended_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "cloudtrail:LookupEvents"
+                ],
+                "Resource": "*"
+            }
+        ]
+    },
+    "security_impact": {
+        "privilege_reduced": true,
+        "administrator_access_removed": true,
+        "full_access_removed": true
+    },
+    "ai_status": "GENERATED"
+}
