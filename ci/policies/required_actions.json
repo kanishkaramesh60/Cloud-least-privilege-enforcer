@@ -1,0 +1,9 @@
+{
+    "required_actions": [
+        "s3:GetObject",
+        "s3:ListBucket",
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+    ]
+}
