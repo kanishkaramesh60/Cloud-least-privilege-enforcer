@@ -1,13 +1,27 @@
-name: Test Self Hosted Runner
+name: Cloud Least Privilege Enforcement
 
 on:
   push:
+    paths:
+      - "ci/**"
+      - "ai/**"
+      - "validation/**"
+      - ".github/workflows/**"
+
+  pull_request:
+    paths:
+      - "ci/**"
+      - "ai/**"
+      - "validation/**"
+      - ".github/workflows/**"
 
 jobs:
-  test:
+  least-privilege-check:
+
     runs-on: self-hosted
 
     steps:
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -18,3 +32,7 @@ jobs:
       - name: Check Ollama
         shell: cmd
         run: ollama --version
+
+      - name: Run Least Privilege CI Pipeline
+        shell: cmd
+        run: python ci\ci_ai_pipeline.py
