@@ -12,7 +12,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Check Python
+        shell: cmd
         run: python --version
 
       - name: Check Ollama
+        shell: cmd
         run: ollama --version
