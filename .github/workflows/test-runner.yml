@@ -13,7 +13,7 @@ jobs:
 
       - name: Check Python
         shell: cmd
-        run: "C:\Users\Lenovo\AppData\Local\Programs\Python\Python313\python.exe --version"
+        run: 'C:\Users\Lenovo\AppData\Local\Programs\Python\Python313\python.exe --version'
 
       - name: Check Ollama
         shell: cmd
