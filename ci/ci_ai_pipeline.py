@@ -5,11 +5,6 @@ from pathlib import Path
 
 import boto3
 
-
-# ============================================================
-# CONFIGURATION
-# ============================================================
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 POLICY_FILE = BASE_DIR / "ci" / "policies" / "test_policy.json"
@@ -25,11 +20,6 @@ OLLAMA_MODEL = "llama3.2:3b"
 
 MAX_ATTEMPTS = 3
 
-
-# ============================================================
-# JSON FUNCTIONS
-# ============================================================
-
 def load_json(path):
     with open(path, "r", encoding="utf-8") as file:
         return json.load(file)
@@ -40,11 +30,6 @@ def save_json(path, data):
 
     with open(path, "w", encoding="utf-8") as file:
         json.dump(data, file, indent=4)
-
-
-# ============================================================
-# STEP 1 - CI POLICY SCANNER
-# ============================================================
 
 def run_policy_scanner():
 
@@ -70,11 +55,6 @@ def run_policy_scanner():
         print(result.stderr)
 
     return result.returncode == 0
-
-
-# ============================================================
-# FIND POLICY PROBLEMS
-# ============================================================
 
 def analyze_policy(policy):
 
@@ -114,11 +94,6 @@ def analyze_policy(policy):
             })
 
     return findings
-
-
-# ============================================================
-# STEP 2 - AI REMEDIATION
-# ============================================================
 
 def call_ollama(policy, findings, required_actions):
 
@@ -237,10 +212,6 @@ STRICT REQUIREMENTS:
         return None
 
 
-# ============================================================
-# DETERMINISTIC AI GUARDRAILS
-# ============================================================
-
 def apply_guardrails(policy, required_actions):
 
     if not isinstance(policy, dict):
@@ -289,7 +260,6 @@ def apply_guardrails(policy, required_actions):
                 if action != "*"
             ]
 
-        # Only retain required actions
         filtered_actions = []
 
         for action in actions:
@@ -324,11 +294,6 @@ def apply_guardrails(policy, required_actions):
     policy["Statement"] = cleaned_statements
 
     return policy, findings
-
-
-# ============================================================
-# STEP 3 - AWS ACCESS ANALYZER
-# ============================================================
 
 def validate_with_access_analyzer(policy):
 
@@ -421,11 +386,6 @@ def validate_with_access_analyzer(policy):
             "error": str(error)
         }
 
-
-# ============================================================
-# STEP 4 - IAM POLICY SIMULATOR
-# ============================================================
-
 def simulate_policy(policy, required_actions):
 
     print("\n" + "=" * 60)
@@ -451,10 +411,6 @@ def simulate_policy(policy, required_actions):
 
     actions = sorted(set(actions))
 
-    # --------------------------------------------------------
-    # Wildcard protection
-    # --------------------------------------------------------
-
     if "*" in actions:
 
         print("IAM SIMULATOR: FAIL")
@@ -465,10 +421,6 @@ def simulate_policy(policy, required_actions):
             "results": [],
             "reason": "Wildcard Action remains."
         }
-
-    # --------------------------------------------------------
-    # Verify required actions are present
-    # --------------------------------------------------------
 
     missing_actions = [
         action
@@ -501,10 +453,6 @@ def simulate_policy(policy, required_actions):
             "results": [],
             "reason": "No actions found."
         }
-
-    # --------------------------------------------------------
-    # AWS Simulation
-    # --------------------------------------------------------
 
     try:
 
@@ -581,20 +529,11 @@ def simulate_policy(policy, required_actions):
             "error": str(error)
         }
 
-
-# ============================================================
-# MAIN PIPELINE
-# ============================================================
-
 def main():
 
     print("=" * 60)
     print("     AI-ASSISTED CI/CD LEAST PRIVILEGE PIPELINE")
     print("=" * 60)
-
-    # --------------------------------------------------------
-    # Check files
-    # --------------------------------------------------------
 
     if not POLICY_FILE.exists():
 
@@ -609,10 +548,6 @@ def main():
         print(REQUIRED_ACTIONS_FILE)
 
         sys.exit(1)
-
-    # --------------------------------------------------------
-    # Load input
-    # --------------------------------------------------------
 
     original_policy = load_json(
         POLICY_FILE
@@ -638,10 +573,6 @@ def main():
         )
 
         sys.exit(1)
-
-    # --------------------------------------------------------
-    # STEP 1
-    # --------------------------------------------------------
 
     safe = run_policy_scanner()
 
@@ -676,19 +607,11 @@ def main():
 
         sys.exit(0)
 
-    # --------------------------------------------------------
-    # Analyze original policy
-    # --------------------------------------------------------
-
     findings = analyze_policy(
         original_policy
     )
 
     print("\nHIGH-RISK POLICY SENT TO AI REMEDIATION")
-
-    # --------------------------------------------------------
-    # AI CLOSED LOOP
-    # --------------------------------------------------------
 
     current_policy = original_policy
 
@@ -706,10 +629,6 @@ def main():
         )
         print("=" * 60)
 
-        # ----------------------------------------------------
-        # AI
-        # ----------------------------------------------------
-
         ai_policy = call_ollama(
             current_policy,
             findings,
@@ -724,10 +643,6 @@ def main():
             })
 
             continue
-
-        # ----------------------------------------------------
-        # Deterministic Guardrails
-        # ----------------------------------------------------
 
         print("\n" + "-" * 60)
         print("DETERMINISTIC SECURITY GUARDRAILS")
@@ -778,10 +693,6 @@ def main():
                     finding
                 )
 
-        # ----------------------------------------------------
-        # ACCESS ANALYZER
-        # ----------------------------------------------------
-
         analyzer_result = (
             validate_with_access_analyzer(
                 guarded_policy
@@ -813,10 +724,6 @@ def main():
             )
 
             continue
-
-        # ----------------------------------------------------
-        # IAM SIMULATOR
-        # ----------------------------------------------------
 
         simulator_result = simulate_policy(
             guarded_policy,
@@ -854,10 +761,6 @@ def main():
 
             continue
 
-        # ----------------------------------------------------
-        # VERIFIED
-        # ----------------------------------------------------
-
         attempts.append({
             "attempt": attempt,
             "policy": guarded_policy,
@@ -872,10 +775,6 @@ def main():
                 simulator_result,
             "status": "PASS"
         })
-
-        # ----------------------------------------------------
-        # FINAL REPORT
-        # ----------------------------------------------------
 
         report = {
             "module":
@@ -927,10 +826,6 @@ def main():
 
         sys.exit(0)
 
-    # --------------------------------------------------------
-    # ALL ATTEMPTS FAILED
-    # --------------------------------------------------------
-
     report = {
         "module":
             "AI-Assisted CI/CD Least Privilege Pipeline",
@@ -969,11 +864,6 @@ def main():
     print(REPORT_FILE)
 
     sys.exit(1)
-
-
-# ============================================================
-# ENTRY POINT
-# ============================================================
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,34 @@
+name: Cloud Least Privilege Enforcement
+
+on:
+  push:
+    paths:
+      - "ci/**"
+      - "ai/**"
+      - "validation/**"
+
+  pull_request:
+    paths:
+      - "ci/**"
+      - "ai/**"
+      - "validation/**"
+
+jobs:
+
+  least-privilege-check:
+
+    runs-on: self-hosted
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check Python
+        run: python --version
+
+      - name: Check Ollama
+        run: ollama --version
+
+      - name: Run AI Least Privilege Pipeline
+        run: python ci/ci_ai_pipeline.py
