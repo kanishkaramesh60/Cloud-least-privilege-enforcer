@@ -7,7 +7,6 @@ import boto3
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-POLICY_FILE = BASE_DIR / "ci" / "policies" / "test_policy.json"
 REQUIRED_ACTIONS_FILE = BASE_DIR / "ci" / "policies" / "required_actions.json"
 
 AI_POLICY_FILE = BASE_DIR / "validation" / "ai_policy.json"
@@ -20,6 +19,7 @@ OLLAMA_MODEL = "llama3.2:3b"
 
 MAX_ATTEMPTS = 3
 
+
 def load_json(path):
     with open(path, "r", encoding="utf-8") as file:
         return json.load(file)
@@ -31,7 +31,137 @@ def save_json(path, data):
     with open(path, "w", encoding="utf-8") as file:
         json.dump(data, file, indent=4)
 
-def run_policy_scanner():
+def find_policy_file():
+    """
+    Find IAM policy files inside ci/policies.
+
+    Ignores required_actions.json because that file
+    contains the application's required permissions,
+    not the policy being scanned.
+    """
+
+    policy_dir = BASE_DIR / "ci" / "policies"
+
+    policy_files = [
+        file
+        for file in policy_dir.glob("*.json")
+        if file.name != "required_actions.json"
+    ]
+
+    if not policy_files:
+        print("ERROR: No IAM policy files found.")
+        return None
+
+    if len(policy_files) == 1:
+        return policy_files[0]
+
+    test_policy = policy_dir / "test_policy.json"
+
+    if test_policy.exists():
+        return test_policy
+
+    print("ERROR: Multiple policy files found.")
+    print("Please specify which policy should be scanned:")
+
+    for file in policy_files:
+        print(" -", file)
+
+    return None
+
+def extract_json_object(text):
+    """
+    Extract exactly ONE JSON object from Ollama output.
+
+    Handles:
+    - normal JSON
+    - Markdown code fences
+    - extra text before JSON
+    - extra text after JSON
+    - multiple JSON objects by taking the first valid object
+    """
+
+    if not text:
+        raise ValueError("AI returned an empty response.")
+
+    text = text.strip()
+
+    if text.startswith("```"):
+        lines = text.splitlines()
+
+        if lines and lines[0].strip().startswith("```"):
+            lines = lines[1:]
+
+        if lines and lines[-1].strip() == "```":
+            lines = lines[:-1]
+
+        text = "\n".join(lines).strip()
+
+    start = text.find("{")
+
+    if start == -1:
+        raise ValueError(
+            "No JSON object found in AI response."
+        )
+
+    json_text = text[start:]
+
+    decoder = json.JSONDecoder()
+
+    policy, end_index = decoder.raw_decode(json_text)
+
+    if not isinstance(policy, dict):
+        raise ValueError(
+            "AI response JSON is not an object."
+        )
+
+    return policy
+
+
+def validate_ai_policy_structure(policy):
+    """
+    Basic structural validation before AWS validation.
+    """
+
+    if not isinstance(policy, dict):
+        return False, "AI policy is not a JSON object."
+
+    if "Version" not in policy:
+        return False, "AI policy is missing Version."
+
+    if "Statement" not in policy:
+        return False, "AI policy is missing Statement."
+
+    statements = policy["Statement"]
+
+    if isinstance(statements, dict):
+        statements = [statements]
+
+    if not isinstance(statements, list):
+        return False, "Statement must be a list or object."
+
+    if len(statements) == 0:
+        return False, "Statement is empty."
+
+    for index, statement in enumerate(statements):
+
+        if not isinstance(statement, dict):
+            return False, (
+                f"Statement {index} is not an object."
+            )
+
+        if "Effect" not in statement:
+            return False, (
+                f"Statement {index} is missing Effect."
+            )
+
+        if "Action" not in statement:
+            return False, (
+                f"Statement {index} is missing Action."
+            )
+
+    return True, ""
+
+def run_policy_scanner(policy_file):
 
     print("\n" + "=" * 60)
     print("STEP 1 - CI/CD POLICY SCANNER")
@@ -41,7 +171,7 @@ def run_policy_scanner():
         [
             sys.executable,
             str(BASE_DIR / "ci" / "ci_policy_scanner.py"),
-            str(POLICY_FILE)
+            str(policy_file)
         ],
         capture_output=True,
         text=True,
@@ -68,7 +198,6 @@ def analyze_policy(policy):
     for index, statement in enumerate(statements):
 
         actions = statement.get("Action", [])
-
         resources = statement.get("Resource", [])
 
         if isinstance(actions, str):
@@ -104,8 +233,8 @@ def call_ollama(policy, findings, required_actions):
     prompt = f"""
 You are an AWS IAM least-privilege security remediation engine.
 
-You must transform the supplied IAM policy into a least-privilege
-identity policy.
+Your task is to transform the supplied IAM policy into a safer
+least-privilege identity policy.
 
 ORIGINAL POLICY:
 {json.dumps(policy, indent=2)}
@@ -116,23 +245,41 @@ SECURITY FINDINGS:
 APPLICATION REQUIRED ACTIONS:
 {json.dumps(required_actions, indent=2)}
 
-STRICT REQUIREMENTS:
+STRICT SECURITY REQUIREMENTS:
 
 1. Only allow actions from APPLICATION REQUIRED ACTIONS.
 2. Remove Action "*".
 3. Never generate Action "*".
-4. Never add permissions that are not required.
-5. Preserve the AWS IAM policy Version.
+4. Never add permissions that are not in APPLICATION REQUIRED ACTIONS.
+5. Preserve Version "2012-10-17".
 6. Use Effect "Allow".
-7. Use explicit actions.
-8. Resource "*" may be used only when resource-level
-   restriction is not provided or not possible.
+7. Use explicit IAM actions.
+8. Resource "*" may be used only when a more specific resource
+   is not provided or is not possible for the action.
 9. Do not invent additional AWS services.
-10. Return ONLY valid JSON.
-11. Do not use Markdown.
-12. Output must contain:
-    Version
-    Statement
+10. Do not add explanations.
+11. Do not add comments.
+12. Do not use Markdown.
+13. Do not use code fences.
+14. Return exactly ONE JSON object.
+15. The JSON object must contain Version and Statement.
+16. Statement must contain at least one statement.
+17. Each statement must contain Effect, Action, and Resource.
+
+VERY IMPORTANT:
+
+Return ONLY the JSON object.
+
+Do NOT write:
+- explanations
+- introductions
+- conclusions
+- Markdown
+- ```json
+- ``` 
+- multiple JSON objects
+
+Your entire response must be exactly ONE valid JSON object.
 """
 
     try:
@@ -160,35 +307,44 @@ STRICT REQUIREMENTS:
 
         output = result.stdout.strip()
 
-        # Remove possible Markdown fences
-        if output.startswith("```json"):
-            output = output[7:]
+        if not output:
 
-        elif output.startswith("```"):
-            output = output[3:]
-
-        if output.endswith("```"):
-            output = output[:-3]
-
-        output = output.strip()
-
-        # Find JSON boundaries if Ollama adds extra text
-        start = output.find("{")
-        end = output.rfind("}")
-
-        if start == -1 or end == -1:
-
-            print("ERROR: AI did not return valid JSON.")
+            print("ERROR: Ollama returned an empty response.")
 
             return None
 
-        output = output[start:end + 1]
+        print("\nAI RAW RESPONSE:")
+        print("-" * 60)
+        print(output)
+        print("-" * 60)
 
-        ai_policy = json.loads(output)
+        ai_policy = extract_json_object(output)
+
+        valid, error_message = validate_ai_policy_structure(
+            ai_policy
+        )
+
+        if not valid:
+
+            print(
+                "ERROR: AI returned an invalid IAM policy structure."
+            )
+
+            print(
+                "Reason:",
+                error_message
+            )
+
+            return None
 
         print("\nAI GENERATED POLICY:")
         print("-" * 60)
-        print(json.dumps(ai_policy, indent=4))
+        print(
+            json.dumps(
+                ai_policy,
+                indent=4
+            )
+        )
 
         return ai_policy
 
@@ -201,7 +357,16 @@ STRICT REQUIREMENTS:
     except json.JSONDecodeError as error:
 
         print("ERROR: AI returned invalid JSON.")
-        print(error)
+
+        print("Reason:", error)
+
+        return None
+
+    except ValueError as error:
+
+        print("ERROR: AI JSON extraction failed.")
+
+        print("Reason:", error)
 
         return None
 
@@ -211,11 +376,13 @@ STRICT REQUIREMENTS:
 
         return None
 
-
 def apply_guardrails(policy, required_actions):
 
     if not isinstance(policy, dict):
-        return None, ["Policy is not a JSON object."]
+
+        return None, [
+            "Policy is not a JSON object."
+        ]
 
     findings = []
 
@@ -231,7 +398,9 @@ def apply_guardrails(policy, required_actions):
 
     if not statements:
 
-        return None, ["Policy contains no Statement."]
+        return None, [
+            "Policy contains no Statement."
+        ]
 
     if isinstance(statements, dict):
         statements = [statements]
@@ -242,12 +411,14 @@ def apply_guardrails(policy, required_actions):
 
     for statement in statements:
 
-        actions = statement.get("Action", [])
+        actions = statement.get(
+            "Action",
+            []
+        )
 
         if isinstance(actions, str):
             actions = [actions]
 
-        # Remove wildcard Action
         if "*" in actions:
 
             findings.append(
@@ -277,13 +448,22 @@ def apply_guardrails(policy, required_actions):
         if not filtered_actions:
             continue
 
+        resource = statement.get(
+            "Resource",
+            "*"
+        )
+
         new_statement = {
             "Effect": "Allow",
-            "Action": sorted(set(filtered_actions)),
-            "Resource": statement.get("Resource", "*")
+            "Action": sorted(
+                set(filtered_actions)
+            ),
+            "Resource": resource
         }
 
-        cleaned_statements.append(new_statement)
+        cleaned_statements.append(
+            new_statement
+        )
 
     if not cleaned_statements:
 
@@ -301,7 +481,10 @@ def validate_with_access_analyzer(policy):
     print("STEP 3 - AWS ACCESS ANALYZER")
     print("=" * 60)
 
-    save_json(AI_POLICY_FILE, policy)
+    save_json(
+        AI_POLICY_FILE,
+        policy
+    )
 
     command = [
         "aws",
@@ -340,20 +523,29 @@ def validate_with_access_analyzer(policy):
                 "error": result.stderr
             }
 
-        data = json.loads(result.stdout)
+        data = json.loads(
+            result.stdout
+        )
 
-        findings = data.get("findings", [])
+        findings = data.get(
+            "findings",
+            []
+        )
 
         if not findings:
 
-            print("ACCESS ANALYZER: PASS")
+            print(
+                "ACCESS ANALYZER: PASS"
+            )
 
             return {
                 "status": "PASS",
                 "findings": []
             }
 
-        print("ACCESS ANALYZER: FAIL")
+        print(
+            "ACCESS ANALYZER: FAIL"
+        )
 
         for finding in findings:
 
@@ -377,7 +569,10 @@ def validate_with_access_analyzer(policy):
 
     except Exception as error:
 
-        print("ACCESS ANALYZER ERROR:")
+        print(
+            "ACCESS ANALYZER ERROR:"
+        )
+
         print(error)
 
         return {
@@ -385,6 +580,7 @@ def validate_with_access_analyzer(policy):
             "findings": [],
             "error": str(error)
         }
+
 
 def simulate_policy(policy, required_actions):
 
@@ -394,27 +590,42 @@ def simulate_policy(policy, required_actions):
 
     actions = []
 
-    statements = policy.get("Statement", [])
+    statements = policy.get(
+        "Statement",
+        []
+    )
 
     if isinstance(statements, dict):
         statements = [statements]
 
     for statement in statements:
 
-        action = statement.get("Action", [])
+        action = statement.get(
+            "Action",
+            []
+        )
 
         if isinstance(action, str):
+
             actions.append(action)
 
         elif isinstance(action, list):
+
             actions.extend(action)
 
-    actions = sorted(set(actions))
+    actions = sorted(
+        set(actions)
+    )
 
     if "*" in actions:
 
-        print("IAM SIMULATOR: FAIL")
-        print("Generated policy still contains Action '*'.")
+        print(
+            "IAM SIMULATOR: FAIL"
+        )
+
+        print(
+            "Generated policy still contains Action '*'."
+        )
 
         return {
             "status": "FAIL",
@@ -430,23 +641,37 @@ def simulate_policy(policy, required_actions):
 
     if missing_actions:
 
-        print("IAM SIMULATOR: FAIL")
+        print(
+            "IAM SIMULATOR: FAIL"
+        )
 
-        print("\nMissing required actions:")
+        print(
+            "\nMissing required actions:"
+        )
 
         for action in missing_actions:
-            print(" -", action)
+
+            print(
+                " -",
+                action
+            )
 
         return {
             "status": "FAIL",
             "results": [],
-            "missing_required_actions": missing_actions
+            "missing_required_actions":
+                missing_actions
         }
 
     if not actions:
 
-        print("IAM SIMULATOR: FAIL")
-        print("No explicit actions found.")
+        print(
+            "IAM SIMULATOR: FAIL"
+        )
+
+        print(
+            "No explicit actions found."
+        )
 
         return {
             "status": "FAIL",
@@ -461,7 +686,9 @@ def simulate_policy(policy, required_actions):
             region_name=REGION
         )
 
-        iam_client = session.client("iam")
+        iam_client = session.client(
+            "iam"
+        )
 
         response = iam_client.simulate_custom_policy(
             PolicyInputList=[
@@ -510,17 +737,24 @@ def simulate_policy(policy, required_actions):
             else "FAIL"
         )
 
-        print("\nIAM SIMULATOR:", status)
+        print(
+            "\nIAM SIMULATOR:",
+            status
+        )
 
         return {
             "status": status,
             "results": results,
-            "required_actions": required_actions
+            "required_actions":
+                required_actions
         }
 
     except Exception as error:
 
-        print("IAM SIMULATOR ERROR:")
+        print(
+            "IAM SIMULATOR ERROR:"
+        )
+
         print(error)
 
         return {
@@ -532,20 +766,31 @@ def simulate_policy(policy, required_actions):
 def main():
 
     print("=" * 60)
-    print("     AI-ASSISTED CI/CD LEAST PRIVILEGE PIPELINE")
+    print(
+        "     AI-ASSISTED CI/CD LEAST PRIVILEGE PIPELINE"
+    )
     print("=" * 60)
 
-    if not POLICY_FILE.exists():
+    if len(sys.argv) > 1:
+        POLICY_FILE = sys.argv[1]
+    else:
+        POLICY_FILE = find_policy_file()
 
-        print("ERROR: Policy file not found:")
-        print(POLICY_FILE)
-
+    if POLICY_FILE is None:
         sys.exit(1)
+
+    print("\nPolicy selected for scanning:")
+    print(POLICY_FILE) 
 
     if not REQUIRED_ACTIONS_FILE.exists():
 
-        print("ERROR: Required actions file not found:")
-        print(REQUIRED_ACTIONS_FILE)
+        print(
+            "ERROR: Required actions file not found:"
+        )
+
+        print(
+            REQUIRED_ACTIONS_FILE
+        )
 
         sys.exit(1)
 
@@ -574,16 +819,21 @@ def main():
 
         sys.exit(1)
 
-    safe = run_policy_scanner()
+    safe = run_policy_scanner(POLICY_FILE)
 
     if safe:
 
         print("=" * 60)
-        print("POLICY PASSED INITIAL CI SCAN")
-        print("CI/CD STATUS: PASS")
+        print(
+            "POLICY PASSED INITIAL CI SCAN"
+        )
+        print(
+            "CI/CD STATUS: PASS"
+        )
         print("=" * 60)
 
         report = {
+
             "module":
                 "AI-Assisted CI/CD Least Privilege Pipeline",
 
@@ -611,7 +861,9 @@ def main():
         original_policy
     )
 
-    print("\nHIGH-RISK POLICY SENT TO AI REMEDIATION")
+    print(
+        "\nHIGH-RISK POLICY SENT TO AI REMEDIATION"
+    )
 
     current_policy = original_policy
 
@@ -623,10 +875,12 @@ def main():
     ):
 
         print("\n" + "=" * 60)
+
         print(
             f"AI VERIFICATION ATTEMPT "
             f"{attempt} OF {MAX_ATTEMPTS}"
         )
+
         print("=" * 60)
 
         ai_policy = call_ollama(
@@ -638,14 +892,30 @@ def main():
         if ai_policy is None:
 
             attempts.append({
-                "attempt": attempt,
-                "status": "AI_ERROR"
+
+                "attempt":
+                    attempt,
+
+                "status":
+                    "AI_ERROR"
             })
+
+            findings = [
+                {
+                    "severity": "HIGH",
+                    "issue":
+                        "Previous AI response was invalid or could not be parsed.",
+                    "instruction":
+                        "Return exactly one valid JSON IAM policy object and nothing else."
+                }
+            ]
 
             continue
 
         print("\n" + "-" * 60)
-        print("DETERMINISTIC SECURITY GUARDRAILS")
+        print(
+            "DETERMINISTIC SECURITY GUARDRAILS"
+        )
         print("-" * 60)
 
         guarded_policy, guardrail_findings = (
@@ -662,17 +932,37 @@ def main():
             )
 
             attempts.append({
-                "attempt": attempt,
-                "policy": ai_policy,
+
+                "attempt":
+                    attempt,
+
+                "policy":
+                    ai_policy,
+
                 "guardrails": {
-                    "status": "FAIL",
+
+                    "status":
+                        "FAIL",
+
                     "findings":
                         guardrail_findings
                 },
-                "status": "FAIL"
+
+                "status":
+                    "FAIL"
             })
 
             current_policy = ai_policy
+
+            findings = [
+                {
+                    "severity": "HIGH",
+                    "issue":
+                        "AI policy failed deterministic security guardrails.",
+                    "details":
+                        guardrail_findings
+                }
+            ]
 
             continue
 
@@ -702,16 +992,27 @@ def main():
         if analyzer_result["status"] != "PASS":
 
             attempts.append({
-                "attempt": attempt,
-                "policy": guarded_policy,
+
+                "attempt":
+                    attempt,
+
+                "policy":
+                    guarded_policy,
+
                 "guardrails": {
-                    "status": "PASS",
+
+                    "status":
+                        "PASS",
+
                     "findings":
                         guardrail_findings
                 },
+
                 "access_analyzer":
                     analyzer_result,
-                "status": "FAIL"
+
+                "status":
+                    "FAIL"
             })
 
             current_policy = guarded_policy
@@ -733,18 +1034,30 @@ def main():
         if simulator_result["status"] != "PASS":
 
             attempts.append({
-                "attempt": attempt,
-                "policy": guarded_policy,
+
+                "attempt":
+                    attempt,
+
+                "policy":
+                    guarded_policy,
+
                 "guardrails": {
-                    "status": "PASS",
+
+                    "status":
+                        "PASS",
+
                     "findings":
                         guardrail_findings
                 },
+
                 "access_analyzer":
                     analyzer_result,
+
                 "iam_simulator":
                     simulator_result,
-                "status": "FAIL"
+
+                "status":
+                    "FAIL"
             })
 
             current_policy = guarded_policy
@@ -762,21 +1075,34 @@ def main():
             continue
 
         attempts.append({
-            "attempt": attempt,
-            "policy": guarded_policy,
+
+            "attempt":
+                attempt,
+
+            "policy":
+                guarded_policy,
+
             "guardrails": {
-                "status": "PASS",
+
+                "status":
+                    "PASS",
+
                 "findings":
                     guardrail_findings
             },
+
             "access_analyzer":
                 analyzer_result,
+
             "iam_simulator":
                 simulator_result,
-            "status": "PASS"
+
+            "status":
+                "PASS"
         })
 
         report = {
+
             "module":
                 "AI-Assisted CI/CD Least Privilege Pipeline",
 
@@ -808,12 +1134,21 @@ def main():
         )
 
         print("\n" + "=" * 60)
-        print("FINAL STATUS: VERIFIED")
-        print("CI/CD STATUS: PASS")
-        print("MERGE/DEPLOYMENT ALLOWED: TRUE")
+        print(
+            "FINAL STATUS: VERIFIED"
+        )
+        print(
+            "CI/CD STATUS: PASS"
+        )
+        print(
+            "MERGE/DEPLOYMENT ALLOWED: TRUE"
+        )
         print("=" * 60)
 
-        print("\nFinal least-privilege policy:")
+        print(
+            "\nFinal least-privilege policy:"
+        )
+
         print(
             json.dumps(
                 guarded_policy,
@@ -821,12 +1156,18 @@ def main():
             )
         )
 
-        print("\nReport saved:")
-        print(REPORT_FILE)
+        print(
+            "\nReport saved:"
+        )
+
+        print(
+            REPORT_FILE
+        )
 
         sys.exit(0)
 
     report = {
+
         "module":
             "AI-Assisted CI/CD Least Privilege Pipeline",
 
@@ -855,13 +1196,24 @@ def main():
     )
 
     print("\n" + "=" * 60)
-    print("FINAL STATUS: FAILED")
-    print("CI/CD STATUS: FAIL")
-    print("MERGE/DEPLOYMENT ALLOWED: FALSE")
+    print(
+        "FINAL STATUS: FAILED"
+    )
+    print(
+        "CI/CD STATUS: FAIL"
+    )
+    print(
+        "MERGE/DEPLOYMENT ALLOWED: FALSE"
+    )
     print("=" * 60)
 
-    print("\nReport saved:")
-    print(REPORT_FILE)
+    print(
+        "\nReport saved:"
+    )
+
+    print(
+        REPORT_FILE
+    )
 
     sys.exit(1)
 
