@@ -33,40 +33,92 @@ def save_json(path, data):
 
 def find_policy_file():
     """
-    Find IAM policy files inside ci/policies.
+    Find IAM policy files changed in Git.
 
-    Ignores required_actions.json because that file
-    contains the application's required permissions,
-    not the policy being scanned.
+    Checks:
+    1. Uncommitted working-tree changes
+    2. Staged changes
+    3. Changes in the latest commit
+
+    required_actions.json is ignored because it contains
+    application-required permissions, not the policy being scanned.
     """
 
-    policy_dir = BASE_DIR / "ci" / "policies"
+    try:
+        changed_files = set()
 
-    policy_files = [
-        file
-        for file in policy_dir.glob("*.json")
-        if file.name != "required_actions.json"
-    ]
+        # 1. Uncommitted working-tree changes
+        result = subprocess.run(
+            ["git", "diff", "--name-only"],
+            cwd=BASE_DIR,
+            capture_output=True,
+            text=True,
+            check=True
+        )
 
-    if not policy_files:
-        print("ERROR: No IAM policy files found.")
+        changed_files.update(result.stdout.splitlines())
+
+        # 2. Staged changes
+        result = subprocess.run(
+            ["git", "diff", "--cached", "--name-only"],
+            cwd=BASE_DIR,
+            capture_output=True,
+            text=True,
+            check=True
+        )
+
+        changed_files.update(result.stdout.splitlines())
+
+        # 3. Changes in the latest commit
+        result = subprocess.run(
+            ["git", "diff", "--name-only", "HEAD~1", "HEAD"],
+            cwd=BASE_DIR,
+            capture_output=True,
+            text=True,
+            check=True
+        )
+
+        changed_files.update(result.stdout.splitlines())
+
+    except subprocess.CalledProcessError as e:
+        print("ERROR: Unable to determine changed files from Git.")
+        print(e)
         return None
 
-    if len(policy_files) == 1:
-        return policy_files[0]
+    changed_policies = []
 
-    test_policy = policy_dir / "test_policy.json"
+    for file in changed_files:
+        file_path = Path(file)
 
-    if test_policy.exists():
-        return test_policy
+        if (
+            file_path.suffix.lower() == ".json"
+            and file_path.parent.as_posix() == "ci/policies"
+            and file_path.name != "required_actions.json"
+        ):
+            changed_policies.append(BASE_DIR / file_path)
 
-    print("ERROR: Multiple policy files found.")
-    print("Please specify which policy should be scanned:")
+    if not changed_policies:
+        print("ERROR: No changed IAM policy file detected.")
+        print("Changed files:")
 
-    for file in policy_files:
-        print(" -", file)
+        for file in sorted(changed_files):
+            print(" -", file)
 
-    return None
+        return None
+
+    if len(changed_policies) > 1:
+        print("ERROR: Multiple IAM policies were changed.")
+        print("Please scan one policy at a time:")
+
+        for file in changed_policies:
+            print(" -", file)
+
+        return None
+
+    print("Git changed policy detected:")
+    print(changed_policies[0])
+
+    return changed_policies[0]
 
 def extract_json_object(text):
     """
