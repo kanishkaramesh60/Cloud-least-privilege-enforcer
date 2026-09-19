@@ -15,15 +15,27 @@
             "risk_level": "Low"
         },
         {
+            "username": "Unknown",
+            "identity_type": "Unresolved",
+            "identity_confidence": "Low",
+            "permission_risk": 0,
+            "usage_risk": 30,
+            "orphan_risk": 0,
+            "temporal_risk": 0,
+            "identity_adjustment": 5,
+            "total_risk": 35,
+            "risk_level": "Low"
+        },
+        {
             "username": "resource-explorer-2",
             "identity_type": "AWS Service Identity",
             "identity_confidence": "Medium",
             "permission_risk": 0,
-            "usage_risk": 60,
+            "usage_risk": 50,
             "orphan_risk": 0,
             "temporal_risk": 0,
             "identity_adjustment": 0,
-            "total_risk": 60,
+            "total_risk": 50,
             "risk_level": "Medium"
         }
     ]

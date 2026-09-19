@@ -12,8 +12,8 @@
         "sts:GetCallerIdentity"
     ],
     "recommendation": {
-        "action": "Update to least privilege policy",
-        "reason": "The IAM user has 3 observed actions, which are already in the required_permissions list."
+        "action": "Update to include only necessary actions",
+        "reason": "Least Privilege remediation"
     },
     "recommended_policy": {
         "Version": "2012-10-17",

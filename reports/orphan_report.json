@@ -1,14 +1,10 @@
 [
     {
-        "username": "classA",
+        "username": "Least_privilege",
         "status": "Active",
-        "last_activity": "2026-08-29 10:01:01+05:30",
+        "last_activity": "2026-09-19 22:07:12+05:30",
         "inactive_days": 0,
-        "attached_policies": [
-            "AmazonEC2FullAccess",
-            "AdministratorAccess",
-            "IAMUserChangePassword"
-        ],
-        "risk": "High"
+        "attached_policies": [],
+        "risk": "Low"
     }
 ]

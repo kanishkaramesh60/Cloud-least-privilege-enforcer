@@ -23,14 +23,14 @@
             "confidence": "High"
         },
         {
+            "identity": "Unknown",
+            "identity_type": "Unresolved",
+            "confidence": "Low"
+        },
+        {
             "identity": "resource-explorer-2",
             "identity_type": "AWS Service Identity",
             "confidence": "Medium"
-        },
-        {
-            "identity": "Unknown",
-            "identity_type": "Unknown",
-            "confidence": "Low"
         }
     ]
 }

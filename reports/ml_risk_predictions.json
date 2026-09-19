@@ -10,9 +10,15 @@
             "risk_level": "Low"
         },
         {
+            "username": "Unknown",
+            "identity_type": "Unresolved",
+            "ml_risk_score": 30.28,
+            "risk_level": "Low"
+        },
+        {
             "username": "resource-explorer-2",
             "identity_type": "AWS Service Identity",
-            "ml_risk_score": 34.89,
+            "ml_risk_score": 33.16,
             "risk_level": "Low"
         }
     ]

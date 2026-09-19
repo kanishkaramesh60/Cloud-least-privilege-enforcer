@@ -1,0 +1,49 @@
+{
+    "snapshot_time": "2026-09-19T22:13:30.210671",
+    "identity": "Least_privilege",
+    "identity_type": "IAM User",
+    "attached_managed_policies": [],
+    "inline_policies": [
+        {
+            "policy_name": "CloudTrailReadAccess",
+            "policy_document": {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Sid": "CloudTrailReadAccess",
+                        "Effect": "Allow",
+                        "Action": "cloudtrail:LookupEvents",
+                        "Resource": "*"
+                    }
+                ]
+            }
+        },
+        {
+            "policy_name": "LeastPrivilegeScannerReadOnly",
+            "policy_document": {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Sid": "LeastPrivilegeScannerReadOnly",
+                        "Effect": "Allow",
+                        "Action": [
+                            "iam:ListUsers",
+                            "iam:ListAttachedUserPolicies",
+                            "iam:ListUserPolicies",
+                            "iam:ListRoles",
+                            "iam:ListGroups",
+                            "iam:ListPolicies",
+                            "iam:GetPolicy",
+                            "iam:GetPolicyVersion",
+                            "access-analyzer:ValidatePolicy",
+                            "iam:SimulateCustomPolicy",
+                            "iam:GetUserPolicy"
+                        ],
+                        "Resource": "*"
+                    }
+                ]
+            }
+        }
+    ],
+    "aws_changes_performed": false
+}

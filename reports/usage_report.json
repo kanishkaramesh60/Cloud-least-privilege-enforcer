@@ -1,40 +1,37 @@
 [
     {
+        "username": "resource-explorer-2",
+        "total_api_calls": 14,
+        "services_used": [
+            "ATHENA",
+            "EC2",
+            "EKS",
+            "EMR-CONTAINERS",
+            "EVENTS",
+            "GLUE",
+            "OUTPOSTS",
+            "REFACTOR-SPACES",
+            "RESILIENCEHUB",
+            "TRANSFER"
+        ],
+        "last_activity": "2026-09-19 22:09:04+05:30"
+    },
+    {
+        "username": "Unknown",
+        "total_api_calls": 18,
+        "services_used": [
+            "STS"
+        ],
+        "last_activity": "2026-09-19 22:09:04+05:30"
+    },
+    {
         "username": "Least_privilege",
-        "total_api_calls": 7,
+        "total_api_calls": 18,
         "services_used": [
             "ACCESS-ANALYZER",
             "CLOUDTRAIL",
             "STS"
         ],
-        "last_activity": "2026-09-15 20:39:47+05:30"
-    },
-    {
-        "username": "Unknown",
-        "total_api_calls": 23,
-        "services_used": [
-            "STS"
-        ],
-        "last_activity": "2026-09-15 19:54:25+05:30"
-    },
-    {
-        "username": "resource-explorer-2",
-        "total_api_calls": 20,
-        "services_used": [
-            "ATHENA",
-            "CLOUDCONTROLAPI",
-            "CLOUDTRAIL",
-            "CODESTAR-CONNECTIONS",
-            "EC2",
-            "ELASTICACHE",
-            "EMR-CONTAINERS",
-            "EMR-SERVERLESS",
-            "GLUE",
-            "GUARDDUTY",
-            "MEDIATAILOR",
-            "S3EXPRESS",
-            "XRAY"
-        ],
-        "last_activity": "2026-09-15 14:05:53+05:30"
+        "last_activity": "2026-09-19 22:07:12+05:30"
     }
 ]

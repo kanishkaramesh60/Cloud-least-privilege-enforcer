@@ -1,0 +1,6 @@
+{
+    "identity": "Least_privilege",
+    "deployment_status": "NO_REMEDIATION_REQUIRED",
+    "aws_changes_performed": false,
+    "verification_status": "NOT_REQUIRED"
+}

@@ -21,24 +21,18 @@
         {
             "username": "resource-explorer-2",
             "observed_actions": [
-                "athena:ListDataCatalogs",
-                "cloudcontrolapi:ListResources",
-                "cloudtrail:ListEventDataStores",
-                "codestar-connections:ListConnections",
-                "ec2:DescribeSecurityGroupRules",
-                "ec2:DescribeTransitGatewayRouteTableAnnouncements",
-                "ec2:DescribeVpcPeeringConnections",
-                "ec2:DescribeVpcs",
-                "elasticache:DescribeUsers",
+                "athena:ListWorkGroups",
+                "ec2:DescribeDhcpOptions",
+                "eks:ListEksAnywhereSubscriptions",
                 "emr-containers:ListSecurityConfigurations",
-                "emr-serverless:ListApplications",
+                "events:ListEventBuses",
                 "glue:GetDatabases",
-                "guardduty:ListMalwareProtectionPlans",
-                "mediatailor:ListSourceLocations",
-                "s3express:ListDirectoryBuckets",
-                "xray:GetSamplingRules"
+                "outposts:ListSites",
+                "refactor-spaces:ListEnvironments",
+                "resiliencehub:ListApps",
+                "transfer:ListServers"
             ],
-            "action_count": 16
+            "action_count": 10
         }
     ]
 }

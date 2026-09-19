@@ -1,16 +1,61 @@
 [
     {
+        "username": "resource-explorer-2",
+        "event_name": "ListEksAnywhereSubscriptions",
+        "event_time": "2026-09-19 22:09:04+05:30",
+        "event_source": "eks.amazonaws.com",
+        "aws_region": null,
+        "resources": []
+    },
+    {
+        "username": null,
+        "event_name": "AssumeRole",
+        "event_time": "2026-09-19 22:09:04+05:30",
+        "event_source": "sts.amazonaws.com",
+        "aws_region": null,
+        "resources": [
+            {
+                "resource_type": "AWS::IAM::AccessKey",
+                "resource_name": "ASIARNGTCVNDH2X6YD3C"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::IAM::Role",
+                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
+            }
+        ]
+    },
+    {
         "username": "Least_privilege",
-        "event_name": "LookupEvents",
-        "event_time": "2026-09-15 20:39:47+05:30",
-        "event_source": "cloudtrail.amazonaws.com",
+        "event_name": "ValidatePolicy",
+        "event_time": "2026-09-19 22:07:12+05:30",
+        "event_source": "access-analyzer.amazonaws.com",
+        "aws_region": null,
+        "resources": []
+    },
+    {
+        "username": "Least_privilege",
+        "event_name": "ValidatePolicy",
+        "event_time": "2026-09-19 22:07:07+05:30",
+        "event_source": "access-analyzer.amazonaws.com",
         "aws_region": null,
         "resources": []
     },
     {
         "username": "Least_privilege",
         "event_name": "LookupEvents",
-        "event_time": "2026-09-15 20:39:24+05:30",
+        "event_time": "2026-09-19 22:06:09+05:30",
         "event_source": "cloudtrail.amazonaws.com",
         "aws_region": null,
         "resources": []
@@ -18,23 +63,60 @@
     {
         "username": "Least_privilege",
         "event_name": "GetCallerIdentity",
-        "event_time": "2026-09-15 20:37:17+05:30",
+        "event_time": "2026-09-19 22:06:03+05:30",
         "event_source": "sts.amazonaws.com",
         "aws_region": null,
         "resources": []
     },
     {
+        "username": null,
+        "event_name": "AssumeRole",
+        "event_time": "2026-09-19 21:55:54+05:30",
+        "event_source": "sts.amazonaws.com",
+        "aws_region": null,
+        "resources": [
+            {
+                "resource_type": "AWS::IAM::AccessKey",
+                "resource_name": "ASIARNGTCVNDMOQKAM3X"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::IAM::Role",
+                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
+            }
+        ]
+    },
+    {
         "username": "Least_privilege",
-        "event_name": "LookupEvents",
-        "event_time": "2026-09-15 20:25:35+05:30",
-        "event_source": "cloudtrail.amazonaws.com",
+        "event_name": "ValidatePolicy",
+        "event_time": "2026-09-19 21:53:19+05:30",
+        "event_source": "access-analyzer.amazonaws.com",
+        "aws_region": null,
+        "resources": []
+    },
+    {
+        "username": "Least_privilege",
+        "event_name": "ValidatePolicy",
+        "event_time": "2026-09-19 21:53:15+05:30",
+        "event_source": "access-analyzer.amazonaws.com",
         "aws_region": null,
         "resources": []
     },
     {
         "username": "Least_privilege",
         "event_name": "LookupEvents",
-        "event_time": "2026-09-15 20:22:31+05:30",
+        "event_time": "2026-09-19 21:52:18+05:30",
         "event_source": "cloudtrail.amazonaws.com",
         "aws_region": null,
         "resources": []
@@ -42,7 +124,7 @@
     {
         "username": "Least_privilege",
         "event_name": "GetCallerIdentity",
-        "event_time": "2026-09-15 20:17:35+05:30",
+        "event_time": "2026-09-19 21:52:12+05:30",
         "event_source": "sts.amazonaws.com",
         "aws_region": null,
         "resources": []
@@ -50,116 +132,101 @@
     {
         "username": "Least_privilege",
         "event_name": "ValidatePolicy",
-        "event_time": "2026-09-15 20:02:34+05:30",
+        "event_time": "2026-09-19 21:41:50+05:30",
         "event_source": "access-analyzer.amazonaws.com",
         "aws_region": null,
         "resources": []
     },
     {
-        "username": null,
-        "event_name": "AssumeRole",
-        "event_time": "2026-09-15 19:54:25+05:30",
-        "event_source": "sts.amazonaws.com",
+        "username": "Least_privilege",
+        "event_name": "ValidatePolicy",
+        "event_time": "2026-09-19 21:37:58+05:30",
+        "event_source": "access-analyzer.amazonaws.com",
         "aws_region": null,
-        "resources": [
-            {
-                "resource_type": "AWS::IAM::AccessKey",
-                "resource_name": "ASIARNGTCVNDL7METLGA"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::IAM::Role",
-                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
-            }
-        ]
+        "resources": []
     },
     {
-        "username": null,
-        "event_name": "AssumeRole",
-        "event_time": "2026-09-15 16:57:10+05:30",
-        "event_source": "sts.amazonaws.com",
+        "username": "Least_privilege",
+        "event_name": "ValidatePolicy",
+        "event_time": "2026-09-19 21:37:54+05:30",
+        "event_source": "access-analyzer.amazonaws.com",
         "aws_region": null,
-        "resources": [
-            {
-                "resource_type": "AWS::IAM::AccessKey",
-                "resource_name": "ASIARNGTCVNDMQJ7ANVO"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::IAM::Role",
-                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
-            }
-        ]
+        "resources": []
     },
     {
-        "username": null,
-        "event_name": "AssumeRole",
-        "event_time": "2026-09-15 14:05:53+05:30",
-        "event_source": "sts.amazonaws.com",
-        "aws_region": null,
-        "resources": [
-            {
-                "resource_type": "AWS::IAM::AccessKey",
-                "resource_name": "ASIARNGTCVNDH2GRVPR5"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::IAM::Role",
-                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
-            }
-        ]
-    },
-    {
-        "username": "resource-explorer-2",
-        "event_name": "ListEventDataStores",
-        "event_time": "2026-09-15 14:05:53+05:30",
+        "username": "Least_privilege",
+        "event_name": "LookupEvents",
+        "event_time": "2026-09-19 21:36:58+05:30",
         "event_source": "cloudtrail.amazonaws.com",
         "aws_region": null,
         "resources": []
     },
     {
+        "username": "Least_privilege",
+        "event_name": "GetCallerIdentity",
+        "event_time": "2026-09-19 21:36:49+05:30",
+        "event_source": "sts.amazonaws.com",
+        "aws_region": null,
+        "resources": []
+    },
+    {
+        "username": "Least_privilege",
+        "event_name": "ValidatePolicy",
+        "event_time": "2026-09-19 21:26:21+05:30",
+        "event_source": "access-analyzer.amazonaws.com",
+        "aws_region": null,
+        "resources": []
+    },
+    {
+        "username": "Least_privilege",
+        "event_name": "ValidatePolicy",
+        "event_time": "2026-09-19 21:26:14+05:30",
+        "event_source": "access-analyzer.amazonaws.com",
+        "aws_region": null,
+        "resources": []
+    },
+    {
+        "username": "Least_privilege",
+        "event_name": "LookupEvents",
+        "event_time": "2026-09-19 21:25:09+05:30",
+        "event_source": "cloudtrail.amazonaws.com",
+        "aws_region": null,
+        "resources": []
+    },
+    {
+        "username": "Least_privilege",
+        "event_name": "GetCallerIdentity",
+        "event_time": "2026-09-19 21:25:02+05:30",
+        "event_source": "sts.amazonaws.com",
+        "aws_region": null,
+        "resources": []
+    },
+    {
+        "username": "Least_privilege",
+        "event_name": "ValidatePolicy",
+        "event_time": "2026-09-19 21:22:26+05:30",
+        "event_source": "access-analyzer.amazonaws.com",
+        "aws_region": null,
+        "resources": []
+    },
+    {
+        "username": "resource-explorer-2",
+        "event_name": "GetDatabases",
+        "event_time": "2026-09-19 20:58:22+05:30",
+        "event_source": "glue.amazonaws.com",
+        "aws_region": null,
+        "resources": []
+    },
+    {
         "username": null,
         "event_name": "AssumeRole",
-        "event_time": "2026-09-15 13:50:30+05:30",
+        "event_time": "2026-09-19 20:58:22+05:30",
         "event_source": "sts.amazonaws.com",
         "aws_region": null,
         "resources": [
             {
                 "resource_type": "AWS::IAM::AccessKey",
-                "resource_name": "ASIARNGTCVNDG4L5SIAR"
+                "resource_name": "ASIARNGTCVNDBFKKM4SU"
             },
             {
                 "resource_type": "AWS::STS::AssumedRole",
@@ -182,13 +249,13 @@
     {
         "username": null,
         "event_name": "AssumeRole",
-        "event_time": "2026-09-15 13:02:30+05:30",
+        "event_time": "2026-09-19 20:09:12+05:30",
         "event_source": "sts.amazonaws.com",
         "aws_region": null,
         "resources": [
             {
                 "resource_type": "AWS::IAM::AccessKey",
-                "resource_name": "ASIARNGTCVNDIWZAHHIZ"
+                "resource_name": "ASIARNGTCVNDBU6FCO7K"
             },
             {
                 "resource_type": "AWS::STS::AssumedRole",
@@ -210,30 +277,22 @@
     },
     {
         "username": "resource-explorer-2",
-        "event_name": "ListSourceLocations",
-        "event_time": "2026-09-15 13:02:30+05:30",
-        "event_source": "mediatailor.amazonaws.com",
-        "aws_region": null,
-        "resources": []
-    },
-    {
-        "username": "resource-explorer-2",
-        "event_name": "ListResources",
-        "event_time": "2026-09-15 12:54:07+05:30",
-        "event_source": "cloudcontrolapi.amazonaws.com",
+        "event_name": "ListSites",
+        "event_time": "2026-09-19 20:09:12+05:30",
+        "event_source": "outposts.amazonaws.com",
         "aws_region": null,
         "resources": []
     },
     {
         "username": null,
         "event_name": "AssumeRole",
-        "event_time": "2026-09-15 12:54:07+05:30",
+        "event_time": "2026-09-19 19:47:31+05:30",
         "event_source": "sts.amazonaws.com",
         "aws_region": null,
         "resources": [
             {
                 "resource_type": "AWS::IAM::AccessKey",
-                "resource_name": "ASIARNGTCVNDL2V66A2Y"
+                "resource_name": "ASIARNGTCVNDMKQ6Z3BF"
             },
             {
                 "resource_type": "AWS::STS::AssumedRole",
@@ -255,22 +314,191 @@
     },
     {
         "username": "resource-explorer-2",
-        "event_name": "ListMalwareProtectionPlans",
-        "event_time": "2026-09-15 12:54:07+05:30",
-        "event_source": "guardduty.amazonaws.com",
+        "event_name": "ListEnvironments",
+        "event_time": "2026-09-19 19:47:31+05:30",
+        "event_source": "refactor-spaces.amazonaws.com",
         "aws_region": null,
         "resources": []
     },
     {
         "username": null,
         "event_name": "AssumeRole",
-        "event_time": "2026-09-15 12:52:58+05:30",
+        "event_time": "2026-09-19 19:45:46+05:30",
         "event_source": "sts.amazonaws.com",
         "aws_region": null,
         "resources": [
             {
                 "resource_type": "AWS::IAM::AccessKey",
-                "resource_name": "ASIARNGTCVNDFK2JITVO"
+                "resource_name": "ASIARNGTCVNDOXVJW64Z"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::IAM::Role",
+                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
+            }
+        ]
+    },
+    {
+        "username": "resource-explorer-2",
+        "event_name": "ListSecurityConfigurations",
+        "event_time": "2026-09-19 19:45:46+05:30",
+        "event_source": "emr-containers.amazonaws.com",
+        "aws_region": null,
+        "resources": []
+    },
+    {
+        "username": null,
+        "event_name": "AssumeRole",
+        "event_time": "2026-09-19 18:19:29+05:30",
+        "event_source": "sts.amazonaws.com",
+        "aws_region": null,
+        "resources": [
+            {
+                "resource_type": "AWS::IAM::AccessKey",
+                "resource_name": "ASIARNGTCVNDP5TKHA2R"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::IAM::Role",
+                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
+            }
+        ]
+    },
+    {
+        "username": null,
+        "event_name": "AssumeRole",
+        "event_time": "2026-09-19 18:05:16+05:30",
+        "event_source": "sts.amazonaws.com",
+        "aws_region": null,
+        "resources": [
+            {
+                "resource_type": "AWS::IAM::AccessKey",
+                "resource_name": "ASIARNGTCVNDOX6ETG5B"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::IAM::Role",
+                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
+            }
+        ]
+    },
+    {
+        "username": "resource-explorer-2",
+        "event_name": "ListWorkGroups",
+        "event_time": "2026-09-19 18:05:16+05:30",
+        "event_source": "athena.amazonaws.com",
+        "aws_region": null,
+        "resources": []
+    },
+    {
+        "username": null,
+        "event_name": "AssumeRole",
+        "event_time": "2026-09-19 14:42:51+05:30",
+        "event_source": "sts.amazonaws.com",
+        "aws_region": null,
+        "resources": [
+            {
+                "resource_type": "AWS::IAM::AccessKey",
+                "resource_name": "ASIARNGTCVNDKBHWRYML"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::IAM::Role",
+                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
+            }
+        ]
+    },
+    {
+        "username": "resource-explorer-2",
+        "event_name": "ListEventBuses",
+        "event_time": "2026-09-19 14:42:51+05:30",
+        "event_source": "events.amazonaws.com",
+        "aws_region": null,
+        "resources": []
+    },
+    {
+        "username": null,
+        "event_name": "AssumeRole",
+        "event_time": "2026-09-19 13:41:46+05:30",
+        "event_source": "sts.amazonaws.com",
+        "aws_region": null,
+        "resources": [
+            {
+                "resource_type": "AWS::IAM::AccessKey",
+                "resource_name": "ASIARNGTCVNDMAMCC3XV"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::IAM::Role",
+                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
+            }
+        ]
+    },
+    {
+        "username": null,
+        "event_name": "AssumeRole",
+        "event_time": "2026-09-19 12:53:02+05:30",
+        "event_source": "sts.amazonaws.com",
+        "aws_region": null,
+        "resources": [
+            {
+                "resource_type": "AWS::IAM::AccessKey",
+                "resource_name": "ASIARNGTCVNDMEPJIW6K"
             },
             {
                 "resource_type": "AWS::STS::AssumedRole",
@@ -293,29 +521,140 @@
     {
         "username": "resource-explorer-2",
         "event_name": "GetDatabases",
-        "event_time": "2026-09-15 12:52:58+05:30",
+        "event_time": "2026-09-19 12:53:02+05:30",
         "event_source": "glue.amazonaws.com",
         "aws_region": null,
         "resources": []
     },
     {
+        "username": null,
+        "event_name": "AssumeRole",
+        "event_time": "2026-09-19 12:04:18+05:30",
+        "event_source": "sts.amazonaws.com",
+        "aws_region": null,
+        "resources": [
+            {
+                "resource_type": "AWS::IAM::AccessKey",
+                "resource_name": "ASIARNGTCVNDMBPPJZY3"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::IAM::Role",
+                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
+            }
+        ]
+    },
+    {
         "username": "resource-explorer-2",
-        "event_name": "ListConnections",
-        "event_time": "2026-09-15 11:42:35+05:30",
-        "event_source": "codestar-connections.amazonaws.com",
+        "event_name": "ListServers",
+        "event_time": "2026-09-19 12:04:18+05:30",
+        "event_source": "transfer.amazonaws.com",
+        "aws_region": null,
+        "resources": []
+    },
+    {
+        "username": "resource-explorer-2",
+        "event_name": "ListEnvironments",
+        "event_time": "2026-09-19 11:36:51+05:30",
+        "event_source": "refactor-spaces.amazonaws.com",
         "aws_region": null,
         "resources": []
     },
     {
         "username": null,
         "event_name": "AssumeRole",
-        "event_time": "2026-09-15 11:42:35+05:30",
+        "event_time": "2026-09-19 11:36:51+05:30",
         "event_source": "sts.amazonaws.com",
         "aws_region": null,
         "resources": [
             {
                 "resource_type": "AWS::IAM::AccessKey",
-                "resource_name": "ASIARNGTCVNDCWWOESS3"
+                "resource_name": "ASIARNGTCVNDJUEEHYN2"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::IAM::Role",
+                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
+            }
+        ]
+    },
+    {
+        "username": null,
+        "event_name": "AssumeRole",
+        "event_time": "2026-09-19 11:26:34+05:30",
+        "event_source": "sts.amazonaws.com",
+        "aws_region": null,
+        "resources": [
+            {
+                "resource_type": "AWS::IAM::AccessKey",
+                "resource_name": "ASIARNGTCVNDDHPX4CMH"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::IAM::Role",
+                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
+            }
+        ]
+    },
+    {
+        "username": "resource-explorer-2",
+        "event_name": "ListApps",
+        "event_time": "2026-09-19 11:26:34+05:30",
+        "event_source": "resiliencehub.amazonaws.com",
+        "aws_region": null,
+        "resources": []
+    },
+    {
+        "username": "resource-explorer-2",
+        "event_name": "DescribeDhcpOptions",
+        "event_time": "2026-09-19 11:00:26+05:30",
+        "event_source": "ec2.amazonaws.com",
+        "aws_region": null,
+        "resources": []
+    },
+    {
+        "username": null,
+        "event_name": "AssumeRole",
+        "event_time": "2026-09-19 11:00:26+05:30",
+        "event_source": "sts.amazonaws.com",
+        "aws_region": null,
+        "resources": [
+            {
+                "resource_type": "AWS::IAM::AccessKey",
+                "resource_name": "ASIARNGTCVNDCKQH7W4T"
             },
             {
                 "resource_type": "AWS::STS::AssumedRole",
@@ -338,7 +677,7 @@
     {
         "username": "resource-explorer-2",
         "event_name": "ListSecurityConfigurations",
-        "event_time": "2026-09-15 11:00:29+05:30",
+        "event_time": "2026-09-19 11:00:24+05:30",
         "event_source": "emr-containers.amazonaws.com",
         "aws_region": null,
         "resources": []
@@ -346,13 +685,71 @@
     {
         "username": null,
         "event_name": "AssumeRole",
-        "event_time": "2026-09-15 11:00:29+05:30",
+        "event_time": "2026-09-19 11:00:24+05:30",
         "event_source": "sts.amazonaws.com",
         "aws_region": null,
         "resources": [
             {
                 "resource_type": "AWS::IAM::AccessKey",
-                "resource_name": "ASIARNGTCVNDAILD524Z"
+                "resource_name": "ASIARNGTCVNDBQAKKVDJ"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::IAM::Role",
+                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
+            }
+        ]
+    },
+    {
+        "username": null,
+        "event_name": "AssumeRole",
+        "event_time": "2026-09-19 09:18:04+05:30",
+        "event_source": "sts.amazonaws.com",
+        "aws_region": null,
+        "resources": [
+            {
+                "resource_type": "AWS::IAM::AccessKey",
+                "resource_name": "ASIARNGTCVNDJYWQB3HL"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::STS::AssumedRole",
+                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
+            },
+            {
+                "resource_type": "AWS::IAM::Role",
+                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
+            }
+        ]
+    },
+    {
+        "username": null,
+        "event_name": "AssumeRole",
+        "event_time": "2026-09-19 09:03:02+05:30",
+        "event_source": "sts.amazonaws.com",
+        "aws_region": null,
+        "resources": [
+            {
+                "resource_type": "AWS::IAM::AccessKey",
+                "resource_name": "ASIARNGTCVNDOTGIPT46"
             },
             {
                 "resource_type": "AWS::STS::AssumedRole",
@@ -374,511 +771,9 @@
     },
     {
         "username": "resource-explorer-2",
-        "event_name": "ListDirectoryBuckets",
-        "event_time": "2026-09-15 10:54:20+05:30",
-        "event_source": "s3express.amazonaws.com",
-        "aws_region": null,
-        "resources": []
-    },
-    {
-        "username": null,
-        "event_name": "AssumeRole",
-        "event_time": "2026-09-15 10:54:20+05:30",
-        "event_source": "sts.amazonaws.com",
-        "aws_region": null,
-        "resources": [
-            {
-                "resource_type": "AWS::IAM::AccessKey",
-                "resource_name": "ASIARNGTCVNDNSEY7JXJ"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::IAM::Role",
-                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
-            }
-        ]
-    },
-    {
-        "username": "resource-explorer-2",
-        "event_name": "DescribeVpcs",
-        "event_time": "2026-09-15 10:04:05+05:30",
-        "event_source": "ec2.amazonaws.com",
-        "aws_region": null,
-        "resources": []
-    },
-    {
-        "username": null,
-        "event_name": "AssumeRole",
-        "event_time": "2026-09-15 10:04:05+05:30",
-        "event_source": "sts.amazonaws.com",
-        "aws_region": null,
-        "resources": [
-            {
-                "resource_type": "AWS::IAM::AccessKey",
-                "resource_name": "ASIARNGTCVNDFTEA4G7C"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::IAM::Role",
-                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
-            }
-        ]
-    },
-    {
-        "username": "resource-explorer-2",
-        "event_name": "GetSamplingRules",
-        "event_time": "2026-09-15 10:03:33+05:30",
-        "event_source": "xray.amazonaws.com",
-        "aws_region": null,
-        "resources": []
-    },
-    {
-        "username": null,
-        "event_name": "AssumeRole",
-        "event_time": "2026-09-15 10:03:33+05:30",
-        "event_source": "sts.amazonaws.com",
-        "aws_region": null,
-        "resources": [
-            {
-                "resource_type": "AWS::IAM::AccessKey",
-                "resource_name": "ASIARNGTCVNDNIBSZVOX"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::IAM::Role",
-                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
-            }
-        ]
-    },
-    {
-        "username": null,
-        "event_name": "AssumeRole",
-        "event_time": "2026-09-15 09:05:24+05:30",
-        "event_source": "sts.amazonaws.com",
-        "aws_region": null,
-        "resources": [
-            {
-                "resource_type": "AWS::IAM::AccessKey",
-                "resource_name": "ASIARNGTCVNDGDHNTQQO"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::IAM::Role",
-                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
-            }
-        ]
-    },
-    {
-        "username": "resource-explorer-2",
-        "event_name": "DescribeTransitGatewayRouteTableAnnouncements",
-        "event_time": "2026-09-15 07:55:37+05:30",
-        "event_source": "ec2.amazonaws.com",
-        "aws_region": null,
-        "resources": []
-    },
-    {
-        "username": null,
-        "event_name": "AssumeRole",
-        "event_time": "2026-09-15 07:55:37+05:30",
-        "event_source": "sts.amazonaws.com",
-        "aws_region": null,
-        "resources": [
-            {
-                "resource_type": "AWS::IAM::AccessKey",
-                "resource_name": "ASIARNGTCVNDOPR7O2YV"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::IAM::Role",
-                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
-            }
-        ]
-    },
-    {
-        "username": "resource-explorer-2",
-        "event_name": "DescribeVpcPeeringConnections",
-        "event_time": "2026-09-15 07:20:22+05:30",
-        "event_source": "ec2.amazonaws.com",
-        "aws_region": null,
-        "resources": []
-    },
-    {
-        "username": null,
-        "event_name": "AssumeRole",
-        "event_time": "2026-09-15 07:20:22+05:30",
-        "event_source": "sts.amazonaws.com",
-        "aws_region": null,
-        "resources": [
-            {
-                "resource_type": "AWS::IAM::AccessKey",
-                "resource_name": "ASIARNGTCVNDNTIZCF6V"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::IAM::Role",
-                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
-            }
-        ]
-    },
-    {
-        "username": null,
-        "event_name": "AssumeRole",
-        "event_time": "2026-09-15 07:17:08+05:30",
-        "event_source": "sts.amazonaws.com",
-        "aws_region": null,
-        "resources": [
-            {
-                "resource_type": "AWS::IAM::AccessKey",
-                "resource_name": "ASIARNGTCVNDBOS2B2F6"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::IAM::Role",
-                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
-            }
-        ]
-    },
-    {
-        "username": null,
-        "event_name": "AssumeRole",
-        "event_time": "2026-09-15 05:43:56+05:30",
-        "event_source": "sts.amazonaws.com",
-        "aws_region": null,
-        "resources": [
-            {
-                "resource_type": "AWS::IAM::AccessKey",
-                "resource_name": "ASIARNGTCVNDHQ4B56YE"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::IAM::Role",
-                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
-            }
-        ]
-    },
-    {
-        "username": "resource-explorer-2",
-        "event_name": "ListSecurityConfigurations",
-        "event_time": "2026-09-15 05:43:56+05:30",
-        "event_source": "emr-containers.amazonaws.com",
-        "aws_region": null,
-        "resources": []
-    },
-    {
-        "username": null,
-        "event_name": "AssumeRole",
-        "event_time": "2026-09-15 05:32:55+05:30",
-        "event_source": "sts.amazonaws.com",
-        "aws_region": null,
-        "resources": [
-            {
-                "resource_type": "AWS::IAM::AccessKey",
-                "resource_name": "ASIARNGTCVNDJWTCMQMT"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::IAM::Role",
-                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
-            }
-        ]
-    },
-    {
-        "username": null,
-        "event_name": "AssumeRole",
-        "event_time": "2026-09-15 05:00:23+05:30",
-        "event_source": "sts.amazonaws.com",
-        "aws_region": null,
-        "resources": [
-            {
-                "resource_type": "AWS::IAM::AccessKey",
-                "resource_name": "ASIARNGTCVNDL5FBT4M2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::IAM::Role",
-                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
-            }
-        ]
-    },
-    {
-        "username": "resource-explorer-2",
-        "event_name": "ListMalwareProtectionPlans",
-        "event_time": "2026-09-15 05:00:23+05:30",
-        "event_source": "guardduty.amazonaws.com",
-        "aws_region": null,
-        "resources": []
-    },
-    {
-        "username": "resource-explorer-2",
-        "event_name": "ListResources",
-        "event_time": "2026-09-15 05:00:23+05:30",
-        "event_source": "cloudcontrolapi.amazonaws.com",
-        "aws_region": null,
-        "resources": []
-    },
-    {
-        "username": "resource-explorer-2",
-        "event_name": "ListDataCatalogs",
-        "event_time": "2026-09-15 04:44:58+05:30",
-        "event_source": "athena.amazonaws.com",
-        "aws_region": null,
-        "resources": []
-    },
-    {
-        "username": null,
-        "event_name": "AssumeRole",
-        "event_time": "2026-09-15 04:44:58+05:30",
-        "event_source": "sts.amazonaws.com",
-        "aws_region": null,
-        "resources": [
-            {
-                "resource_type": "AWS::IAM::AccessKey",
-                "resource_name": "ASIARNGTCVNDLBR44CKX"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::IAM::Role",
-                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
-            }
-        ]
-    },
-    {
-        "username": null,
-        "event_name": "AssumeRole",
-        "event_time": "2026-09-15 04:31:00+05:30",
-        "event_source": "sts.amazonaws.com",
-        "aws_region": null,
-        "resources": [
-            {
-                "resource_type": "AWS::IAM::AccessKey",
-                "resource_name": "ASIARNGTCVNDF4EBTV53"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::IAM::Role",
-                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
-            }
-        ]
-    },
-    {
-        "username": "resource-explorer-2",
-        "event_name": "DescribeUsers",
-        "event_time": "2026-09-15 04:03:17+05:30",
-        "event_source": "elasticache.amazonaws.com",
-        "aws_region": null,
-        "resources": []
-    },
-    {
-        "username": null,
-        "event_name": "AssumeRole",
-        "event_time": "2026-09-15 04:03:17+05:30",
-        "event_source": "sts.amazonaws.com",
-        "aws_region": null,
-        "resources": [
-            {
-                "resource_type": "AWS::IAM::AccessKey",
-                "resource_name": "ASIARNGTCVNDHOPCSRWA"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::IAM::Role",
-                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
-            }
-        ]
-    },
-    {
-        "username": "resource-explorer-2",
-        "event_name": "ListApplications",
-        "event_time": "2026-09-15 03:56:14+05:30",
-        "event_source": "emr-serverless.amazonaws.com",
-        "aws_region": null,
-        "resources": []
-    },
-    {
-        "username": null,
-        "event_name": "AssumeRole",
-        "event_time": "2026-09-15 03:56:14+05:30",
-        "event_source": "sts.amazonaws.com",
-        "aws_region": null,
-        "resources": [
-            {
-                "resource_type": "AWS::IAM::AccessKey",
-                "resource_name": "ASIARNGTCVNDDCJ4ZTHL"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "AROARNGTCVNDLYY3CO64X:resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::STS::AssumedRole",
-                "resource_name": "arn:aws:sts::097079438150:assumed-role/AWSServiceRoleForResourceExplorer/resource-explorer-2"
-            },
-            {
-                "resource_type": "AWS::IAM::Role",
-                "resource_name": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer"
-            }
-        ]
-    },
-    {
-        "username": "resource-explorer-2",
-        "event_name": "DescribeSecurityGroupRules",
-        "event_time": "2026-09-15 03:44:32+05:30",
-        "event_source": "ec2.amazonaws.com",
-        "aws_region": null,
-        "resources": []
-    },
-    {
-        "username": "resource-explorer-2",
-        "event_name": "DescribeSecurityGroupRules",
-        "event_time": "2026-09-15 03:44:31+05:30",
-        "event_source": "ec2.amazonaws.com",
+        "event_name": "ListSites",
+        "event_time": "2026-09-19 09:03:02+05:30",
+        "event_source": "outposts.amazonaws.com",
         "aws_region": null,
         "resources": []
     }
