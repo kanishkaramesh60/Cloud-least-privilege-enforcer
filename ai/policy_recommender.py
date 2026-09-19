@@ -13,7 +13,7 @@ ACTIONS_FILE = BASE_DIR / "reports" / "observed_actions.json"
 OUTPUT_FILE = BASE_DIR / "reports" / "ai_recommended_policies.json"
 
 MODEL = "llama3.2:3b"
-TARGET_IDENTITY = "classA"
+TARGET_IDENTITY = "Least_privilege"
 
 
 def load_json(path):
@@ -333,7 +333,7 @@ def apply_guardrails(result, context):
     # ---------------------------------------------------------
 
     result["security_impact"] = {
-        "privilege_reduced": True,
+        "privilege_reduced": bool(excessive_permissions),
         "administrator_access_removed": (
             "AdministratorAccess" in excessive_permissions
         ),

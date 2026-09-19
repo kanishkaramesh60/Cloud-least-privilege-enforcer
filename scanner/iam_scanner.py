@@ -17,7 +17,7 @@ print("Account ID:", identity["Account"])
 print("ARN:", identity["Arn"])
 print("======================================")
 
-iam = boto3.client("iam")
+iam = session.client("iam")
 data = {
     "users": [],
     "roles": [],

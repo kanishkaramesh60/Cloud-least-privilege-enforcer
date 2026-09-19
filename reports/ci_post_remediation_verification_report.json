@@ -1,0 +1,46 @@
+{
+    "module": "Cloud Least Privilege Post-Remediation Verification",
+    "identity": "TestUser",
+    "identity_type": "IAM User",
+    "verification_type": "SYNTHETIC",
+    "source_reports": {
+        "ai_remediation_report": "D:\\Least_privilege\\reports\\ci_ai_remediation_report.json",
+        "validation_report": "D:\\Least_privilege\\reports\\ci_remediation_validation_report.json"
+    },
+    "before_remediation": {
+        "excessive_permissions": [
+            "iam:*",
+            "ec2:*",
+            "s3:*",
+            "lambda:*",
+            "dynamodb:*"
+        ],
+        "required_permissions": [
+            "s3:GetObject",
+            "s3:ListBucket",
+            "ec2:DescribeInstances",
+            "cloudtrail:LookupEvents"
+        ]
+    },
+    "after_remediation": {
+        "recommended_actions": [
+            "cloudtrail:LookupEvents",
+            "ec2:DescribeInstances",
+            "s3:GetObject",
+            "s3:ListBucket"
+        ],
+        "remaining_excessive_permissions": [],
+        "missing_required_actions": []
+    },
+    "checks": {
+        "excessive_permission_removal": "PASS",
+        "required_action_preservation": "PASS",
+        "wildcard_action_check": "PASS",
+        "previous_validation": "PASS",
+        "aws_change_check": "PASS",
+        "ai_remediation_report": "PASS"
+    },
+    "aws_policy_attached": false,
+    "aws_changes_performed": false,
+    "final_status": "POST_REMEDIATION_VERIFIED"
+}

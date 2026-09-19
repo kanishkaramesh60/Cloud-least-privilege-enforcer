@@ -1,10 +1,10 @@
 {
     "module": "AI Policy Simulation",
     "identity": {
-        "name": "classA",
+        "name": "Least_privilege",
         "type": "IAM User",
-        "risk_level": "High",
-        "risk_score": 100
+        "risk_level": "Low",
+        "risk_score": 30
     },
     "policy": {
         "Version": "2012-10-17",
@@ -12,20 +12,32 @@
             {
                 "Effect": "Allow",
                 "Action": [
-                    "cloudtrail:LookupEvents"
+                    "access-analyzer:ValidatePolicy",
+                    "cloudtrail:LookupEvents",
+                    "sts:GetCallerIdentity"
                 ],
                 "Resource": "*"
             }
         ]
     },
     "simulated_actions": [
-        "cloudtrail:LookupEvents"
+        "access-analyzer:ValidatePolicy",
+        "cloudtrail:LookupEvents",
+        "sts:GetCallerIdentity"
     ],
     "simulation": {
-        "identity": "classA",
+        "identity": "Least_privilege",
         "results": [
             {
+                "action": "access-analyzer:ValidatePolicy",
+                "decision": "allowed"
+            },
+            {
                 "action": "cloudtrail:LookupEvents",
+                "decision": "allowed"
+            },
+            {
+                "action": "sts:GetCallerIdentity",
                 "decision": "allowed"
             }
         ],

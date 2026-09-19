@@ -1,15 +1,37 @@
 {
     "module": "Cloud Least Privilege Verification Controller",
     "identity": {
-        "name": "classA",
+        "name": "Least_privilege",
         "type": "IAM User",
-        "risk_level": "High",
-        "risk_score": 100
+        "risk_level": "Low",
+        "risk_score": 30
+    },
+    "verification_basis": {
+        "source": "CloudTrail observed actions",
+        "observed_actions": [
+            "access-analyzer:ValidatePolicy",
+            "cloudtrail:LookupEvents",
+            "sts:GetCallerIdentity"
+        ]
     },
     "max_attempts": 3,
     "attempts": [
         {
             "attempt": 1,
+            "observed_action_coverage": {
+                "observed_actions": [
+                    "access-analyzer:ValidatePolicy",
+                    "cloudtrail:LookupEvents",
+                    "sts:GetCallerIdentity"
+                ],
+                "policy_actions": [
+                    "access-analyzer:ValidatePolicy",
+                    "cloudtrail:LookupEvents",
+                    "sts:GetCallerIdentity"
+                ],
+                "missing_actions": [],
+                "status": "PASS"
+            },
             "access_analyzer": {
                 "status": "PASS",
                 "findings": []
@@ -18,7 +40,15 @@
                 "status": "PASS",
                 "results": [
                     {
+                        "action": "access-analyzer:ValidatePolicy",
+                        "decision": "allowed"
+                    },
+                    {
                         "action": "cloudtrail:LookupEvents",
+                        "decision": "allowed"
+                    },
+                    {
+                        "action": "sts:GetCallerIdentity",
                         "decision": "allowed"
                     }
                 ]
@@ -27,5 +57,6 @@
         }
     ],
     "final_status": "VERIFIED",
-    "deployment_allowed": true
+    "ready_for_deployment_review": true,
+    "deployment_performed": false
 }

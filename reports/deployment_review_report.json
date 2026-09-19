@@ -1,0 +1,85 @@
+{
+    "module": "Cloud Least Privilege Deployment Review",
+    "identity": {
+        "name": "Least_privilege",
+        "type": "IAM User",
+        "risk_level": "Low",
+        "risk_score": 30
+    },
+    "policy_actions": [
+        "access-analyzer:ValidatePolicy",
+        "cloudtrail:LookupEvents",
+        "sts:GetCallerIdentity"
+    ],
+    "observed_actions": [
+        "access-analyzer:ValidatePolicy",
+        "cloudtrail:LookupEvents",
+        "sts:GetCallerIdentity"
+    ],
+    "missing_actions": [],
+    "checks": [
+        {
+            "check": "Target identity",
+            "expected": "Least_privilege",
+            "actual": "Least_privilege",
+            "status": "PASS"
+        },
+        {
+            "check": "Identity type",
+            "expected": "IAM User",
+            "actual": "IAM User",
+            "status": "PASS"
+        },
+        {
+            "check": "Verification status",
+            "expected": "VERIFIED",
+            "actual": "VERIFIED",
+            "status": "PASS"
+        },
+        {
+            "check": "Ready for deployment review",
+            "expected": true,
+            "actual": true,
+            "status": "PASS"
+        },
+        {
+            "check": "AWS Access Analyzer",
+            "expected": "PASS",
+            "actual": "PASS",
+            "status": "PASS"
+        },
+        {
+            "check": "IAM Policy Simulator",
+            "expected": "PASS",
+            "actual": "PASS",
+            "status": "PASS"
+        },
+        {
+            "check": "Recommended policy exists",
+            "expected": true,
+            "actual": true,
+            "status": "PASS"
+        },
+        {
+            "check": "Wildcard Action",
+            "expected": "Not present",
+            "actual": "Not present",
+            "status": "PASS"
+        },
+        {
+            "check": "Observed action coverage",
+            "expected": "All observed actions included",
+            "actual": "All covered",
+            "status": "PASS"
+        },
+        {
+            "check": "AI recommendation status",
+            "expected": "GENERATED",
+            "actual": "GENERATED",
+            "status": "PASS"
+        }
+    ],
+    "review_status": "APPROVED_FOR_HUMAN_REVIEW",
+    "human_approval_required": true,
+    "deployment_performed": false
+}

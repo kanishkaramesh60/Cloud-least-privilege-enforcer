@@ -1,0 +1,38 @@
+{
+    "module": "Synthetic Least Privilege Remediation Test",
+    "identity": "TestUser",
+    "current_policies": [
+        "AdministratorAccess"
+    ],
+    "excessive_permissions": [
+        "iam:*",
+        "ec2:*",
+        "s3:*",
+        "lambda:*",
+        "dynamodb:*"
+    ],
+    "observed_actions": [
+        "s3:GetObject",
+        "s3:ListBucket",
+        "ec2:DescribeInstances",
+        "cloudtrail:LookupEvents"
+    ],
+    "recommended_policy": {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "s3:GetObject",
+                    "s3:ListBucket",
+                    "ec2:DescribeInstances",
+                    "cloudtrail:LookupEvents"
+                ],
+                "Resource": "*"
+            }
+        ]
+    },
+    "wildcard_action": false,
+    "status": "PASS",
+    "aws_changes_performed": false
+}

@@ -1,17 +1,17 @@
 {
     "module": "AI Policy Validation",
-    "identity": "classA",
-    "risk_level": "High",
-    "risk_score": 100,
+    "identity": "Least_privilege",
+    "risk_level": "Low",
+    "risk_score": 30,
     "policy_source": "ai_recommended_policies.json",
     "local_validation": {
         "status": "PASS",
         "findings": []
     },
     "access_analyzer": {
-        "status": "FAIL",
+        "status": "PASS",
         "findings": [],
-        "raw_status": "ERROR"
+        "raw_status": "SUCCESS"
     },
-    "overall_status": "FAIL"
+    "overall_status": "PASS"
 }

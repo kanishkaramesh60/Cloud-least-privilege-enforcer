@@ -3,94 +3,88 @@
     "description": "Compares assigned IAM policies with observed CloudTrail usage and extracts observed IAM actions.",
     "users": [
         {
-            "username": "classA",
+            "username": "Least_privilege",
             "assigned_policies": [
-                "AmazonEC2FullAccess",
-                "AdministratorAccess",
-                "IAMUserChangePassword"
+                "CloudTrailReadAccess",
+                "LeastPrivilegeScannerReadOnly"
             ],
-            "observed_api_calls": 4,
+            "observed_api_calls": 7,
             "observed_services": [
-                "CLOUDTRAIL"
+                "ACCESS-ANALYZER",
+                "CLOUDTRAIL",
+                "STS"
             ],
             "observed_iam_actions": [
-                "cloudtrail:LookupEvents"
-            ],
-            "analysis": {
-                "broad_policies": [
-                    "AmazonEC2FullAccess",
-                    "AdministratorAccess"
-                ],
-                "potentially_excessive_policies": [
-                    "AmazonEC2FullAccess",
-                    "AdministratorAccess"
-                ],
-                "used_services": [
-                    "CLOUDTRAIL"
-                ],
-                "unused_services": [],
-                "least_privilege_status": "Potentially Over-Privileged"
-            }
-        },
-        {
-            "username": "resource-explorer-2",
-            "assigned_policies": [],
-            "observed_api_calls": 19,
-            "observed_services": [
-                "CLOUDCONTROLAPI",
-                "DATABREW",
-                "EC2",
-                "EKS",
-                "EMR-CONTAINERS",
-                "FORECAST",
-                "GLUE",
-                "GREENGRASS",
-                "IOT",
-                "IOTSITEWISE",
-                "MEDIAPACKAGE",
-                "QUICKSIGHT",
-                "RDS",
-                "SSM",
-                "VPC-LATTICE"
-            ],
-            "observed_iam_actions": [
-                "cloudcontrolapi:ListResources",
-                "databrew:ListJobs",
-                "ec2:DescribeNetworkInterfaces",
-                "eks:ListEksAnywhereSubscriptions",
-                "emr-containers:ListSecurityConfigurations",
-                "forecast:ListForecasts",
-                "glue:GetDatabases",
-                "greengrass:ListGroups",
-                "iot:ListJobs",
-                "iot:ListThings",
-                "iotsitewise:ListPortals",
-                "mediapackage:ListOriginEndpoints",
-                "quicksight:DescribeAccountSubscription",
-                "rds:DescribeDBParameterGroups",
-                "rds:DescribeDBSubnetGroups",
-                "ssm:ListAssociations",
-                "vpc-lattice:ListServiceNetworks"
+                "access-analyzer:ValidatePolicy",
+                "cloudtrail:LookupEvents",
+                "sts:GetCallerIdentity"
             ],
             "analysis": {
                 "broad_policies": [],
                 "potentially_excessive_policies": [],
                 "used_services": [
+                    "ACCESS-ANALYZER",
+                    "CLOUDTRAIL",
+                    "STS"
+                ],
+                "unused_services": [],
+                "least_privilege_status": "Requires Detailed Review"
+            }
+        },
+        {
+            "username": "resource-explorer-2",
+            "assigned_policies": [],
+            "observed_api_calls": 20,
+            "observed_services": [
+                "ATHENA",
+                "CLOUDCONTROLAPI",
+                "CLOUDTRAIL",
+                "CODESTAR-CONNECTIONS",
+                "EC2",
+                "ELASTICACHE",
+                "EMR-CONTAINERS",
+                "EMR-SERVERLESS",
+                "GLUE",
+                "GUARDDUTY",
+                "MEDIATAILOR",
+                "S3EXPRESS",
+                "XRAY"
+            ],
+            "observed_iam_actions": [
+                "athena:ListDataCatalogs",
+                "cloudcontrolapi:ListResources",
+                "cloudtrail:ListEventDataStores",
+                "codestar-connections:ListConnections",
+                "ec2:DescribeSecurityGroupRules",
+                "ec2:DescribeTransitGatewayRouteTableAnnouncements",
+                "ec2:DescribeVpcPeeringConnections",
+                "ec2:DescribeVpcs",
+                "elasticache:DescribeUsers",
+                "emr-containers:ListSecurityConfigurations",
+                "emr-serverless:ListApplications",
+                "glue:GetDatabases",
+                "guardduty:ListMalwareProtectionPlans",
+                "mediatailor:ListSourceLocations",
+                "s3express:ListDirectoryBuckets",
+                "xray:GetSamplingRules"
+            ],
+            "analysis": {
+                "broad_policies": [],
+                "potentially_excessive_policies": [],
+                "used_services": [
+                    "ATHENA",
                     "CLOUDCONTROLAPI",
-                    "DATABREW",
+                    "CLOUDTRAIL",
+                    "CODESTAR-CONNECTIONS",
                     "EC2",
-                    "EKS",
+                    "ELASTICACHE",
                     "EMR-CONTAINERS",
-                    "FORECAST",
+                    "EMR-SERVERLESS",
                     "GLUE",
-                    "GREENGRASS",
-                    "IOT",
-                    "IOTSITEWISE",
-                    "MEDIAPACKAGE",
-                    "QUICKSIGHT",
-                    "RDS",
-                    "SSM",
-                    "VPC-LATTICE"
+                    "GUARDDUTY",
+                    "MEDIATAILOR",
+                    "S3EXPRESS",
+                    "XRAY"
                 ],
                 "unused_services": [],
                 "least_privilege_status": "No Policies"

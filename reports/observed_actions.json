@@ -3,42 +3,42 @@
     "description": "Extracts IAM-style actions from CloudTrail event_source and event_name.",
     "users": [
         {
-            "username": "Unknown",
+            "username": "Least_privilege",
             "observed_actions": [
-                "kms:Decrypt",
-                "sts:AssumeRole"
+                "access-analyzer:ValidatePolicy",
+                "cloudtrail:LookupEvents",
+                "sts:GetCallerIdentity"
             ],
-            "action_count": 2
+            "action_count": 3
         },
         {
-            "username": "classA",
+            "username": "Unknown",
             "observed_actions": [
-                "cloudtrail:LookupEvents"
+                "sts:AssumeRole"
             ],
             "action_count": 1
         },
         {
             "username": "resource-explorer-2",
             "observed_actions": [
-                "cloudformation:ListResources",
-                "databrew:ListJobs",
-                "ec2:DescribeNetworkInterfaces",
-                "eks:ListEksAnywhereSubscriptions",
+                "athena:ListDataCatalogs",
+                "cloudcontrolapi:ListResources",
+                "cloudtrail:ListEventDataStores",
+                "codestar-connections:ListConnections",
+                "ec2:DescribeSecurityGroupRules",
+                "ec2:DescribeTransitGatewayRouteTableAnnouncements",
+                "ec2:DescribeVpcPeeringConnections",
+                "ec2:DescribeVpcs",
+                "elasticache:DescribeUsers",
                 "emr-containers:ListSecurityConfigurations",
-                "forecast:ListForecasts",
+                "emr-serverless:ListApplications",
                 "glue:GetDatabases",
-                "greengrass:ListGroups",
-                "iot:ListJobs",
-                "iot:ListThings",
-                "iotsitewise:ListPortals",
-                "mediapackage:ListOriginEndpoints",
-                "quicksight:DescribeAccountSubscription",
-                "rds:DescribeDBParameterGroups",
-                "rds:DescribeDBSubnetGroups",
-                "ssm:ListAssociations",
-                "vpc-lattice:ListServiceNetworks"
+                "guardduty:ListMalwareProtectionPlans",
+                "mediatailor:ListSourceLocations",
+                "s3express:ListDirectoryBuckets",
+                "xray:GetSamplingRules"
             ],
-            "action_count": 17
+            "action_count": 16
         }
     ]
 }

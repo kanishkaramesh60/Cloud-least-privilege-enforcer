@@ -1,20 +1,19 @@
 {
     "identity": {
-        "name": "classA",
+        "name": "Least_privilege",
         "type": "IAM User",
-        "risk_level": "High",
-        "risk_score": 100
+        "risk_level": "Low",
+        "risk_score": 30
     },
-    "excessive_permissions": [
-        "AmazonEC2FullAccess",
-        "AdministratorAccess"
-    ],
+    "excessive_permissions": [],
     "required_permissions": [
-        "cloudtrail:LookupEvents"
+        "access-analyzer:ValidatePolicy",
+        "cloudtrail:LookupEvents",
+        "sts:GetCallerIdentity"
     ],
     "recommendation": {
-        "action": "Remove broad permissions",
-        "reason": "Excessive permissions identified"
+        "action": "Update to least privilege policy",
+        "reason": "The IAM user has 3 observed actions, which are already in the required_permissions list."
     },
     "recommended_policy": {
         "Version": "2012-10-17",
@@ -22,16 +21,18 @@
             {
                 "Effect": "Allow",
                 "Action": [
-                    "cloudtrail:LookupEvents"
+                    "access-analyzer:ValidatePolicy",
+                    "cloudtrail:LookupEvents",
+                    "sts:GetCallerIdentity"
                 ],
                 "Resource": "*"
             }
         ]
     },
     "security_impact": {
-        "privilege_reduced": true,
-        "administrator_access_removed": true,
-        "full_access_removed": true
+        "privilege_reduced": false,
+        "administrator_access_removed": false,
+        "full_access_removed": false
     },
     "ai_status": "GENERATED"
 }

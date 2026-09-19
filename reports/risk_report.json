@@ -3,27 +3,27 @@
     "description": "Calculates risk using permission, usage, orphan, temporal and identity classification data.",
     "users": [
         {
-            "username": "classA",
+            "username": "Least_privilege",
             "identity_type": "IAM User",
             "identity_confidence": "High",
-            "permission_risk": 80,
-            "usage_risk": 20,
-            "orphan_risk": 30,
+            "permission_risk": 0,
+            "usage_risk": 30,
+            "orphan_risk": 0,
             "temporal_risk": 0,
             "identity_adjustment": 0,
-            "total_risk": 100,
-            "risk_level": "High"
+            "total_risk": 30,
+            "risk_level": "Low"
         },
         {
             "username": "resource-explorer-2",
             "identity_type": "AWS Service Identity",
             "identity_confidence": "Medium",
             "permission_risk": 0,
-            "usage_risk": 50,
+            "usage_risk": 60,
             "orphan_risk": 0,
             "temporal_risk": 0,
             "identity_adjustment": 0,
-            "total_risk": 50,
+            "total_risk": 60,
             "risk_level": "Medium"
         }
     ]

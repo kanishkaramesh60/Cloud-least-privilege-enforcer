@@ -1,0 +1,20 @@
+{
+    "identity": "TestUser",
+    "identity_type": "IAM User",
+    "current_policies": [
+        "AdministratorAccess"
+    ],
+    "observed_actions": [
+        "s3:GetObject",
+        "s3:ListBucket",
+        "ec2:DescribeInstances",
+        "cloudtrail:LookupEvents"
+    ],
+    "excessive_permissions": [
+        "iam:*",
+        "ec2:*",
+        "s3:*",
+        "lambda:*",
+        "dynamodb:*"
+    ]
+}

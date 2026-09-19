@@ -1,0 +1,20 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "LeastPrivilegeScannerReadOnly",
+            "Effect": "Allow",
+            "Action": [
+                "iam:ListUsers",
+                "iam:ListAttachedUserPolicies",
+                "iam:ListUserPolicies",
+                "iam:ListRoles",
+                "iam:ListGroups",
+                "iam:ListPolicies",
+                "iam:GetPolicy",
+                "iam:GetPolicyVersion"
+            ],
+            "Resource": "*"
+        }
+    ]
+}

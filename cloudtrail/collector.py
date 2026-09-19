@@ -2,7 +2,8 @@ import boto3
 import json
 import os
 
-cloudtrail = boto3.client("cloudtrail")
+session = boto3.Session(profile_name="leastprivilege")
+cloudtrail = session.client("cloudtrail", region_name="ap-south-1")
 print("=" * 60)
 print("AWS CLOUDTRAIL LOG COLLECTOR")
 print("=" * 60)
