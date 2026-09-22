@@ -189,6 +189,7 @@ def main():
             file,
             indent=4
         )
+        
     print(f"\nTotal Events             : {total_events}")
     print(f"Within Access Window    : {within_window}")
     print(f"Outside Access Window   : {outside_window}")
