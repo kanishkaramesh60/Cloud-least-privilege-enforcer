@@ -43,9 +43,9 @@
                 "eks:ListEksAnywhereSubscriptions",
                 "emr-containers:ListSecurityConfigurations",
                 "glue:GetDatabases",
-                "kafka:ListClusters",
                 "rds:DescribeDBClusterEndpoints",
                 "rds:DescribeReservedDBInstances",
+                "synthetics:ListGroups",
                 "vpc-lattice:ListServices"
             ],
             "action_count": 9

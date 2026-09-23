@@ -157,7 +157,7 @@
                 "CloudTrailReadAccess",
                 "LeastPrivilegeScannerReadOnly"
             ],
-            "observed_api_calls": 25,
+            "observed_api_calls": 26,
             "observed_services": [
                 "ACCESS-ANALYZER",
                 "CLOUDTRAIL",
@@ -275,7 +275,7 @@
         {
             "username": "Unknown",
             "assigned_policies": [],
-            "observed_api_calls": 11,
+            "observed_api_calls": 10,
             "observed_services": [
                 "STS"
             ],
@@ -304,8 +304,8 @@
                 "EKS",
                 "EMR-CONTAINERS",
                 "GLUE",
-                "KAFKA",
                 "RDS",
+                "SYNTHETICS",
                 "VPC-LATTICE"
             ],
             "observed_iam_actions": [
@@ -314,9 +314,9 @@
                 "eks:ListEksAnywhereSubscriptions",
                 "emr-containers:ListSecurityConfigurations",
                 "glue:GetDatabases",
-                "kafka:ListClusters",
                 "rds:DescribeDBClusterEndpoints",
                 "rds:DescribeReservedDBInstances",
+                "synthetics:ListGroups",
                 "vpc-lattice:ListServices"
             ],
             "granted_actions": [],
@@ -327,9 +327,9 @@
                 "eks:ListEksAnywhereSubscriptions",
                 "emr-containers:ListSecurityConfigurations",
                 "glue:GetDatabases",
-                "kafka:ListClusters",
                 "rds:DescribeDBClusterEndpoints",
                 "rds:DescribeReservedDBInstances",
+                "synthetics:ListGroups",
                 "vpc-lattice:ListServices"
             ],
             "potentially_unused_actions": [],
@@ -342,8 +342,8 @@
                     "EKS",
                     "EMR-CONTAINERS",
                     "GLUE",
-                    "KAFKA",
                     "RDS",
+                    "SYNTHETICS",
                     "VPC-LATTICE"
                 ],
                 "unused_services": [],

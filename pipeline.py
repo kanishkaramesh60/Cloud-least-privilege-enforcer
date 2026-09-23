@@ -92,7 +92,7 @@ PIPELINE = [
         "Verification Controller",
         "validation\\verification_controller.py"
     ),
-
+    ("Decision Engine", "decision\\decision_engine.py"),
     (
         "Rollback Controller",
         "validation\\rollback_controller.py"

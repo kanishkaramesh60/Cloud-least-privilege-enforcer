@@ -1,0 +1,39 @@
+{
+    "module": "Cloud Least Privilege Decision Engine",
+    "description": "Determines whether IAM remediation is justified using deterministic findings, rule-based risk, XGBoost risk, policy validation, IAM simulation and verification.",
+    "decision": "NO_REMEDIATION_REQUIRED",
+    "explanation": "No confirmed excessive permissions exist. The current evidence does not justify modifying the target identity's IAM permissions.",
+    "identity": {
+        "name": "LeastPrivilegeDemoUser",
+        "type": "IAM User"
+    },
+    "risk": {
+        "rule_based_score": 18,
+        "rule_based_level": "Low",
+        "ml_score": 35.12,
+        "ml_level": "Medium"
+    },
+    "permission_findings": {
+        "confirmed_excessive_permissions": [],
+        "potentially_excessive_policies": [],
+        "potentially_unused_permissions": [
+            "s3-object-lambda:Get*",
+            "s3-object-lambda:List*",
+            "s3:Describe*",
+            "s3:Get*"
+        ],
+        "least_privilege_status": "Unknown"
+    },
+    "validation": {
+        "policy_validation": "PASS",
+        "iam_simulation": "PASS",
+        "verification": "VERIFIED"
+    },
+    "reasons": [
+        "No confirmed excessive permissions were detected.",
+        "Potentially unused permissions require review but are not treated as confirmed excessive permissions."
+    ],
+    "blockers": [],
+    "human_approval_required": false,
+    "remediation_allowed": false
+}

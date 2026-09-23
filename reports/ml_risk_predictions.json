@@ -1,256 +1,132 @@
 {
-    "module": "XGBoost ML Risk Prediction",
-    "model": "XGBoost Regressor",
-    "description": "Predicts IAM identity risk using the trained XGBoost model and available IAM and CloudTrail behavioral features.",
-    "feature_sources": {
-        "risk_report": "reports\\risk_report.json",
-        "identity_report": "reports\\identity_report.json",
-        "permission_analysis": "reports\\permission_analysis.json",
-        "cloudtrail_analysis": "reports\\cloudtrail_analysis.json"
-    },
-    "connected_features": [
-        "permission_risk",
-        "usage_risk",
-        "orphan_risk",
-        "temporal_risk",
-        "admin_access",
-        "full_access_policies",
-        "policy_count",
-        "unused_permissions_pct",
-        "services_used",
-        "unusual_hour_access",
-        "sensitive_actions",
-        "cross_service_access",
-        "identity_type"
-    ],
-    "unavailable_features": [
-        "api_calls_7d",
-        "inactive_days",
-        "new_source_ip",
-        "failed_auth_attempts"
-    ],
-    "limitations": [
-        "The current CloudTrail collection window is not necessarily seven days.",
-        "Inactive days are not available from the current dataset.",
-        "Source IP history is not available in the current collected log format.",
-        "Failed authentication attempts are not available in the current collected log format.",
-        "Unused permission percentage is calculated only when a reliable total granted-permission count is available in permission_analysis.json.",
-        "The XGBoost model was trained on synthetic data, so the resulting score is an ML risk signal rather than a validated real-world probability."
-    ],
+    "module": "XGBoost Risk Prediction",
+    "description": "ML-based risk prediction using behavioral, identity, permission and rule-based risk features.",
+    "model": "XGBoost",
     "predictions": [
         {
             "username": "LeastPrivilegeDemoUser",
             "identity_type": "IAM User",
-            "ml_risk_score": 31.48,
-            "risk_level": "Low",
-            "model_features": {
-                "permission_risk": 8.0,
-                "usage_risk": 10.0,
-                "orphan_risk": 0.0,
-                "temporal_risk": 0.0,
-                "admin_access": 0,
-                "full_access_policies": 0,
-                "policy_count": 1,
-                "unused_permissions_pct": 0,
-                "api_calls_7d": 0,
+            "features": {
+                "permission_risk": 8,
+                "usage_risk": 10,
+                "temporal_risk": 0,
+                "orphan_risk": 0,
                 "services_used": 2,
-                "inactive_days": 0,
                 "unusual_hour_access": 1,
-                "new_source_ip": 0,
-                "failed_auth_attempts": 0,
                 "sensitive_actions": 0,
                 "cross_service_access": 1,
-                "identity_type": "IAM User"
-            },
-            "cloudtrail_features": {
-                "total_api_calls": 4,
-                "service_count": 2,
-                "unusual_hour_access": 1,
-                "sensitive_action_count": 0,
-                "cross_service_access": 1
-            },
-            "permission_features": {
                 "admin_access": 0,
                 "full_access_policies": 0,
                 "policy_count": 1,
-                "unused_permissions_pct": 0,
-                "assigned_policies": [
-                    "AmazonS3ReadOnlyAccess"
-                ],
-                "potentially_unused_permissions": [],
-                "potentially_excessive_policies": []
-            }
+                "unused_permissions_pct": 80.0,
+                "api_calls_7d": 0,
+                "inactive_days": 0,
+                "new_source_ip": 0,
+                "failed_auth_attempts": 0,
+                "identity_type": "IAM User"
+            },
+            "ml_risk_score": 35.12,
+            "risk_level": "Medium"
         },
         {
             "username": "LeastPrivilegeDeployer",
             "identity_type": "IAM User",
-            "ml_risk_score": 37.82,
-            "risk_level": "Low",
-            "model_features": {
-                "permission_risk": 40.0,
-                "usage_risk": 10.0,
-                "orphan_risk": 0.0,
-                "temporal_risk": 0.0,
-                "admin_access": 0,
-                "full_access_policies": 0,
-                "policy_count": 1,
-                "unused_permissions_pct": 0,
-                "api_calls_7d": 0,
+            "features": {
+                "permission_risk": 40,
+                "usage_risk": 10,
+                "temporal_risk": 0,
+                "orphan_risk": 0,
                 "services_used": 1,
-                "inactive_days": 0,
                 "unusual_hour_access": 1,
-                "new_source_ip": 0,
-                "failed_auth_attempts": 0,
                 "sensitive_actions": 0,
                 "cross_service_access": 0,
-                "identity_type": "IAM User"
-            },
-            "cloudtrail_features": {
-                "total_api_calls": 1,
-                "service_count": 1,
-                "unusual_hour_access": 1,
-                "sensitive_action_count": 0,
-                "cross_service_access": 0
-            },
-            "permission_features": {
                 "admin_access": 0,
                 "full_access_policies": 0,
                 "policy_count": 1,
-                "unused_permissions_pct": 0,
-                "assigned_policies": [
-                    "LeastPrivilegeRemediationPolicy"
-                ],
-                "potentially_unused_permissions": [],
-                "potentially_excessive_policies": [
-                    "LeastPrivilegeRemediationPolicy"
-                ]
-            }
+                "unused_permissions_pct": 100.0,
+                "api_calls_7d": 0,
+                "inactive_days": 0,
+                "new_source_ip": 0,
+                "failed_auth_attempts": 0,
+                "identity_type": "IAM User"
+            },
+            "ml_risk_score": 43.92,
+            "risk_level": "Medium"
         },
         {
             "username": "Least_privilege",
             "identity_type": "IAM User",
-            "ml_risk_score": 32.96,
-            "risk_level": "Low",
-            "model_features": {
-                "permission_risk": 20.0,
-                "usage_risk": 30.0,
-                "orphan_risk": 0.0,
-                "temporal_risk": 0.0,
-                "admin_access": 0,
-                "full_access_policies": 0,
-                "policy_count": 2,
-                "unused_permissions_pct": 0,
-                "api_calls_7d": 0,
+            "features": {
+                "permission_risk": 20,
+                "usage_risk": 30,
+                "temporal_risk": 0,
+                "orphan_risk": 0,
                 "services_used": 3,
-                "inactive_days": 0,
                 "unusual_hour_access": 1,
-                "new_source_ip": 0,
-                "failed_auth_attempts": 0,
                 "sensitive_actions": 0,
                 "cross_service_access": 1,
-                "identity_type": "IAM User"
-            },
-            "cloudtrail_features": {
-                "total_api_calls": 25,
-                "service_count": 3,
-                "unusual_hour_access": 1,
-                "sensitive_action_count": 0,
-                "cross_service_access": 1
-            },
-            "permission_features": {
                 "admin_access": 0,
                 "full_access_policies": 0,
                 "policy_count": 2,
-                "unused_permissions_pct": 0,
-                "assigned_policies": [
-                    "CloudTrailReadAccess",
-                    "LeastPrivilegeScannerReadOnly"
-                ],
-                "potentially_unused_permissions": [],
-                "potentially_excessive_policies": []
-            }
+                "unused_permissions_pct": 73.33333333333333,
+                "api_calls_7d": 0,
+                "inactive_days": 0,
+                "new_source_ip": 0,
+                "failed_auth_attempts": 0,
+                "identity_type": "IAM User"
+            },
+            "ml_risk_score": 36.45,
+            "risk_level": "Medium"
         },
         {
             "username": "Unknown",
             "identity_type": "Unresolved",
-            "ml_risk_score": 31.67,
-            "risk_level": "Low",
-            "model_features": {
-                "permission_risk": 0.0,
-                "usage_risk": 20.0,
-                "orphan_risk": 0.0,
-                "temporal_risk": 0.0,
-                "admin_access": 0,
-                "full_access_policies": 0,
-                "policy_count": 0,
-                "unused_permissions_pct": 0,
-                "api_calls_7d": 0,
+            "features": {
+                "permission_risk": 0,
+                "usage_risk": 20,
+                "temporal_risk": 0,
+                "orphan_risk": 0,
                 "services_used": 1,
-                "inactive_days": 0,
                 "unusual_hour_access": 1,
-                "new_source_ip": 0,
-                "failed_auth_attempts": 0,
                 "sensitive_actions": 1,
                 "cross_service_access": 0,
-                "identity_type": "Unresolved"
-            },
-            "cloudtrail_features": {
-                "total_api_calls": 11,
-                "service_count": 1,
-                "unusual_hour_access": 1,
-                "sensitive_action_count": 1,
-                "cross_service_access": 0
-            },
-            "permission_features": {
                 "admin_access": 0,
                 "full_access_policies": 0,
                 "policy_count": 0,
-                "unused_permissions_pct": 0,
-                "assigned_policies": [],
-                "potentially_unused_permissions": [],
-                "potentially_excessive_policies": []
-            }
+                "unused_permissions_pct": 0.0,
+                "api_calls_7d": 0,
+                "inactive_days": 0,
+                "new_source_ip": 0,
+                "failed_auth_attempts": 0,
+                "identity_type": "Unresolved"
+            },
+            "ml_risk_score": 31.67,
+            "risk_level": "Medium"
         },
         {
             "username": "resource-explorer-2",
             "identity_type": "AWS Service Identity",
-            "ml_risk_score": 35.34,
-            "risk_level": "Low",
-            "model_features": {
-                "permission_risk": 0.0,
-                "usage_risk": 30.0,
-                "orphan_risk": 0.0,
-                "temporal_risk": 0.0,
-                "admin_access": 0,
-                "full_access_policies": 0,
-                "policy_count": 0,
-                "unused_permissions_pct": 0,
-                "api_calls_7d": 0,
+            "features": {
+                "permission_risk": 0,
+                "usage_risk": 30,
+                "temporal_risk": 0,
+                "orphan_risk": 0,
                 "services_used": 7,
-                "inactive_days": 0,
                 "unusual_hour_access": 1,
-                "new_source_ip": 0,
-                "failed_auth_attempts": 0,
                 "sensitive_actions": 0,
                 "cross_service_access": 1,
-                "identity_type": "AWS Service Identity"
-            },
-            "cloudtrail_features": {
-                "total_api_calls": 9,
-                "service_count": 7,
-                "unusual_hour_access": 1,
-                "sensitive_action_count": 0,
-                "cross_service_access": 1
-            },
-            "permission_features": {
                 "admin_access": 0,
                 "full_access_policies": 0,
                 "policy_count": 0,
-                "unused_permissions_pct": 0,
-                "assigned_policies": [],
-                "potentially_unused_permissions": [],
-                "potentially_excessive_policies": []
-            }
+                "unused_permissions_pct": 0.0,
+                "api_calls_7d": 0,
+                "inactive_days": 0,
+                "new_source_ip": 0,
+                "failed_auth_attempts": 0,
+                "identity_type": "AWS Service Identity"
+            },
+            "ml_risk_score": 35.34,
+            "risk_level": "Medium"
         }
     ]
 }
