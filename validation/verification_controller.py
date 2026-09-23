@@ -3,6 +3,11 @@ import subprocess
 import boto3
 from pathlib import Path
 
+from ai.iam_action_mapper import (
+    map_actions,
+    get_unmapped_actions
+)
+
 
 # ============================================================
 # BASE CONFIGURATION
@@ -155,6 +160,13 @@ def simulate_policy(
     actions
 ):
 
+    if not actions:
+
+        return {
+            "status": "NO_ACTIONS",
+            "results": []
+        }
+
     session = boto3.Session(
         profile_name=PROFILE,
         region_name=REGION
@@ -270,13 +282,11 @@ def get_observed_actions(
 
 
 # ============================================================
-# COMPARE OBSERVED ACTIONS
-# WITH RECOMMENDED POLICY
+# EXTRACT POLICY ACTIONS
 # ============================================================
 
-def compare_observed_with_policy(
-    policy,
-    observed_actions
+def get_policy_actions(
+    policy
 ):
 
     policy_actions = []
@@ -309,28 +319,72 @@ def compare_observed_with_policy(
                 action
             )
 
-    policy_actions = sorted(
+    return sorted(
         set(policy_actions)
     )
+
+
+# ============================================================
+# COMPARE MAPPED IAM ACTIONS
+# WITH RECOMMENDED POLICY
+# ============================================================
+
+def compare_observed_with_policy(
+    policy,
+    observed_actions
+):
+
+    # --------------------------------------------------------
+    # Convert CloudTrail API operations into confirmed
+    # IAM policy actions.
+    # --------------------------------------------------------
+
+    mapped_actions = map_actions(
+        observed_actions
+    )
+
+    # --------------------------------------------------------
+    # Keep unmapped actions as contextual evidence.
+    # They must not automatically become IAM permissions.
+    # --------------------------------------------------------
+
+    unmapped_actions = get_unmapped_actions(
+        observed_actions
+    )
+
+    policy_actions = get_policy_actions(
+        policy
+    )
+
+    # --------------------------------------------------------
+    # Only confirmed IAM actions are checked against
+    # the recommended policy.
+    # --------------------------------------------------------
 
     missing_actions = [
 
         action
 
-        for action in observed_actions
+        for action in mapped_actions
 
         if action not in policy_actions
     ]
 
     return {
 
-        "observed_actions":
+        "observed_cloudtrail_actions":
             observed_actions,
+
+        "mapped_iam_actions":
+            mapped_actions,
+
+        "unmapped_context_actions":
+            unmapped_actions,
 
         "policy_actions":
             policy_actions,
 
-        "missing_actions":
+        "missing_iam_actions":
             missing_actions,
 
         "status":
@@ -347,17 +401,21 @@ def compare_observed_with_policy(
 def regenerate_ai_policy():
 
     print()
+
     print(
         "Regenerating AI policy..."
     )
+
+    # Run recommender as a Python module so the
+    # ai.iam_action_mapper import works correctly.
 
     command = [
 
         "python",
 
-        str(
-            AI_RECOMMENDER
-        )
+        "-m",
+
+        "ai.policy_recommender"
     ]
 
     result = subprocess.run(
@@ -374,6 +432,7 @@ def regenerate_ai_policy():
     if result.returncode != 0:
 
         print()
+
         print(
             "AI policy regeneration failed."
         )
@@ -385,6 +444,7 @@ def regenerate_ai_policy():
         return False
 
     print()
+
     print(
         "AI policy regenerated successfully."
     )
@@ -418,6 +478,7 @@ def main():
     if not AI_POLICY_FILE.exists():
 
         print()
+
         print(
             "ERROR: AI recommendation file not found."
         )
@@ -431,6 +492,7 @@ def main():
     if not OBSERVED_ACTIONS_FILE.exists():
 
         print()
+
         print(
             "ERROR: observed actions file not found."
         )
@@ -465,6 +527,7 @@ def main():
     if not policy:
 
         print()
+
         print(
             "ERROR: recommended_policy not found."
         )
@@ -482,6 +545,7 @@ def main():
     if not actions:
 
         print()
+
         print(
             "ERROR: No observed CloudTrail "
             "actions found for identity:",
@@ -489,6 +553,18 @@ def main():
         )
 
         return
+
+    # --------------------------------------------------------
+    # MAP CLOUDTRAIL ACTIONS
+    # --------------------------------------------------------
+
+    mapped_actions = map_actions(
+        actions
+    )
+
+    unmapped_actions = get_unmapped_actions(
+        actions
+    )
 
     # --------------------------------------------------------
     # DISPLAY IDENTITY
@@ -531,6 +607,32 @@ def main():
     print()
 
     print(
+        "Mapped IAM policy actions:"
+    )
+
+    for action in mapped_actions:
+
+        print(
+            " -",
+            action
+        )
+
+    print()
+
+    print(
+        "Unmapped/context actions:"
+    )
+
+    for action in unmapped_actions:
+
+        print(
+            " -",
+            action
+        )
+
+    print()
+
+    print(
         "Maximum verification attempts:",
         MAX_ATTEMPTS
     )
@@ -553,6 +655,7 @@ def main():
     ):
 
         print()
+
         print(
             "=" * 65
         )
@@ -589,6 +692,7 @@ def main():
         if not policy:
 
             print()
+
             print(
                 "ERROR: No recommended policy found."
             )
@@ -598,13 +702,46 @@ def main():
             break
 
         # ----------------------------------------------------
+        # RELOAD OBSERVED ACTIONS
+        # ----------------------------------------------------
+
+        actions = get_observed_actions(
+            username
+        )
+
+        if not actions:
+
+            print()
+
+            print(
+                "ERROR: No observed actions found."
+            )
+
+            final_status = "FAILED"
+
+            break
+
+        # ----------------------------------------------------
+        # MAP ACTIONS
+        # ----------------------------------------------------
+
+        mapped_actions = map_actions(
+            actions
+        )
+
+        unmapped_actions = get_unmapped_actions(
+            actions
+        )
+
+        # ----------------------------------------------------
         # STEP 1
-        # OBSERVED ACTION COVERAGE
+        # IAM ACTION POLICY COVERAGE
         # ----------------------------------------------------
 
         print()
+
         print(
-            "1. OBSERVED ACTION POLICY COVERAGE"
+            "1. IAM ACTION POLICY COVERAGE"
         )
 
         print(
@@ -623,17 +760,59 @@ def main():
             coverage["status"]
         )
 
+        print()
+
+        print(
+            "Observed CloudTrail actions:"
+        )
+
+        for action in actions:
+
+            print(
+                " -",
+                action
+            )
+
+        print()
+
+        print(
+            "Mapped IAM actions:"
+        )
+
+        for action in mapped_actions:
+
+            print(
+                " -",
+                action
+            )
+
+        if unmapped_actions:
+
+            print()
+
+            print(
+                "Unmapped/context actions:"
+            )
+
+            for action in unmapped_actions:
+
+                print(
+                    " -",
+                    action
+                )
+
         if coverage[
-            "missing_actions"
+            "missing_iam_actions"
         ]:
 
             print()
+
             print(
-                "Missing observed actions:"
+                "Missing IAM policy actions:"
             )
 
             for action in coverage[
-                "missing_actions"
+                "missing_iam_actions"
             ]:
 
                 print(
@@ -647,6 +826,7 @@ def main():
         # ----------------------------------------------------
 
         print()
+
         print(
             "2. AWS ACCESS ANALYZER"
         )
@@ -690,6 +870,7 @@ def main():
         # ----------------------------------------------------
 
         print()
+
         print(
             "3. IAM POLICY SIMULATOR"
         )
@@ -698,9 +879,16 @@ def main():
             "-" * 65
         )
 
+        # IMPORTANT:
+        # Simulate only confirmed IAM actions.
+        #
+        # Do NOT simulate raw CloudTrail actions such as
+        # sts:GetCallerIdentity when there is no confirmed
+        # mapping in the action mapper.
+
         simulator = simulate_policy(
             policy,
-            actions
+            mapped_actions
         )
 
         print(
@@ -746,6 +934,7 @@ def main():
         if verification_passed:
 
             print()
+
             print(
                 "=" * 65
             )
@@ -785,6 +974,7 @@ def main():
         # ----------------------------------------------------
 
         print()
+
         print(
             "VERIFICATION FAILED"
         )
@@ -816,6 +1006,7 @@ def main():
         if attempt < MAX_ATTEMPTS:
 
             print()
+
             print(
                 "Policy requires regeneration."
             )
@@ -832,6 +1023,7 @@ def main():
             if not regenerated:
 
                 print()
+
                 print(
                     "Unable to regenerate policy."
                 )
@@ -841,6 +1033,7 @@ def main():
         else:
 
             print()
+
             print(
                 "Maximum verification attempts reached."
             )
@@ -878,7 +1071,13 @@ def main():
                 "CloudTrail observed actions",
 
             "observed_actions":
-                actions
+                actions,
+
+            "mapped_iam_actions":
+                map_actions(actions),
+
+            "unmapped_context_actions":
+                get_unmapped_actions(actions)
         },
 
         "max_attempts":
@@ -921,6 +1120,7 @@ def main():
     # --------------------------------------------------------
 
     print()
+
     print(
         "=" * 65
     )

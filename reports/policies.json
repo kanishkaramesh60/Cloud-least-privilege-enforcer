@@ -7,7 +7,69 @@
             "attached_policies": [
                 "AmazonS3ReadOnlyAccess"
             ],
-            "inline_policies": []
+            "inline_policies": [],
+            "attached_policy_details": [
+                {
+                    "policy_name": "AmazonS3ReadOnlyAccess",
+                    "policy_arn": "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess",
+                    "policy_type": "AWS Managed",
+                    "document": {
+                        "Version": "2012-10-17",
+                        "Statement": [
+                            {
+                                "Effect": "Allow",
+                                "Action": [
+                                    "s3:Get*",
+                                    "s3:List*",
+                                    "s3:Describe*",
+                                    "s3-object-lambda:Get*",
+                                    "s3-object-lambda:List*"
+                                ],
+                                "Resource": "*"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "inline_policy_details": []
+        },
+        {
+            "username": "LeastPrivilegeDeployer",
+            "arn": "arn:aws:iam::097079438150:user/LeastPrivilegeDeployer",
+            "created": "2026-09-23 15:06:46+00:00",
+            "attached_policies": [],
+            "inline_policies": [
+                "LeastPrivilegeRemediationPolicy"
+            ],
+            "attached_policy_details": [],
+            "inline_policy_details": [
+                {
+                    "policy_name": "LeastPrivilegeRemediationPolicy",
+                    "policy_type": "Inline",
+                    "document": {
+                        "Version": "2012-10-17",
+                        "Statement": [
+                            {
+                                "Sid": "LeastPrivilegeRemediation",
+                                "Effect": "Allow",
+                                "Action": [
+                                    "iam:CreatePolicy",
+                                    "iam:CreatePolicyVersion",
+                                    "iam:DeletePolicyVersion",
+                                    "iam:AttachUserPolicy",
+                                    "iam:DetachUserPolicy",
+                                    "iam:GetPolicy",
+                                    "iam:GetPolicyVersion",
+                                    "iam:ListAttachedUserPolicies",
+                                    "iam:ListUserPolicies",
+                                    "iam:GetUser"
+                                ],
+                                "Resource": "*"
+                            }
+                        ]
+                    }
+                }
+            ]
         },
         {
             "username": "Least_privilege",
@@ -17,6 +79,54 @@
             "inline_policies": [
                 "CloudTrailReadAccess",
                 "LeastPrivilegeScannerReadOnly"
+            ],
+            "attached_policy_details": [],
+            "inline_policy_details": [
+                {
+                    "policy_name": "CloudTrailReadAccess",
+                    "policy_type": "Inline",
+                    "document": {
+                        "Version": "2012-10-17",
+                        "Statement": [
+                            {
+                                "Sid": "CloudTrailReadAccess",
+                                "Effect": "Allow",
+                                "Action": "cloudtrail:LookupEvents",
+                                "Resource": "*"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "policy_name": "LeastPrivilegeScannerReadOnly",
+                    "policy_type": "Inline",
+                    "document": {
+                        "Version": "2012-10-17",
+                        "Statement": [
+                            {
+                                "Sid": "LeastPrivilegeScannerReadOnly",
+                                "Effect": "Allow",
+                                "Action": [
+                                    "iam:ListUsers",
+                                    "iam:GetUser",
+                                    "iam:ListAttachedUserPolicies",
+                                    "iam:ListUserPolicies",
+                                    "iam:ListRoles",
+                                    "iam:ListGroups",
+                                    "iam:ListPolicies",
+                                    "iam:GetPolicy",
+                                    "iam:GetPolicyVersion",
+                                    "access-analyzer:ValidatePolicy",
+                                    "iam:SimulateCustomPolicy",
+                                    "iam:GetUserPolicy",
+                                    "cloudtrail:DescribeTrails",
+                                    "cloudtrail:GetTrailStatus"
+                                ],
+                                "Resource": "*"
+                            }
+                        ]
+                    }
+                }
             ]
         }
     ],

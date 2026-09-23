@@ -1,16 +1,20 @@
 {
     "module": "Cloud Least Privilege Deployment Controller",
+    "target_identity": "LeastPrivilegeDemoUser",
     "identity": {
-        "name": "Least_privilege",
+        "name": "LeastPrivilegeDemoUser",
         "type": "IAM User",
         "risk_level": "Low",
-        "risk_score": 30
+        "risk_score": 18
     },
     "deployment_mode": "NO_REMEDIATION",
     "human_approval": false,
     "excessive_permissions": [],
+    "policy_actions": [
+        "s3:ListAllMyBuckets"
+    ],
     "deployment_performed": false,
     "status": "NO_REMEDIATION_REQUIRED",
-    "reason": "No excessive permissions detected.",
+    "reason": "No confirmed excessive permissions detected.",
     "aws_changes": []
 }

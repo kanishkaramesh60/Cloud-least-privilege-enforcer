@@ -1,21 +1,17 @@
 {
     "identity": {
-        "name": "Least_privilege",
+        "name": "LeastPrivilegeDemoUser",
         "type": "IAM User",
         "risk_level": "Low",
-        "risk_score": 30
+        "risk_score": 18
     },
     "excessive_permissions": [],
     "required_permissions": [
-        "access-analyzer:ValidatePolicy",
-        "cloudtrail:DescribeTrails",
-        "cloudtrail:GetTrailStatus",
-        "cloudtrail:LookupEvents",
-        "sts:GetCallerIdentity"
+        "s3:ListAllMyBuckets"
     ],
     "recommendation": {
-        "action": "Remove broad permissions",
-        "reason": "Excessive permissions identified"
+        "action": "No confirmed excessive permission was identified. Keep the recommendation as a review candidate.",
+        "reason": "Observed CloudTrail activity produced confirmed IAM mappings, but the deterministic analysis did not identify a confirmed excessive policy."
     },
     "recommended_policy": {
         "Version": "2012-10-17",
@@ -23,11 +19,7 @@
             {
                 "Effect": "Allow",
                 "Action": [
-                    "access-analyzer:ValidatePolicy",
-                    "cloudtrail:DescribeTrails",
-                    "cloudtrail:GetTrailStatus",
-                    "cloudtrail:LookupEvents",
-                    "sts:GetCallerIdentity"
+                    "s3:ListAllMyBuckets"
                 ],
                 "Resource": "*"
             }

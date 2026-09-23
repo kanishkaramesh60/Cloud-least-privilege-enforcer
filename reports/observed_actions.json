@@ -11,6 +11,13 @@
             "action_count": 2
         },
         {
+            "username": "LeastPrivilegeDeployer",
+            "observed_actions": [
+                "sts:GetCallerIdentity"
+            ],
+            "action_count": 1
+        },
+        {
             "username": "Least_privilege",
             "observed_actions": [
                 "access-analyzer:ValidatePolicy",
@@ -31,20 +38,17 @@
         {
             "username": "resource-explorer-2",
             "observed_actions": [
-                "acm-pca:ListCertificateAuthorities",
-                "chime-sdk-media-pipelines:ListMediaPipelineKinesisVideoStreamPools",
                 "cloudcontrolapi:ListResources",
                 "eks:ListClusters",
+                "eks:ListEksAnywhereSubscriptions",
                 "emr-containers:ListSecurityConfigurations",
                 "glue:GetDatabases",
                 "kafka:ListClusters",
-                "m2:ListEnvironments",
-                "mediatailor:ListPlaybackConfigurations",
                 "rds:DescribeDBClusterEndpoints",
-                "sagemaker:ListAppImageConfigs",
+                "rds:DescribeReservedDBInstances",
                 "vpc-lattice:ListServices"
             ],
-            "action_count": 12
+            "action_count": 9
         }
     ]
 }

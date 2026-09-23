@@ -1,10 +1,10 @@
 {
     "module": "AI Policy Simulation",
     "identity": {
-        "name": "Least_privilege",
+        "name": "LeastPrivilegeDemoUser",
         "type": "IAM User",
         "risk_level": "Low",
-        "risk_score": 30
+        "risk_score": 18
     },
     "policy": {
         "Version": "2012-10-17",
@@ -12,44 +12,20 @@
             {
                 "Effect": "Allow",
                 "Action": [
-                    "access-analyzer:ValidatePolicy",
-                    "cloudtrail:DescribeTrails",
-                    "cloudtrail:GetTrailStatus",
-                    "cloudtrail:LookupEvents",
-                    "sts:GetCallerIdentity"
+                    "s3:ListAllMyBuckets"
                 ],
                 "Resource": "*"
             }
         ]
     },
     "simulated_actions": [
-        "access-analyzer:ValidatePolicy",
-        "cloudtrail:DescribeTrails",
-        "cloudtrail:GetTrailStatus",
-        "cloudtrail:LookupEvents",
-        "sts:GetCallerIdentity"
+        "s3:ListAllMyBuckets"
     ],
     "simulation": {
-        "identity": "Least_privilege",
+        "identity": "LeastPrivilegeDemoUser",
         "results": [
             {
-                "action": "access-analyzer:ValidatePolicy",
-                "decision": "allowed"
-            },
-            {
-                "action": "cloudtrail:DescribeTrails",
-                "decision": "allowed"
-            },
-            {
-                "action": "cloudtrail:GetTrailStatus",
-                "decision": "allowed"
-            },
-            {
-                "action": "cloudtrail:LookupEvents",
-                "decision": "allowed"
-            },
-            {
-                "action": "sts:GetCallerIdentity",
+                "action": "s3:ListAllMyBuckets",
                 "decision": "allowed"
             }
         ],

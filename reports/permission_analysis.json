@@ -1,6 +1,6 @@
 {
     "module": "Least-Privilege Permission Analysis",
-    "description": "Compares assigned IAM policies with observed CloudTrail usage and extracts observed IAM actions.",
+    "description": "Compares assigned IAM policy permissions with observed CloudTrail usage.",
     "users": [
         {
             "username": "LeastPrivilegeDemoUser",
@@ -16,6 +16,47 @@
                 "s3:ListBuckets",
                 "sts:GetCallerIdentity"
             ],
+            "granted_actions": [
+                "s3-object-lambda:Get*",
+                "s3-object-lambda:List*",
+                "s3:Describe*",
+                "s3:Get*",
+                "s3:List*"
+            ],
+            "covered_observed_actions": [
+                "s3:ListBuckets"
+            ],
+            "uncovered_observed_actions": [
+                "sts:GetCallerIdentity"
+            ],
+            "potentially_unused_actions": [
+                "s3-object-lambda:Get*",
+                "s3-object-lambda:List*",
+                "s3:Describe*",
+                "s3:Get*"
+            ],
+            "policy_usage": [
+                {
+                    "policy_name": "AmazonS3ReadOnlyAccess",
+                    "policy_type": "AWS Managed",
+                    "granted_actions": [
+                        "s3-object-lambda:Get*",
+                        "s3-object-lambda:List*",
+                        "s3:Describe*",
+                        "s3:Get*",
+                        "s3:List*"
+                    ],
+                    "observed_actions": [
+                        "s3:ListBuckets"
+                    ],
+                    "potentially_unused_actions": [
+                        "s3-object-lambda:Get*",
+                        "s3-object-lambda:List*",
+                        "s3:Describe*",
+                        "s3:Get*"
+                    ]
+                }
+            ],
             "analysis": {
                 "broad_policies": [],
                 "potentially_excessive_policies": [],
@@ -24,7 +65,90 @@
                     "STS"
                 ],
                 "unused_services": [],
-                "least_privilege_status": "Requires Detailed Review"
+                "least_privilege_status": "Requires Policy Review"
+            }
+        },
+        {
+            "username": "LeastPrivilegeDeployer",
+            "assigned_policies": [
+                "LeastPrivilegeRemediationPolicy"
+            ],
+            "observed_api_calls": 1,
+            "observed_services": [
+                "STS"
+            ],
+            "observed_iam_actions": [
+                "sts:GetCallerIdentity"
+            ],
+            "granted_actions": [
+                "iam:AttachUserPolicy",
+                "iam:CreatePolicy",
+                "iam:CreatePolicyVersion",
+                "iam:DeletePolicyVersion",
+                "iam:DetachUserPolicy",
+                "iam:GetPolicy",
+                "iam:GetPolicyVersion",
+                "iam:GetUser",
+                "iam:ListAttachedUserPolicies",
+                "iam:ListUserPolicies"
+            ],
+            "covered_observed_actions": [],
+            "uncovered_observed_actions": [
+                "sts:GetCallerIdentity"
+            ],
+            "potentially_unused_actions": [
+                "iam:AttachUserPolicy",
+                "iam:CreatePolicy",
+                "iam:CreatePolicyVersion",
+                "iam:DeletePolicyVersion",
+                "iam:DetachUserPolicy",
+                "iam:GetPolicy",
+                "iam:GetPolicyVersion",
+                "iam:GetUser",
+                "iam:ListAttachedUserPolicies",
+                "iam:ListUserPolicies"
+            ],
+            "policy_usage": [
+                {
+                    "policy_name": "LeastPrivilegeRemediationPolicy",
+                    "policy_type": "Inline",
+                    "granted_actions": [
+                        "iam:AttachUserPolicy",
+                        "iam:CreatePolicy",
+                        "iam:CreatePolicyVersion",
+                        "iam:DeletePolicyVersion",
+                        "iam:DetachUserPolicy",
+                        "iam:GetPolicy",
+                        "iam:GetPolicyVersion",
+                        "iam:GetUser",
+                        "iam:ListAttachedUserPolicies",
+                        "iam:ListUserPolicies"
+                    ],
+                    "observed_actions": [],
+                    "potentially_unused_actions": [
+                        "iam:AttachUserPolicy",
+                        "iam:CreatePolicy",
+                        "iam:CreatePolicyVersion",
+                        "iam:DeletePolicyVersion",
+                        "iam:DetachUserPolicy",
+                        "iam:GetPolicy",
+                        "iam:GetPolicyVersion",
+                        "iam:GetUser",
+                        "iam:ListAttachedUserPolicies",
+                        "iam:ListUserPolicies"
+                    ]
+                }
+            ],
+            "analysis": {
+                "broad_policies": [],
+                "potentially_excessive_policies": [
+                    "LeastPrivilegeRemediationPolicy"
+                ],
+                "used_services": [
+                    "STS"
+                ],
+                "unused_services": [],
+                "least_privilege_status": "Potentially Over-Privileged"
             }
         },
         {
@@ -33,7 +157,7 @@
                 "CloudTrailReadAccess",
                 "LeastPrivilegeScannerReadOnly"
             ],
-            "observed_api_calls": 12,
+            "observed_api_calls": 25,
             "observed_services": [
                 "ACCESS-ANALYZER",
                 "CLOUDTRAIL",
@@ -46,6 +170,96 @@
                 "cloudtrail:LookupEvents",
                 "sts:GetCallerIdentity"
             ],
+            "granted_actions": [
+                "access-analyzer:ValidatePolicy",
+                "cloudtrail:DescribeTrails",
+                "cloudtrail:GetTrailStatus",
+                "cloudtrail:LookupEvents",
+                "iam:GetPolicy",
+                "iam:GetPolicyVersion",
+                "iam:GetUser",
+                "iam:GetUserPolicy",
+                "iam:ListAttachedUserPolicies",
+                "iam:ListGroups",
+                "iam:ListPolicies",
+                "iam:ListRoles",
+                "iam:ListUserPolicies",
+                "iam:ListUsers",
+                "iam:SimulateCustomPolicy"
+            ],
+            "covered_observed_actions": [
+                "access-analyzer:ValidatePolicy",
+                "cloudtrail:DescribeTrails",
+                "cloudtrail:GetTrailStatus",
+                "cloudtrail:LookupEvents"
+            ],
+            "uncovered_observed_actions": [
+                "sts:GetCallerIdentity"
+            ],
+            "potentially_unused_actions": [
+                "iam:GetPolicy",
+                "iam:GetPolicyVersion",
+                "iam:GetUser",
+                "iam:GetUserPolicy",
+                "iam:ListAttachedUserPolicies",
+                "iam:ListGroups",
+                "iam:ListPolicies",
+                "iam:ListRoles",
+                "iam:ListUserPolicies",
+                "iam:ListUsers",
+                "iam:SimulateCustomPolicy"
+            ],
+            "policy_usage": [
+                {
+                    "policy_name": "CloudTrailReadAccess",
+                    "policy_type": "Inline",
+                    "granted_actions": [
+                        "cloudtrail:LookupEvents"
+                    ],
+                    "observed_actions": [
+                        "cloudtrail:LookupEvents"
+                    ],
+                    "potentially_unused_actions": []
+                },
+                {
+                    "policy_name": "LeastPrivilegeScannerReadOnly",
+                    "policy_type": "Inline",
+                    "granted_actions": [
+                        "access-analyzer:ValidatePolicy",
+                        "cloudtrail:DescribeTrails",
+                        "cloudtrail:GetTrailStatus",
+                        "iam:GetPolicy",
+                        "iam:GetPolicyVersion",
+                        "iam:GetUser",
+                        "iam:GetUserPolicy",
+                        "iam:ListAttachedUserPolicies",
+                        "iam:ListGroups",
+                        "iam:ListPolicies",
+                        "iam:ListRoles",
+                        "iam:ListUserPolicies",
+                        "iam:ListUsers",
+                        "iam:SimulateCustomPolicy"
+                    ],
+                    "observed_actions": [
+                        "access-analyzer:ValidatePolicy",
+                        "cloudtrail:DescribeTrails",
+                        "cloudtrail:GetTrailStatus"
+                    ],
+                    "potentially_unused_actions": [
+                        "iam:GetPolicy",
+                        "iam:GetPolicyVersion",
+                        "iam:GetUser",
+                        "iam:GetUserPolicy",
+                        "iam:ListAttachedUserPolicies",
+                        "iam:ListGroups",
+                        "iam:ListPolicies",
+                        "iam:ListRoles",
+                        "iam:ListUserPolicies",
+                        "iam:ListUsers",
+                        "iam:SimulateCustomPolicy"
+                    ]
+                }
+            ],
             "analysis": {
                 "broad_policies": [],
                 "potentially_excessive_policies": [],
@@ -55,17 +269,22 @@
                     "STS"
                 ],
                 "unused_services": [],
-                "least_privilege_status": "Requires Detailed Review"
+                "least_privilege_status": "Requires Policy Review"
             }
         },
         {
             "username": "Unknown",
             "assigned_policies": [],
-            "observed_api_calls": 19,
+            "observed_api_calls": 11,
             "observed_services": [
                 "STS"
             ],
             "observed_iam_actions": [],
+            "granted_actions": [],
+            "covered_observed_actions": [],
+            "uncovered_observed_actions": [],
+            "potentially_unused_actions": [],
+            "policy_usage": [],
             "analysis": {
                 "broad_policies": [],
                 "potentially_excessive_policies": [],
@@ -79,50 +298,52 @@
         {
             "username": "resource-explorer-2",
             "assigned_policies": [],
-            "observed_api_calls": 15,
+            "observed_api_calls": 9,
             "observed_services": [
-                "ACM-PCA",
-                "CHIME-SDK-MEDIA-PIPELINES",
                 "CLOUDCONTROLAPI",
                 "EKS",
                 "EMR-CONTAINERS",
                 "GLUE",
                 "KAFKA",
-                "M2",
-                "MEDIATAILOR",
                 "RDS",
-                "SAGEMAKER",
                 "VPC-LATTICE"
             ],
             "observed_iam_actions": [
-                "acm-pca:ListCertificateAuthorities",
-                "chime-sdk-media-pipelines:ListMediaPipelineKinesisVideoStreamPools",
                 "cloudcontrolapi:ListResources",
                 "eks:ListClusters",
+                "eks:ListEksAnywhereSubscriptions",
                 "emr-containers:ListSecurityConfigurations",
                 "glue:GetDatabases",
                 "kafka:ListClusters",
-                "m2:ListEnvironments",
-                "mediatailor:ListPlaybackConfigurations",
                 "rds:DescribeDBClusterEndpoints",
-                "sagemaker:ListAppImageConfigs",
+                "rds:DescribeReservedDBInstances",
                 "vpc-lattice:ListServices"
             ],
+            "granted_actions": [],
+            "covered_observed_actions": [],
+            "uncovered_observed_actions": [
+                "cloudcontrolapi:ListResources",
+                "eks:ListClusters",
+                "eks:ListEksAnywhereSubscriptions",
+                "emr-containers:ListSecurityConfigurations",
+                "glue:GetDatabases",
+                "kafka:ListClusters",
+                "rds:DescribeDBClusterEndpoints",
+                "rds:DescribeReservedDBInstances",
+                "vpc-lattice:ListServices"
+            ],
+            "potentially_unused_actions": [],
+            "policy_usage": [],
             "analysis": {
                 "broad_policies": [],
                 "potentially_excessive_policies": [],
                 "used_services": [
-                    "ACM-PCA",
-                    "CHIME-SDK-MEDIA-PIPELINES",
                     "CLOUDCONTROLAPI",
                     "EKS",
                     "EMR-CONTAINERS",
                     "GLUE",
                     "KAFKA",
-                    "M2",
-                    "MEDIATAILOR",
                     "RDS",
-                    "SAGEMAKER",
                     "VPC-LATTICE"
                 ],
                 "unused_services": [],

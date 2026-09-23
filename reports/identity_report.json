@@ -23,6 +23,11 @@
             "confidence": "High"
         },
         {
+            "identity": "LeastPrivilegeDeployer",
+            "identity_type": "IAM User",
+            "confidence": "High"
+        },
+        {
             "identity": "Least_privilege",
             "identity_type": "IAM User",
             "confidence": "High"

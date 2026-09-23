@@ -1,8 +1,8 @@
 {
     "module": "AI Policy Validation",
-    "identity": "Least_privilege",
+    "identity": "LeastPrivilegeDemoUser",
     "risk_level": "Low",
-    "risk_score": 30,
+    "risk_score": 18,
     "policy_source": "ai_recommended_policies.json",
     "local_validation": {
         "status": "PASS",

@@ -1,54 +1,88 @@
 {
     "module": "Identity-Aware Risk Scoring",
-    "description": "Calculates risk using permission, usage, orphan, temporal and identity classification data.",
+    "description": "Calculates risk using permission, usage, orphan, temporal and identity classification data. Potentially unused permissions contribute a review signal and are not treated as confirmed excessive permissions.",
     "users": [
         {
             "username": "LeastPrivilegeDemoUser",
             "identity_type": "IAM User",
             "identity_confidence": "High",
-            "permission_risk": 0,
-            "usage_risk": 20,
+            "permission_risk": 8,
+            "usage_risk": 10,
             "orphan_risk": 0,
             "temporal_risk": 0,
             "identity_adjustment": 0,
-            "total_risk": 20,
-            "risk_level": "Low"
+            "total_risk": 18,
+            "risk_level": "Low",
+            "potentially_unused_permissions": 4,
+            "potentially_excessive_policies": [],
+            "broad_policies": [],
+            "least_privilege_status": "Requires Policy Review"
+        },
+        {
+            "username": "LeastPrivilegeDeployer",
+            "identity_type": "IAM User",
+            "identity_confidence": "High",
+            "permission_risk": 40,
+            "usage_risk": 10,
+            "orphan_risk": 0,
+            "temporal_risk": 0,
+            "identity_adjustment": 0,
+            "total_risk": 50,
+            "risk_level": "Medium",
+            "potentially_unused_permissions": 10,
+            "potentially_excessive_policies": [
+                "LeastPrivilegeRemediationPolicy"
+            ],
+            "broad_policies": [],
+            "least_privilege_status": "Potentially Over-Privileged"
         },
         {
             "username": "Least_privilege",
             "identity_type": "IAM User",
             "identity_confidence": "High",
-            "permission_risk": 0,
+            "permission_risk": 20,
             "usage_risk": 30,
             "orphan_risk": 0,
             "temporal_risk": 0,
             "identity_adjustment": 0,
-            "total_risk": 30,
-            "risk_level": "Low"
+            "total_risk": 50,
+            "risk_level": "Medium",
+            "potentially_unused_permissions": 11,
+            "potentially_excessive_policies": [],
+            "broad_policies": [],
+            "least_privilege_status": "Requires Policy Review"
         },
         {
             "username": "Unknown",
             "identity_type": "Unresolved",
             "identity_confidence": "Low",
             "permission_risk": 0,
-            "usage_risk": 30,
+            "usage_risk": 20,
             "orphan_risk": 0,
             "temporal_risk": 0,
             "identity_adjustment": 5,
-            "total_risk": 35,
-            "risk_level": "Low"
+            "total_risk": 25,
+            "risk_level": "Low",
+            "potentially_unused_permissions": 0,
+            "potentially_excessive_policies": [],
+            "broad_policies": [],
+            "least_privilege_status": "No Policies"
         },
         {
             "username": "resource-explorer-2",
             "identity_type": "AWS Service Identity",
             "identity_confidence": "Medium",
             "permission_risk": 0,
-            "usage_risk": 50,
+            "usage_risk": 30,
             "orphan_risk": 0,
             "temporal_risk": 0,
             "identity_adjustment": 0,
-            "total_risk": 50,
-            "risk_level": "Medium"
+            "total_risk": 30,
+            "risk_level": "Low",
+            "potentially_unused_permissions": 0,
+            "potentially_excessive_policies": [],
+            "broad_policies": [],
+            "least_privilege_status": "No Policies"
         }
     ]
 }

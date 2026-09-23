@@ -1,5 +1,7 @@
+
 import subprocess
 import sys
+import os
 from pathlib import Path
 from datetime import datetime
 
@@ -22,6 +24,18 @@ PIPELINE = [
     (
         "CloudTrail Analyzer",
         "cloudtrail\\analyzer.py"
+    ),
+
+    # ------------------------------------------------------------
+    # NEW: Generate fresh CloudTrail behavioral analysis
+    # before XGBoost Risk Prediction.
+    #
+    # This prevents XGBoost from reading stale
+    # reports/cloudtrail_analysis.json data.
+    # ------------------------------------------------------------
+    (
+        "CloudTrail Behavioral Analysis",
+        "cloudtrail_analysis.py"
     ),
 
     (
@@ -78,22 +92,27 @@ PIPELINE = [
         "Verification Controller",
         "validation\\verification_controller.py"
     ),
+
     (
         "Rollback Controller",
         "validation\\rollback_controller.py"
     ),
+
     (
         "Rollback Verification",
         "validation\\rollback_verification.py"
     ),
+
     (
         "Deployment Review",
         "validation\\deployment_review.py"
     ),
+
     (
         "Deployment Controller",
         "validation\\deployment_controller.py"
     ),
+
     (
         "Post-Deployment Verification",
         "validation\\post_deployment_verification.py"
@@ -122,12 +141,40 @@ def run_module(name, script):
     print("Running:")
     print(script_path)
 
+    # ------------------------------------------------------------
+    # Make the project root available to every child Python
+    # process.
+    #
+    # This allows modules such as:
+    #
+    # from ai.iam_action_mapper import ...
+    #
+    # to work correctly when executed by the pipeline.
+    # ------------------------------------------------------------
+
+    env = dict(os.environ)
+
+    existing_pythonpath = env.get("PYTHONPATH", "")
+
+    if existing_pythonpath:
+
+        env["PYTHONPATH"] = (
+            str(BASE_DIR)
+            + os.pathsep
+            + existing_pythonpath
+        )
+
+    else:
+
+        env["PYTHONPATH"] = str(BASE_DIR)
+
     result = subprocess.run(
         [
             sys.executable,
             str(script_path)
         ],
-        cwd=BASE_DIR
+        cwd=BASE_DIR,
+        env=env
     )
 
     if result.returncode != 0:

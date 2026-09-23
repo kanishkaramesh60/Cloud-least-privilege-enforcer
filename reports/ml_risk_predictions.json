@@ -1,31 +1,84 @@
 {
     "module": "XGBoost ML Risk Prediction",
     "model": "XGBoost Regressor",
-    "description": "Predicts IAM identity risk using the trained XGBoost model.",
+    "description": "Predicts IAM identity risk using the trained XGBoost model and available CloudTrail behavioral features.",
+    "feature_sources": {
+        "risk_report": "reports\\risk_report.json",
+        "identity_report": "reports\\identity_report.json",
+        "cloudtrail_analysis": "reports\\cloudtrail_analysis.json"
+    },
+    "limitations": [
+        "The current CloudTrail collection window is not necessarily seven days.",
+        "Inactive days are not available from the current dataset.",
+        "Source IP history is not available in the current collected log format.",
+        "Failed authentication attempts are not available in the current collected log format.",
+        "Admin access, full access policies, policy count and unused permission percentage are not yet derived here."
+    ],
     "predictions": [
         {
             "username": "LeastPrivilegeDemoUser",
             "identity_type": "IAM User",
-            "ml_risk_score": 30.47,
-            "risk_level": "Low"
+            "ml_risk_score": 31.52,
+            "risk_level": "Low",
+            "cloudtrail_features": {
+                "total_api_calls": 4,
+                "service_count": 2,
+                "unusual_hour_access": 1,
+                "sensitive_action_count": 0,
+                "cross_service_access": 1
+            }
+        },
+        {
+            "username": "LeastPrivilegeDeployer",
+            "identity_type": "IAM User",
+            "ml_risk_score": 37.8,
+            "risk_level": "Low",
+            "cloudtrail_features": {
+                "total_api_calls": 1,
+                "service_count": 1,
+                "unusual_hour_access": 1,
+                "sensitive_action_count": 0,
+                "cross_service_access": 0
+            }
         },
         {
             "username": "Least_privilege",
             "identity_type": "IAM User",
-            "ml_risk_score": 30.4,
-            "risk_level": "Low"
+            "ml_risk_score": 32.72,
+            "risk_level": "Low",
+            "cloudtrail_features": {
+                "total_api_calls": 25,
+                "service_count": 3,
+                "unusual_hour_access": 1,
+                "sensitive_action_count": 0,
+                "cross_service_access": 1
+            }
         },
         {
             "username": "Unknown",
             "identity_type": "Unresolved",
-            "ml_risk_score": 30.28,
-            "risk_level": "Low"
+            "ml_risk_score": 31.67,
+            "risk_level": "Low",
+            "cloudtrail_features": {
+                "total_api_calls": 11,
+                "service_count": 1,
+                "unusual_hour_access": 1,
+                "sensitive_action_count": 1,
+                "cross_service_access": 0
+            }
         },
         {
             "username": "resource-explorer-2",
             "identity_type": "AWS Service Identity",
-            "ml_risk_score": 33.16,
-            "risk_level": "Low"
+            "ml_risk_score": 35.34,
+            "risk_level": "Low",
+            "cloudtrail_features": {
+                "total_api_calls": 9,
+                "service_count": 7,
+                "unusual_hour_access": 1,
+                "sensitive_action_count": 0,
+                "cross_service_access": 1
+            }
         }
     ]
 }

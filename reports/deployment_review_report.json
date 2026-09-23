@@ -1,31 +1,32 @@
 {
     "module": "Cloud Least Privilege Deployment Review",
+    "target_identity": "LeastPrivilegeDemoUser",
+    "allowed_identity_type": "IAM User",
     "identity": {
-        "name": "Least_privilege",
+        "name": "LeastPrivilegeDemoUser",
         "type": "IAM User",
         "risk_level": "Low",
-        "risk_score": 30
+        "risk_score": 18
     },
     "policy_actions": [
-        "access-analyzer:ValidatePolicy",
-        "cloudtrail:DescribeTrails",
-        "cloudtrail:GetTrailStatus",
-        "cloudtrail:LookupEvents",
-        "sts:GetCallerIdentity"
+        "s3:ListAllMyBuckets"
     ],
     "observed_actions": [
-        "access-analyzer:ValidatePolicy",
-        "cloudtrail:DescribeTrails",
-        "cloudtrail:GetTrailStatus",
-        "cloudtrail:LookupEvents",
+        "s3:ListBuckets",
         "sts:GetCallerIdentity"
     ],
-    "missing_actions": [],
+    "mapped_iam_actions": [
+        "s3:ListAllMyBuckets"
+    ],
+    "unmapped_context_actions": [
+        "sts:GetCallerIdentity"
+    ],
+    "missing_iam_actions": [],
     "checks": [
         {
             "check": "Target identity",
-            "expected": "Least_privilege",
-            "actual": "Least_privilege",
+            "expected": "LeastPrivilegeDemoUser",
+            "actual": "LeastPrivilegeDemoUser",
             "status": "PASS"
         },
         {
@@ -71,8 +72,8 @@
             "status": "PASS"
         },
         {
-            "check": "Observed action coverage",
-            "expected": "All observed actions included",
+            "check": "IAM action coverage",
+            "expected": "All confirmed IAM actions included",
             "actual": "All covered",
             "status": "PASS"
         },
