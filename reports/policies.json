@@ -1,6 +1,15 @@
 {
     "users": [
         {
+            "username": "LeastPrivilegeDemoUser",
+            "arn": "arn:aws:iam::097079438150:user/LeastPrivilegeDemoUser",
+            "created": "2026-09-23 09:58:40+00:00",
+            "attached_policies": [
+                "AmazonS3ReadOnlyAccess"
+            ],
+            "inline_policies": []
+        },
+        {
             "username": "Least_privilege",
             "arn": "arn:aws:iam::097079438150:user/Least_privilege",
             "created": "2026-09-15 14:57:33+00:00",

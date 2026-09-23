@@ -8,12 +8,14 @@
     "excessive_permissions": [],
     "required_permissions": [
         "access-analyzer:ValidatePolicy",
+        "cloudtrail:DescribeTrails",
+        "cloudtrail:GetTrailStatus",
         "cloudtrail:LookupEvents",
         "sts:GetCallerIdentity"
     ],
     "recommendation": {
-        "action": "Update to include only necessary actions",
-        "reason": "Least Privilege remediation"
+        "action": "Remove broad permissions",
+        "reason": "Excessive permissions identified"
     },
     "recommended_policy": {
         "Version": "2012-10-17",
@@ -22,6 +24,8 @@
                 "Effect": "Allow",
                 "Action": [
                     "access-analyzer:ValidatePolicy",
+                    "cloudtrail:DescribeTrails",
+                    "cloudtrail:GetTrailStatus",
                     "cloudtrail:LookupEvents",
                     "sts:GetCallerIdentity"
                 ],

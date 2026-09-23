@@ -4,6 +4,12 @@
     "description": "Predicts IAM identity risk using the trained XGBoost model.",
     "predictions": [
         {
+            "username": "LeastPrivilegeDemoUser",
+            "identity_type": "IAM User",
+            "ml_risk_score": 30.47,
+            "risk_level": "Low"
+        },
+        {
             "username": "Least_privilege",
             "identity_type": "IAM User",
             "ml_risk_score": 30.4,

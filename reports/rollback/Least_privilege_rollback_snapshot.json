@@ -1,5 +1,5 @@
 {
-    "snapshot_time": "2026-09-19T22:13:30.210671",
+    "snapshot_time": "2026-09-23T20:02:34.504454",
     "identity": "Least_privilege",
     "identity_type": "IAM User",
     "attached_managed_policies": [],
@@ -28,6 +28,7 @@
                         "Effect": "Allow",
                         "Action": [
                             "iam:ListUsers",
+                            "iam:GetUser",
                             "iam:ListAttachedUserPolicies",
                             "iam:ListUserPolicies",
                             "iam:ListRoles",
@@ -37,7 +38,9 @@
                             "iam:GetPolicyVersion",
                             "access-analyzer:ValidatePolicy",
                             "iam:SimulateCustomPolicy",
-                            "iam:GetUserPolicy"
+                            "iam:GetUserPolicy",
+                            "cloudtrail:DescribeTrails",
+                            "cloudtrail:GetTrailStatus"
                         ],
                         "Resource": "*"
                     }

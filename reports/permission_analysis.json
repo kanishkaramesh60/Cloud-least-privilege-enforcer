@@ -3,12 +3,37 @@
     "description": "Compares assigned IAM policies with observed CloudTrail usage and extracts observed IAM actions.",
     "users": [
         {
+            "username": "LeastPrivilegeDemoUser",
+            "assigned_policies": [
+                "AmazonS3ReadOnlyAccess"
+            ],
+            "observed_api_calls": 4,
+            "observed_services": [
+                "S3",
+                "STS"
+            ],
+            "observed_iam_actions": [
+                "s3:ListBuckets",
+                "sts:GetCallerIdentity"
+            ],
+            "analysis": {
+                "broad_policies": [],
+                "potentially_excessive_policies": [],
+                "used_services": [
+                    "S3",
+                    "STS"
+                ],
+                "unused_services": [],
+                "least_privilege_status": "Requires Detailed Review"
+            }
+        },
+        {
             "username": "Least_privilege",
             "assigned_policies": [
                 "CloudTrailReadAccess",
                 "LeastPrivilegeScannerReadOnly"
             ],
-            "observed_api_calls": 18,
+            "observed_api_calls": 12,
             "observed_services": [
                 "ACCESS-ANALYZER",
                 "CLOUDTRAIL",
@@ -16,6 +41,8 @@
             ],
             "observed_iam_actions": [
                 "access-analyzer:ValidatePolicy",
+                "cloudtrail:DescribeTrails",
+                "cloudtrail:GetTrailStatus",
                 "cloudtrail:LookupEvents",
                 "sts:GetCallerIdentity"
             ],
@@ -34,7 +61,7 @@
         {
             "username": "Unknown",
             "assigned_policies": [],
-            "observed_api_calls": 18,
+            "observed_api_calls": 19,
             "observed_services": [
                 "STS"
             ],
@@ -52,45 +79,51 @@
         {
             "username": "resource-explorer-2",
             "assigned_policies": [],
-            "observed_api_calls": 14,
+            "observed_api_calls": 15,
             "observed_services": [
-                "ATHENA",
-                "EC2",
+                "ACM-PCA",
+                "CHIME-SDK-MEDIA-PIPELINES",
+                "CLOUDCONTROLAPI",
                 "EKS",
                 "EMR-CONTAINERS",
-                "EVENTS",
                 "GLUE",
-                "OUTPOSTS",
-                "REFACTOR-SPACES",
-                "RESILIENCEHUB",
-                "TRANSFER"
+                "KAFKA",
+                "M2",
+                "MEDIATAILOR",
+                "RDS",
+                "SAGEMAKER",
+                "VPC-LATTICE"
             ],
             "observed_iam_actions": [
-                "athena:ListWorkGroups",
-                "ec2:DescribeDhcpOptions",
-                "eks:ListEksAnywhereSubscriptions",
+                "acm-pca:ListCertificateAuthorities",
+                "chime-sdk-media-pipelines:ListMediaPipelineKinesisVideoStreamPools",
+                "cloudcontrolapi:ListResources",
+                "eks:ListClusters",
                 "emr-containers:ListSecurityConfigurations",
-                "events:ListEventBuses",
                 "glue:GetDatabases",
-                "outposts:ListSites",
-                "refactor-spaces:ListEnvironments",
-                "resiliencehub:ListApps",
-                "transfer:ListServers"
+                "kafka:ListClusters",
+                "m2:ListEnvironments",
+                "mediatailor:ListPlaybackConfigurations",
+                "rds:DescribeDBClusterEndpoints",
+                "sagemaker:ListAppImageConfigs",
+                "vpc-lattice:ListServices"
             ],
             "analysis": {
                 "broad_policies": [],
                 "potentially_excessive_policies": [],
                 "used_services": [
-                    "ATHENA",
-                    "EC2",
+                    "ACM-PCA",
+                    "CHIME-SDK-MEDIA-PIPELINES",
+                    "CLOUDCONTROLAPI",
                     "EKS",
                     "EMR-CONTAINERS",
-                    "EVENTS",
                     "GLUE",
-                    "OUTPOSTS",
-                    "REFACTOR-SPACES",
-                    "RESILIENCEHUB",
-                    "TRANSFER"
+                    "KAFKA",
+                    "M2",
+                    "MEDIATAILOR",
+                    "RDS",
+                    "SAGEMAKER",
+                    "VPC-LATTICE"
                 ],
                 "unused_services": [],
                 "least_privilege_status": "No Policies"

@@ -1,37 +1,48 @@
 [
     {
-        "username": "resource-explorer-2",
-        "total_api_calls": 14,
-        "services_used": [
-            "ATHENA",
-            "EC2",
-            "EKS",
-            "EMR-CONTAINERS",
-            "EVENTS",
-            "GLUE",
-            "OUTPOSTS",
-            "REFACTOR-SPACES",
-            "RESILIENCEHUB",
-            "TRANSFER"
-        ],
-        "last_activity": "2026-09-19 22:09:04+05:30"
-    },
-    {
-        "username": "Unknown",
-        "total_api_calls": 18,
-        "services_used": [
-            "STS"
-        ],
-        "last_activity": "2026-09-19 22:09:04+05:30"
-    },
-    {
         "username": "Least_privilege",
-        "total_api_calls": 18,
+        "total_api_calls": 12,
         "services_used": [
             "ACCESS-ANALYZER",
             "CLOUDTRAIL",
             "STS"
         ],
-        "last_activity": "2026-09-19 22:07:12+05:30"
+        "last_activity": "2026-09-23 19:51:59+05:30"
+    },
+    {
+        "username": "LeastPrivilegeDemoUser",
+        "total_api_calls": 4,
+        "services_used": [
+            "S3",
+            "STS"
+        ],
+        "last_activity": "2026-09-23 19:14:48+05:30"
+    },
+    {
+        "username": "resource-explorer-2",
+        "total_api_calls": 15,
+        "services_used": [
+            "ACM-PCA",
+            "CHIME-SDK-MEDIA-PIPELINES",
+            "CLOUDCONTROLAPI",
+            "EKS",
+            "EMR-CONTAINERS",
+            "GLUE",
+            "KAFKA",
+            "M2",
+            "MEDIATAILOR",
+            "RDS",
+            "SAGEMAKER",
+            "VPC-LATTICE"
+        ],
+        "last_activity": "2026-09-23 17:56:47+05:30"
+    },
+    {
+        "username": "Unknown",
+        "total_api_calls": 19,
+        "services_used": [
+            "STS"
+        ],
+        "last_activity": "2026-09-23 17:56:47+05:30"
     }
 ]

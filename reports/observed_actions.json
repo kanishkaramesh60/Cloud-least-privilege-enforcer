@@ -3,13 +3,23 @@
     "description": "Extracts IAM-style actions from CloudTrail event_source and event_name.",
     "users": [
         {
+            "username": "LeastPrivilegeDemoUser",
+            "observed_actions": [
+                "s3:ListBuckets",
+                "sts:GetCallerIdentity"
+            ],
+            "action_count": 2
+        },
+        {
             "username": "Least_privilege",
             "observed_actions": [
                 "access-analyzer:ValidatePolicy",
+                "cloudtrail:DescribeTrails",
+                "cloudtrail:GetTrailStatus",
                 "cloudtrail:LookupEvents",
                 "sts:GetCallerIdentity"
             ],
-            "action_count": 3
+            "action_count": 5
         },
         {
             "username": "Unknown",
@@ -21,18 +31,20 @@
         {
             "username": "resource-explorer-2",
             "observed_actions": [
-                "athena:ListWorkGroups",
-                "ec2:DescribeDhcpOptions",
-                "eks:ListEksAnywhereSubscriptions",
+                "acm-pca:ListCertificateAuthorities",
+                "chime-sdk-media-pipelines:ListMediaPipelineKinesisVideoStreamPools",
+                "cloudcontrolapi:ListResources",
+                "eks:ListClusters",
                 "emr-containers:ListSecurityConfigurations",
-                "events:ListEventBuses",
                 "glue:GetDatabases",
-                "outposts:ListSites",
-                "refactor-spaces:ListEnvironments",
-                "resiliencehub:ListApps",
-                "transfer:ListServers"
+                "kafka:ListClusters",
+                "m2:ListEnvironments",
+                "mediatailor:ListPlaybackConfigurations",
+                "rds:DescribeDBClusterEndpoints",
+                "sagemaker:ListAppImageConfigs",
+                "vpc-lattice:ListServices"
             ],
-            "action_count": 10
+            "action_count": 12
         }
     ]
 }

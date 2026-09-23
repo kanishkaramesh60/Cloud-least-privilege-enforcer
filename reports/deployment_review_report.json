@@ -8,11 +8,15 @@
     },
     "policy_actions": [
         "access-analyzer:ValidatePolicy",
+        "cloudtrail:DescribeTrails",
+        "cloudtrail:GetTrailStatus",
         "cloudtrail:LookupEvents",
         "sts:GetCallerIdentity"
     ],
     "observed_actions": [
         "access-analyzer:ValidatePolicy",
+        "cloudtrail:DescribeTrails",
+        "cloudtrail:GetTrailStatus",
         "cloudtrail:LookupEvents",
         "sts:GetCallerIdentity"
     ],

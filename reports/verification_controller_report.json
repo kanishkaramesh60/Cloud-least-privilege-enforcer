@@ -10,6 +10,8 @@
         "source": "CloudTrail observed actions",
         "observed_actions": [
             "access-analyzer:ValidatePolicy",
+            "cloudtrail:DescribeTrails",
+            "cloudtrail:GetTrailStatus",
             "cloudtrail:LookupEvents",
             "sts:GetCallerIdentity"
         ]
@@ -21,11 +23,15 @@
             "observed_action_coverage": {
                 "observed_actions": [
                     "access-analyzer:ValidatePolicy",
+                    "cloudtrail:DescribeTrails",
+                    "cloudtrail:GetTrailStatus",
                     "cloudtrail:LookupEvents",
                     "sts:GetCallerIdentity"
                 ],
                 "policy_actions": [
                     "access-analyzer:ValidatePolicy",
+                    "cloudtrail:DescribeTrails",
+                    "cloudtrail:GetTrailStatus",
                     "cloudtrail:LookupEvents",
                     "sts:GetCallerIdentity"
                 ],
@@ -41,6 +47,14 @@
                 "results": [
                     {
                         "action": "access-analyzer:ValidatePolicy",
+                        "decision": "allowed"
+                    },
+                    {
+                        "action": "cloudtrail:DescribeTrails",
+                        "decision": "allowed"
+                    },
+                    {
+                        "action": "cloudtrail:GetTrailStatus",
                         "decision": "allowed"
                     },
                     {

@@ -3,6 +3,18 @@
     "description": "Calculates risk using permission, usage, orphan, temporal and identity classification data.",
     "users": [
         {
+            "username": "LeastPrivilegeDemoUser",
+            "identity_type": "IAM User",
+            "identity_confidence": "High",
+            "permission_risk": 0,
+            "usage_risk": 20,
+            "orphan_risk": 0,
+            "temporal_risk": 0,
+            "identity_adjustment": 0,
+            "total_risk": 20,
+            "risk_level": "Low"
+        },
+        {
             "username": "Least_privilege",
             "identity_type": "IAM User",
             "identity_confidence": "High",
