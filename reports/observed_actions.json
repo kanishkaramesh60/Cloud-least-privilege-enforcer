@@ -3,30 +3,13 @@
     "description": "Extracts IAM-style actions from CloudTrail event_source and event_name.",
     "users": [
         {
-            "username": "LeastPrivilegeDemoUser",
-            "observed_actions": [
-                "s3:ListBuckets",
-                "sts:GetCallerIdentity"
-            ],
-            "action_count": 2
-        },
-        {
-            "username": "LeastPrivilegeDeployer",
-            "observed_actions": [
-                "sts:GetCallerIdentity"
-            ],
-            "action_count": 1
-        },
-        {
             "username": "Least_privilege",
             "observed_actions": [
                 "access-analyzer:ValidatePolicy",
-                "cloudtrail:DescribeTrails",
-                "cloudtrail:GetTrailStatus",
                 "cloudtrail:LookupEvents",
                 "sts:GetCallerIdentity"
             ],
-            "action_count": 5
+            "action_count": 3
         },
         {
             "username": "Unknown",
@@ -38,17 +21,20 @@
         {
             "username": "resource-explorer-2",
             "observed_actions": [
-                "cloudcontrolapi:ListResources",
-                "eks:ListClusters",
+                "auditmanager:GetAccountStatus",
+                "ec2:DescribeInternetGateways",
+                "ec2:DescribeNetworkAcls",
+                "ec2:DescribeSecurityGroupRules",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeVpnGateways",
                 "eks:ListEksAnywhereSubscriptions",
                 "emr-containers:ListSecurityConfigurations",
-                "glue:GetDatabases",
-                "rds:DescribeDBClusterEndpoints",
+                "glue:ListDataQualityRulesets",
                 "rds:DescribeReservedDBInstances",
-                "synthetics:ListGroups",
-                "vpc-lattice:ListServices"
+                "ssm:DescribeMaintenanceWindows",
+                "synthetics:ListGroups"
             ],
-            "action_count": 9
+            "action_count": 12
         }
     ]
 }

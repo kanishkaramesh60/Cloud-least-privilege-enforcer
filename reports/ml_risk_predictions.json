@@ -7,37 +7,12 @@
             "username": "LeastPrivilegeDemoUser",
             "identity_type": "IAM User",
             "features": {
-                "permission_risk": 8,
-                "usage_risk": 10,
+                "permission_risk": 30,
+                "usage_risk": 0,
                 "temporal_risk": 0,
                 "orphan_risk": 0,
-                "services_used": 2,
-                "unusual_hour_access": 1,
-                "sensitive_actions": 0,
-                "cross_service_access": 1,
-                "admin_access": 0,
-                "full_access_policies": 0,
-                "policy_count": 1,
-                "unused_permissions_pct": 80.0,
-                "api_calls_7d": 0,
-                "inactive_days": 0,
-                "new_source_ip": 0,
-                "failed_auth_attempts": 0,
-                "identity_type": "IAM User"
-            },
-            "ml_risk_score": 35.12,
-            "risk_level": "Medium"
-        },
-        {
-            "username": "LeastPrivilegeDeployer",
-            "identity_type": "IAM User",
-            "features": {
-                "permission_risk": 40,
-                "usage_risk": 10,
-                "temporal_risk": 0,
-                "orphan_risk": 0,
-                "services_used": 1,
-                "unusual_hour_access": 1,
+                "services_used": 0,
+                "unusual_hour_access": 0,
                 "sensitive_actions": 0,
                 "cross_service_access": 0,
                 "admin_access": 0,
@@ -50,7 +25,32 @@
                 "failed_auth_attempts": 0,
                 "identity_type": "IAM User"
             },
-            "ml_risk_score": 43.92,
+            "ml_risk_score": 34.73,
+            "risk_level": "Medium"
+        },
+        {
+            "username": "LeastPrivilegeDeployer",
+            "identity_type": "IAM User",
+            "features": {
+                "permission_risk": 40,
+                "usage_risk": 0,
+                "temporal_risk": 0,
+                "orphan_risk": 0,
+                "services_used": 0,
+                "unusual_hour_access": 0,
+                "sensitive_actions": 0,
+                "cross_service_access": 0,
+                "admin_access": 0,
+                "full_access_policies": 0,
+                "policy_count": 1,
+                "unused_permissions_pct": 100.0,
+                "api_calls_7d": 0,
+                "inactive_days": 0,
+                "new_source_ip": 0,
+                "failed_auth_attempts": 0,
+                "identity_type": "IAM User"
+            },
+            "ml_risk_score": 42.95,
             "risk_level": "Medium"
         },
         {
@@ -58,7 +58,7 @@
             "identity_type": "IAM User",
             "features": {
                 "permission_risk": 20,
-                "usage_risk": 30,
+                "usage_risk": 20,
                 "temporal_risk": 0,
                 "orphan_risk": 0,
                 "services_used": 3,
@@ -68,14 +68,14 @@
                 "admin_access": 0,
                 "full_access_policies": 0,
                 "policy_count": 2,
-                "unused_permissions_pct": 73.33333333333333,
+                "unused_permissions_pct": 86.66666666666667,
                 "api_calls_7d": 0,
                 "inactive_days": 0,
                 "new_source_ip": 0,
                 "failed_auth_attempts": 0,
                 "identity_type": "IAM User"
             },
-            "ml_risk_score": 36.45,
+            "ml_risk_score": 38.0,
             "risk_level": "Medium"
         },
         {
@@ -111,7 +111,7 @@
                 "usage_risk": 30,
                 "temporal_risk": 0,
                 "orphan_risk": 0,
-                "services_used": 7,
+                "services_used": 8,
                 "unusual_hour_access": 1,
                 "sensitive_actions": 0,
                 "cross_service_access": 1,
@@ -125,7 +125,7 @@
                 "failed_auth_attempts": 0,
                 "identity_type": "AWS Service Identity"
             },
-            "ml_risk_score": 35.34,
+            "ml_risk_score": 36.54,
             "risk_level": "Medium"
         }
     ]

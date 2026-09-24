@@ -6,48 +6,50 @@
             "username": "LeastPrivilegeDemoUser",
             "identity_type": "IAM User",
             "identity_confidence": "High",
-            "permission_risk": 8,
-            "usage_risk": 10,
+            "permission_risk": 30,
+            "usage_risk": 0,
             "orphan_risk": 0,
             "temporal_risk": 0,
             "identity_adjustment": 0,
-            "total_risk": 18,
+            "total_risk": 30,
             "risk_level": "Low",
-            "potentially_unused_permissions": 4,
-            "potentially_excessive_policies": [],
+            "potentially_unused_permissions": 5,
+            "potentially_excessive_policies": [
+                "AmazonS3ReadOnlyAccess"
+            ],
             "broad_policies": [],
-            "least_privilege_status": "Requires Policy Review"
+            "least_privilege_status": "No Observed Usage"
         },
         {
             "username": "LeastPrivilegeDeployer",
             "identity_type": "IAM User",
             "identity_confidence": "High",
             "permission_risk": 40,
-            "usage_risk": 10,
+            "usage_risk": 0,
             "orphan_risk": 0,
             "temporal_risk": 0,
             "identity_adjustment": 0,
-            "total_risk": 50,
+            "total_risk": 40,
             "risk_level": "Medium",
             "potentially_unused_permissions": 10,
             "potentially_excessive_policies": [
                 "LeastPrivilegeRemediationPolicy"
             ],
             "broad_policies": [],
-            "least_privilege_status": "Potentially Over-Privileged"
+            "least_privilege_status": "No Observed Usage"
         },
         {
             "username": "Least_privilege",
             "identity_type": "IAM User",
             "identity_confidence": "High",
             "permission_risk": 20,
-            "usage_risk": 30,
+            "usage_risk": 20,
             "orphan_risk": 0,
             "temporal_risk": 0,
             "identity_adjustment": 0,
-            "total_risk": 50,
+            "total_risk": 40,
             "risk_level": "Medium",
-            "potentially_unused_permissions": 11,
+            "potentially_unused_permissions": 13,
             "potentially_excessive_policies": [],
             "broad_policies": [],
             "least_privilege_status": "Requires Policy Review"

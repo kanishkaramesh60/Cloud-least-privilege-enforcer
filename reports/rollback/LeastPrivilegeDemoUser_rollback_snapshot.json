@@ -1,0 +1,30 @@
+{
+    "snapshot_time": "2026-09-24T09:11:38.860207",
+    "identity": "LeastPrivilegeDemoUser",
+    "identity_type": "IAM User",
+    "attached_managed_policies": [
+        {
+            "policy_name": "AmazonS3ReadOnlyAccess",
+            "policy_arn": "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess",
+            "default_version_id": "v3",
+            "policy_document": {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Effect": "Allow",
+                        "Action": [
+                            "s3:Get*",
+                            "s3:List*",
+                            "s3:Describe*",
+                            "s3-object-lambda:Get*",
+                            "s3-object-lambda:List*"
+                        ],
+                        "Resource": "*"
+                    }
+                ]
+            }
+        }
+    ],
+    "inline_policies": [],
+    "aws_changes_performed": false
+}

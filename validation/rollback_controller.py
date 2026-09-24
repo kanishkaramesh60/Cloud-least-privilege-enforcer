@@ -6,7 +6,7 @@ from urllib.parse import unquote
 
 PROFILE = "leastprivilege"
 REGION = "ap-south-1"
-IDENTITY = "Least_privilege"
+IDENTITY = "LeastPrivilegeDemoUser"
 
 ROLLBACK_DIR = "reports/rollback"
 
