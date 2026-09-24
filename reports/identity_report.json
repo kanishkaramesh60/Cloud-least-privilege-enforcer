@@ -3,6 +3,16 @@
     "description": "Classifies IAM and CloudTrail identities as IAM users, IAM roles, AWS service identities, or unresolved identities.",
     "identities": [
         {
+            "identity": "AWSServiceRoleForAIDevOps",
+            "identity_type": "IAM Role",
+            "confidence": "High"
+        },
+        {
+            "identity": "AWSServiceRoleForElasticLoadBalancing",
+            "identity_type": "IAM Role",
+            "confidence": "High"
+        },
+        {
             "identity": "AWSServiceRoleForResourceExplorer",
             "identity_type": "IAM Role",
             "confidence": "High"
@@ -33,14 +43,9 @@
             "confidence": "High"
         },
         {
-            "identity": "Unknown",
-            "identity_type": "Unresolved",
-            "confidence": "Low"
-        },
-        {
-            "identity": "resource-explorer-2",
-            "identity_type": "AWS Service Identity",
-            "confidence": "Medium"
+            "identity": "ec2-console-devops-agent-eu-west-1",
+            "identity_type": "IAM Role",
+            "confidence": "High"
         }
     ]
 }

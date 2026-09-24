@@ -3,38 +3,12 @@
     "description": "Extracts IAM-style actions from CloudTrail event_source and event_name.",
     "users": [
         {
-            "username": "Least_privilege",
+            "username": "LeastPrivilegeDemoUser",
             "observed_actions": [
-                "access-analyzer:ValidatePolicy",
-                "cloudtrail:LookupEvents",
+                "s3:ListBuckets",
                 "sts:GetCallerIdentity"
             ],
-            "action_count": 3
-        },
-        {
-            "username": "Unknown",
-            "observed_actions": [
-                "sts:AssumeRole"
-            ],
-            "action_count": 1
-        },
-        {
-            "username": "resource-explorer-2",
-            "observed_actions": [
-                "auditmanager:GetAccountStatus",
-                "ec2:DescribeInternetGateways",
-                "ec2:DescribeNetworkAcls",
-                "ec2:DescribeSecurityGroupRules",
-                "ec2:DescribeSubnets",
-                "ec2:DescribeVpnGateways",
-                "eks:ListEksAnywhereSubscriptions",
-                "emr-containers:ListSecurityConfigurations",
-                "glue:ListDataQualityRulesets",
-                "rds:DescribeReservedDBInstances",
-                "ssm:DescribeMaintenanceWindows",
-                "synthetics:ListGroups"
-            ],
-            "action_count": 12
+            "action_count": 2
         }
     ]
 }

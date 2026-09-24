@@ -2,77 +2,149 @@ import boto3
 import json
 import os
 
-session = boto3.Session(profile_name="leastprivilege")
-cloudtrail = session.client("cloudtrail", region_name="ap-south-1")
+PROFILE = "leastprivilege"
+REGION = "ap-south-1"
+TARGET_IDENTITY = "LeastPrivilegeDemoUser"
+
+session = boto3.Session(profile_name=PROFILE)
+cloudtrail = session.client("cloudtrail", region_name=REGION)
 
 print("=" * 60)
 print("AWS CLOUDTRAIL LOG COLLECTOR")
 print("=" * 60)
 
-response = cloudtrail.lookup_events(
-    MaxResults=50
-)
+events = []
 
-events = response["Events"]
+try:
+    response = cloudtrail.lookup_events(
+        LookupAttributes=[
+            {
+                "AttributeKey": "Username",
+                "AttributeValue": TARGET_IDENTITY
+            }
+        ],
+        MaxResults=50
+    )
+
+    events = response.get("Events", [])
+
+except Exception as e:
+    print("\nERROR while collecting CloudTrail events:")
+    print(e)
+    exit(1)
+
+print(f"\nTarget Identity : {TARGET_IDENTITY}")
+print(f"Total Events Found : {len(events)}\n")
+
 data = []
 
-print(f"\nTotal Events Found : {len(events)}\n")
-
 for event in events:
+
     print("-" * 50)
 
-    print("User        :", event.get("Username", "N/A"))
-    print("Event       :", event["EventName"])
-    print("Time        :", event["EventTime"])
-    print("Source      :", event["EventSource"])
+    username = event.get("Username", "N/A")
+    event_name = event.get("EventName", "N/A")
+    event_time = event.get("EventTime")
+    event_source = event.get("EventSource", "N/A")
 
+    print("User        :", username)
+    print("Event       :", event_name)
+    print("Time        :", event_time)
+    print("Source      :", event_source)
+
+    # --------------------------------------------------
     # Extract detailed CloudTrail event
+    # --------------------------------------------------
+
     aws_region = None
 
     if event.get("CloudTrailEvent"):
         try:
-            detailed_event = json.loads(event["CloudTrailEvent"])
+            detailed_event = json.loads(
+                event["CloudTrailEvent"]
+            )
+
             aws_region = detailed_event.get("awsRegion")
+
         except json.JSONDecodeError:
             aws_region = None
 
-    print("Region      :", aws_region if aws_region else "N/A")
+    print(
+        "Region      :",
+        aws_region if aws_region else "N/A"
+    )
+
+    # --------------------------------------------------
+    # Extract resources
+    # --------------------------------------------------
 
     resources = []
 
     if event.get("Resources"):
+
         print("Resources   :")
 
         for resource in event["Resources"]:
+
+            resource_type = resource.get(
+                "ResourceType"
+            )
+
+            resource_name = resource.get(
+                "ResourceName"
+            )
+
             print(
-                f"   {resource.get('ResourceType')} : "
-                f"{resource.get('ResourceName')}"
+                f"   {resource_type} : "
+                f"{resource_name}"
             )
 
             resources.append({
-                "resource_type": resource.get("ResourceType"),
-                "resource_name": resource.get("ResourceName")
+                "resource_type": resource_type,
+                "resource_name": resource_name
             })
 
     else:
         print("Resources   : None")
 
+    # --------------------------------------------------
+    # Store normalized event
+    # --------------------------------------------------
+
     data.append({
-        "username": event.get("Username"),
-        "event_name": event["EventName"],
-        "event_time": str(event["EventTime"]),
-        "event_source": event["EventSource"],
+        "username": username,
+        "event_name": event_name,
+        "event_time": str(event_time),
+        "event_source": event_source,
         "aws_region": aws_region,
         "resources": resources
     })
 
 
+# ------------------------------------------------------
+# Save report
+# ------------------------------------------------------
+
 os.makedirs("reports", exist_ok=True)
 
-with open("reports/cloudtrail_logs.json", "w") as file:
-    json.dump(data, file, indent=4)
+OUTPUT_FILE = "reports/cloudtrail_logs.json"
+
+with open(
+    OUTPUT_FILE,
+    "w",
+    encoding="utf-8"
+) as file:
+
+    json.dump(
+        data,
+        file,
+        indent=4
+    )
+
 
 print("\n" + "=" * 60)
 print("CloudTrail Log Collection Completed")
-print("Report saved to reports/cloudtrail_logs.json")
+print("Report saved to:", OUTPUT_FILE)
+print("Identity collected:", TARGET_IDENTITY)
+print("Events collected:", len(data))
 print("=" * 60)

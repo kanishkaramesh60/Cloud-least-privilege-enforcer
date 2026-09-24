@@ -8,9 +8,9 @@
         "type": "IAM User"
     },
     "risk": {
-        "rule_based_score": 30,
+        "rule_based_score": 18,
         "rule_based_level": "Low",
-        "ml_score": 34.73,
+        "ml_score": 35.12,
         "ml_level": "Medium"
     },
     "permission_findings": {
@@ -20,8 +20,7 @@
             "s3-object-lambda:Get*",
             "s3-object-lambda:List*",
             "s3:Describe*",
-            "s3:Get*",
-            "s3:List*"
+            "s3:Get*"
         ],
         "least_privilege_status": "Unknown"
     },

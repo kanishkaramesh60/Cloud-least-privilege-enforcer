@@ -1,9 +1,9 @@
 [
     {
         "username": "LeastPrivilegeDemoUser",
-        "status": "Orphan",
-        "last_activity": "Never",
-        "inactive_days": 999,
+        "status": "Active",
+        "last_activity": "2026-09-23 19:14:48+05:30",
+        "inactive_days": 0,
         "attached_policies": [
             "AmazonS3ReadOnlyAccess"
         ],
@@ -19,9 +19,9 @@
     },
     {
         "username": "Least_privilege",
-        "status": "Active",
-        "last_activity": "2026-09-23 23:12:11+05:30",
-        "inactive_days": 0,
+        "status": "Orphan",
+        "last_activity": "Never",
+        "inactive_days": 999,
         "attached_policies": [],
         "risk": "Low"
     }

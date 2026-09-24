@@ -132,6 +132,16 @@
     ],
     "roles": [
         {
+            "name": "AWSServiceRoleForAIDevOps",
+            "arn": "arn:aws:iam::097079438150:role/aws-service-role/aidevops.amazonaws.com/AWSServiceRoleForAIDevOps",
+            "created": "2026-09-24 06:22:43+00:00"
+        },
+        {
+            "name": "AWSServiceRoleForElasticLoadBalancing",
+            "arn": "arn:aws:iam::097079438150:role/aws-service-role/elasticloadbalancing.amazonaws.com/AWSServiceRoleForElasticLoadBalancing",
+            "created": "2026-09-24 05:05:46+00:00"
+        },
+        {
             "name": "AWSServiceRoleForResourceExplorer",
             "arn": "arn:aws:iam::097079438150:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer",
             "created": "2026-08-20 14:48:24+00:00"
@@ -145,6 +155,11 @@
             "name": "AWSServiceRoleForTrustedAdvisor",
             "arn": "arn:aws:iam::097079438150:role/aws-service-role/trustedadvisor.amazonaws.com/AWSServiceRoleForTrustedAdvisor",
             "created": "2026-08-17 03:55:46+00:00"
+        },
+        {
+            "name": "ec2-console-devops-agent-eu-west-1",
+            "arn": "arn:aws:iam::097079438150:role/service-role/ec2-console-devops-agent-eu-west-1",
+            "created": "2026-09-24 06:22:47+00:00"
         }
     ],
     "groups": [],
