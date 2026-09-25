@@ -49,7 +49,7 @@ def find_policy_file():
 
         # 1. Uncommitted working-tree changes
         result = subprocess.run(
-            ["git", "diff", "--name-only","HEAD~1", "HEAD"],
+            ["git", "diff", "--name-only"],
             cwd=BASE_DIR,
             capture_output=True,
             text=True,
@@ -94,8 +94,6 @@ def find_policy_file():
             )
 
             changed_files.update(result.stdout.splitlines())
-
-        changed_files.update(result.stdout.splitlines())
 
     except subprocess.CalledProcessError as e:
         print("ERROR: Unable to determine changed files from Git.")
