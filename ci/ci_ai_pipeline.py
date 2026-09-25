@@ -49,7 +49,7 @@ def find_policy_file():
 
         # 1. Uncommitted working-tree changes
         result = subprocess.run(
-            ["git", "diff", "--name-only"],
+            ["git", "diff", "--name-only","HEAD~1", "HEAD"],
             cwd=BASE_DIR,
             capture_output=True,
             text=True,
@@ -70,13 +70,30 @@ def find_policy_file():
         changed_files.update(result.stdout.splitlines())
 
         # 3. Changes in the latest commit
-        result = subprocess.run(
-            ["git", "diff", "--name-only", "HEAD~1", "HEAD"],
-            cwd=BASE_DIR,
-            capture_output=True,
-            text=True,
-            check=True
-        )
+        try:
+            result = subprocess.run(
+                ["git", "diff", "--name-only", "HEAD~1", "HEAD"],
+                cwd=BASE_DIR,
+                capture_output=True,
+                text=True,
+                check=True
+            )
+
+            changed_files.update(result.stdout.splitlines())
+
+        except subprocess.CalledProcessError:
+            print("WARNING: HEAD~1 is not available.")
+            print("Falling back to the current HEAD commit.")
+
+            result = subprocess.run(
+                ["git", "show", "--pretty=", "--name-only", "HEAD"],
+                cwd=BASE_DIR,
+                capture_output=True,
+                text=True,
+                check=True
+            )
+
+            changed_files.update(result.stdout.splitlines())
 
         changed_files.update(result.stdout.splitlines())
 
