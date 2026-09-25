@@ -1,0 +1,29 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# AWS configuration and credentials
+.aws/
+.env
+.env.*
+
+# Generated AWS reports
+reports/
+*.json
+
+# ML generated models
+*.pkl
+*.joblib
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

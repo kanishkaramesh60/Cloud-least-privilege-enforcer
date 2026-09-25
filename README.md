@@ -410,7 +410,7 @@ The pipeline executes all project stages sequentially and reports the status of 
 ## 🎬 Example Demonstration Scenario
 
 ```text
-Target:            LeastPrivilegeDemoUser
+Target:            DemoUser
 Actual workload:   S3
 Observed activity: s3:ListBuckets, sts:GetCallerIdentity
 ```
