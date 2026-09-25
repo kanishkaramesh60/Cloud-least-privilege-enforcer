@@ -1,6 +1,6 @@
 {
     "identity": "LeastPrivilegeDemoUser",
-    "deployment_status": "NO_REMEDIATION_REQUIRED",
+    "deployment_status": "DRY_RUN_SUCCESS",
     "aws_changes_performed": false,
-    "verification_status": "NOT_REQUIRED"
+    "verification_status": "DRY_RUN_VERIFIED"
 }

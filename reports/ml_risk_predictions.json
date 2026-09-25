@@ -7,26 +7,26 @@
             "username": "LeastPrivilegeDemoUser",
             "identity_type": "IAM User",
             "features": {
-                "permission_risk": 8,
+                "permission_risk": 100,
                 "usage_risk": 10,
                 "temporal_risk": 0,
-                "orphan_risk": 0,
+                "orphan_risk": 15,
                 "services_used": 2,
                 "unusual_hour_access": 1,
                 "sensitive_actions": 0,
                 "cross_service_access": 1,
                 "admin_access": 0,
-                "full_access_policies": 0,
-                "policy_count": 1,
-                "unused_permissions_pct": 80.0,
+                "full_access_policies": 2,
+                "policy_count": 3,
+                "unused_permissions_pct": 97.43589743589743,
                 "api_calls_7d": 0,
                 "inactive_days": 0,
                 "new_source_ip": 0,
                 "failed_auth_attempts": 0,
                 "identity_type": "IAM User"
             },
-            "ml_risk_score": 35.12,
-            "risk_level": "Medium"
+            "ml_risk_score": 65.47,
+            "risk_level": "High"
         },
         {
             "username": "LeastPrivilegeDeployer",

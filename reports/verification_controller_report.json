@@ -3,8 +3,8 @@
     "identity": {
         "name": "LeastPrivilegeDemoUser",
         "type": "IAM User",
-        "risk_level": "Low",
-        "risk_score": 18
+        "risk_level": "High",
+        "risk_score": 100
     },
     "verification_basis": {
         "source": "CloudTrail observed actions",

@@ -6,17 +6,23 @@
             "username": "LeastPrivilegeDemoUser",
             "identity_type": "IAM User",
             "identity_confidence": "High",
-            "permission_risk": 8,
+            "permission_risk": 100,
             "usage_risk": 10,
-            "orphan_risk": 0,
+            "orphan_risk": 15,
             "temporal_risk": 0,
             "identity_adjustment": 0,
-            "total_risk": 18,
-            "risk_level": "Low",
-            "potentially_unused_permissions": 4,
-            "potentially_excessive_policies": [],
-            "broad_policies": [],
-            "least_privilege_status": "Requires Policy Review"
+            "total_risk": 100,
+            "risk_level": "High",
+            "potentially_unused_permissions": 38,
+            "potentially_excessive_policies": [
+                "AWSLambda_FullAccess",
+                "AmazonEC2FullAccess"
+            ],
+            "broad_policies": [
+                "AmazonEC2FullAccess",
+                "AWSLambda_FullAccess"
+            ],
+            "least_privilege_status": "Potentially Over-Privileged"
         },
         {
             "username": "LeastPrivilegeDeployer",
