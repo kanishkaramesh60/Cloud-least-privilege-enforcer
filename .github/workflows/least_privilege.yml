@@ -33,4 +33,4 @@ jobs:
         run: ollama --version
 
       - name: Run AI Least Privilege Pipeline
-        run: python ci/ci_ai_pipeline.py
+        run: python ci\ci_ai_pipeline.py ci\policies\overprivileged_test_policy.json
