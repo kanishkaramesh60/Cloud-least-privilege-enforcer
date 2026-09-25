@@ -35,4 +35,4 @@ jobs:
 
       - name: Run Least Privilege CI Pipeline
         shell: cmd
-        run: python ci\ci_ai_pipeline.py
+        run: python ci\ci_ai_pipeline.py ci\policies\overprivileged_test_policy.json
