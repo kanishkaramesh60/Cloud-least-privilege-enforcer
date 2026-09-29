@@ -499,12 +499,104 @@ def request_approval(
 
     print()
 
+    # --------------------------------------------------------
+    # DASHBOARD APPROVAL MODE
+    #
+    # A browser cannot answer Python input(). When the pipeline
+    # is launched by the dashboard, wait for the dashboard to
+    # write APPROVE or CANCEL to the approval file.
+    #
+    # Normal CMD execution is unchanged and still uses input().
+    # --------------------------------------------------------
+
+    dashboard_mode = (
+        os.environ.get(
+            "LEAST_PRIVILEGE_DASHBOARD",
+            ""
+        )
+        == "1"
+    )
+
+    if dashboard_mode:
+
+        approval_file = Path(
+            os.environ.get(
+                "LEAST_PRIVILEGE_APPROVAL_FILE",
+                str(
+                    BASE_DIR
+                    / "reports"
+                    / ".dashboard_approval"
+                )
+            )
+        )
+
+        print(
+            "Waiting for dashboard human approval..."
+        )
+
+        print(
+            "Approve or cancel from the dashboard."
+        )
+
+        while True:
+
+            try:
+
+                if approval_file.exists():
+
+                    decision = (
+                        approval_file
+                        .read_text(
+                            encoding="utf-8"
+                        )
+                        .strip()
+                        .upper()
+                    )
+
+                    if decision == "APPROVE":
+
+                        print(
+                            "Dashboard approval received: APPROVE"
+                        )
+
+                        try:
+                            approval_file.unlink()
+                        except FileNotFoundError:
+                            pass
+
+                        return True
+
+                    if decision == "CANCEL":
+
+                        print(
+                            "Dashboard approval received: CANCEL"
+                        )
+
+                        try:
+                            approval_file.unlink()
+                        except FileNotFoundError:
+                            pass
+
+                        return False
+
+            except OSError as error:
+
+                print(
+                    "Approval channel error:",
+                    str(error)
+                )
+
+            time.sleep(0.5)
+
+    # --------------------------------------------------------
+    # NORMAL CMD MODE
+    # --------------------------------------------------------
+
     response = input(
         "Type APPROVE to continue or anything else to cancel: "
     ).strip()
 
     return response == "APPROVE"
-
 
 # ============================================================
 # CREATE DEPLOYMENT POLICY NAME
