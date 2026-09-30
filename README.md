@@ -4,22 +4,31 @@
 
 **Automated AWS IAM security analysis and least-privilege enforcement — from real activity to safe, verified remediation.**
 
-[!\[AWS](https://img.shields.io/badge/AWS-IAM%20%7C%20CloudTrail-FF9900?logo=amazon-aws\&logoColor=white)](#)
-[!\[Python](https://img.shields.io/badge/Python-3.x-3776AB?logo=python\&logoColor=white)](#)
-[!\[XGBoost](https://img.shields.io/badge/ML-XGBoost-1a1a1a)](#)
-[!\[Ollama](https://img.shields.io/badge/AI-Ollama%20%2F%20Llama%203.2-000000)](#)
-[!\[Status](https://img.shields.io/badge/Status-Demo%20%7C%20Dry--Run%20Safe-brightgreen)](#)
-[!\[License](https://img.shields.io/badge/Use-Educational%20%2F%20Research-blue)](#)
+[![AWS](https://img.shields.io/badge/AWS-IAM%20%7C%20CloudTrail-FF9900?logo=amazon-aws&logoColor=white)](#)
+[![Streamlit](https://img.shields.io/badge/Dashboard-Streamlit-FF4B4B?logo=streamlit&logoColor=white)](#-interactive-dashboard)
+[![CLI](https://img.shields.io/badge/Interface-CLI%20%2B%20Dashboard-444444?logo=gnubash&logoColor=white)](#-two-ways-to-run)
+[![Python](https://img.shields.io/badge/Python-3.x-3776AB?logo=python&logoColor=white)](#)
+[![XGBoost](https://img.shields.io/badge/ML-XGBoost-1a1a1a)](#)
+[![Ollama](https://img.shields.io/badge/AI-Ollama%20%2F%20Llama%203.2-000000)](#)
+[![Status](https://img.shields.io/badge/Status-Demo%20%7C%20Dry--Run%20Safe-brightgreen)](#)
+[![License](https://img.shields.io/badge/Use-Educational%20%2F%20Research-blue)](#)
+
+
+<br>
+
+<img src="screenshots/run-pipeline.png" alt="Cloud Least Privilege Enforcer dashboard" width="850">
 
 </div>
 
-\---
+---
 
 An end-to-end pipeline that analyzes real cloud activity, compares it with granted IAM permissions, evaluates identity risk, recommends least-privilege policies, validates and simulates them, and controls remediation through verification, human approval, rollback, and deployment safety mechanisms — **never modifying IAM permissions on trust alone.**
 
 ## 📑 Table of Contents
 
 * [Overview](#-overview)
+* [Two Ways to Run](#-two-ways-to-run)
+* [Interactive Dashboard](#-interactive-dashboard)
 * [Main Objective](#-main-objective)
 * [System Workflow](#-system-workflow)
 * [Key Features](#-key-features)
@@ -39,7 +48,7 @@ An end-to-end pipeline that analyzes real cloud activity, compares it with grant
 * [Project Outcome](#-project-outcome)
 * [Disclaimer](#-disclaimer)
 
-\---
+---
 
 ## 🧭 Overview
 
@@ -52,7 +61,7 @@ The system considers:
 |🗂️ Granted IAM policies|Permissions currently assigned to an identity|
 |📡 Actual API activity|Real usage recorded by CloudTrail|
 |🔍 Observed IAM actions|Actions mapped from real API calls|
-|🧬 Identity type \& classification|User, role, service identity, or unknown|
+|🧬 Identity type & classification|User, role, service identity, or unknown|
 |👻 Orphan / inactive status|Identities with little or no recent activity|
 |⏱️ Temporal access behavior|When and how access actually happens|
 |⚠️ Potentially unused permissions|Granted but never observed|
@@ -64,7 +73,7 @@ The system considers:
 |🧪 IAM Policy Simulator testing|Simulated permission checks|
 |🛡️ Pre-deployment verification|Final safety gate before change|
 |⚖️ Decision-based remediation|Only acts when justified|
-|♻️ Rollback preparation \& verification|Every change is reversible|
+|♻️ Rollback preparation & verification|Every change is reversible|
 |🙋 Human deployment approval|A person signs off before AWS changes|
 |🎛️ Controlled deployment|Attach → verify → detach → verify|
 |📋 Post-deployment verification|Confirms the final IAM state|
@@ -73,33 +82,83 @@ The project is implemented as a **modular Python pipeline**, integrated with AWS
 
 ## 🎯 Main Objective
 
-> Provide a controlled workflow from \*\*IAM permissions + actual usage\*\* → \*\*risk analysis + least-privilege policy recommendation + validation + controlled remediation.\*\*
+> Provide a controlled workflow from **IAM permissions + actual usage** → **risk analysis + least-privilege policy recommendation + validation + controlled remediation.**
 
 The system is deliberately designed so that **AI and machine-learning outputs never directly modify AWS IAM permissions** without validation and safety checks.
+
+## 🔀 Two Ways to Run
+
+The same 21-stage pipeline can be used from a **web dashboard** or from the **command line**.
+
+| | 🖥️ Dashboard (GUI) | ⌨️ CLI |
+|-|-|-|
+| **Best for** | Demos, exploration, live progress, reviewing results | Automation, scripting, scheduled runs, CI/CD |
+| **Start with** | `streamlit run app.py` | `python pipeline.py` |
+| **Opens at** | <http://localhost:8501> | Terminal output |
+| **Reports** | `reports/` | `reports/` (identical) |
+
+## 🖥️ Interactive Dashboard
+
+A **Streamlit** dashboard lets you connect an AWS account, launch the pipeline, and watch every stage run in real time — with no commands to remember.
+
+### 🔌 Connect AWS Account
+
+Point the dashboard at the project folder containing `pipeline.py`. Once connected, the AWS account and IAM principal in use are displayed, with options to **Disconnect** or **Continue to Run Pipeline**.
+
+<p align="center">
+  <img src="screenshots/connect-aws-account.png" alt="Connect AWS Account page" width="850">
+</p>
+
+### ▶️ Run Pipeline
+
+Runs all **21 features** in sequence with live metrics: completed count, currently running stage, elapsed time, and overall state. Every stage is shown as a status chip, so you always know where the pipeline is. An option lets you clear previous reports before a new run.
+
+<p align="center">
+  <img src="screenshots/run-pipeline.png" alt="Run Pipeline page" width="850">
+</p>
+
+### 🧭 Dashboard Navigation
+
+| Section | Pages |
+|---|---|
+| **⚙️ Setup** | Connect AWS Account, Run Pipeline |
+| **📊 Overview** | Dashboard |
+| **🔎 Discovery** | IAM Scanner, CloudTrail Collector, CloudTrail Analyzer, CloudTrail Behavioral Analysis, Action Mapper, Identity Classification, Orphan Detection, Temporal Analysis |
+| **⚠️ Risk Analysis & Remediation** | Permission Analysis, Risk Scoring, XGBoost Risk Prediction, AI Policy Recommendation, Policy Validation, IAM Policy Simulation, Verification Controller, Decision Engine, Rollback Controller, Rollback Verification, Deployment Review, Deployment Controller, Post-Deployment Verification |
+
+### 🚀 Launch the Dashboard
+
+```cmd
+cd /d D:\Least_privilege
+pip install streamlit
+streamlit run app.py
+```
+
+Then open <http://localhost:8501>, go to **Connect AWS Account**, and continue to **Run Pipeline**.
 
 ## 🔄 System Workflow
 
 ```mermaid
 flowchart TD
-    A\[IAM \& CloudTrail Collection] --> B\[CloudTrail Behavioral Analysis]
-    B --> C\[Action Mapping]
-    C --> D\[Identity Classification]
-    D --> E\[Orphan Detection]
-    E --> F\[Temporal Analysis]
-    F --> G\[Permission Analysis]
-    G --> H\[Rule-Based Risk Scoring]
-    H --> I\[XGBoost Risk Prediction]
-    I --> J\[AI Policy Recommendation]
-    J --> K\[Policy Validation]
-    K --> L\[IAM Policy Simulation]
-    L --> M\[Verification Controller]
-    M --> N\[Decision Engine]
-    N --> O\[Rollback Preparation]
-    O --> P\[Rollback Verification]
-    P --> Q\[Deployment Review]
-    Q --> R\[Human Approval]
-    R --> S\[Deployment Controller]
-    S --> T\[Post-Deployment Verification]
+    A[IAM & CloudTrail Collection] --> B[CloudTrail Behavioral Analysis]
+    B --> C[Action Mapping]
+    C --> D[Identity Classification]
+    D --> E[Orphan Detection]
+    E --> F[Temporal Analysis]
+    F --> G[Permission Analysis]
+    G --> H[Rule-Based Risk Scoring]
+    H --> I[XGBoost Risk Prediction]
+    I --> J[AI Policy Recommendation]
+    J --> K[Policy Validation]
+    K --> L[IAM Policy Simulation]
+    L --> M[Verification Controller]
+    M --> N[Decision Engine]
+    N --> O[Rollback Preparation]
+    O --> P[Rollback Verification]
+    P --> Q[Deployment Review]
+    Q --> R[Human Approval]
+    R --> S[Deployment Controller]
+    S --> T[Post-Deployment Verification]
 ```
 
 ## ✨ Key Features
@@ -113,53 +172,53 @@ Scans AWS IAM identities and their policies, including IAM users, roles, attache
 
 Collects actual API activity performed by the target IAM identity via AWS CloudTrail.
 **Captures:** username, API event, event time, event source, AWS region, resources.
-📄 Output: `reports/cloudtrail\_logs.json`
+📄 Output: `reports/cloudtrail_logs.json`
 
 ### 3\. CloudTrail Behavioral Analysis
 
 Analyzes observed activity for API usage, accessed services, sensitive actions, activity outside the defined access window, and cross-service access.
-📄 Output: `reports/cloudtrail\_analysis.json`
+📄 Output: `reports/cloudtrail_analysis.json`
 
 ### 4\. Action Mapping
 
 Maps observed AWS API operations to IAM permissions — for example, mapping an observed S3 operation to the corresponding IAM action required by the recommendation process.
-📄 Output: `reports/observed\_actions.json`
+📄 Output: `reports/observed_actions.json`
 
 ### 5\. Identity Classification
 
 Classifies identities (IAM users, IAM roles, AWS service identities, unknown) with confidence information.
-📄 Output: `reports/identity\_report.json`
+📄 Output: `reports/identity_report.json`
 
 ### 6\. Orphan Detection
 
 Identifies inactive or potentially orphaned identities, reporting activity status, last activity, inactive days, and risk classification.
-📄 Output: `reports/orphan\_report.json`
+📄 Output: `reports/orphan_report.json`
 
 ### 7\. Temporal Analysis
 
 Analyzes *when* activity occurs — activity inside/outside the expected access window, weekend activity, and timestamp validity.
-📄 Output: `reports/temporal\_report.json`
+📄 Output: `reports/temporal_report.json`
 
 ### 8\. Permission Analysis
 
 Compares granted permissions with observed activity to identify potentially unused permissions, potentially excessive policies, and uncovered observed actions.
 
-> ℹ️ Potentially unused permissions are \*\*not\*\* automatically treated as confirmed excessive permissions.
+> ℹ️ Potentially unused permissions are **not** automatically treated as confirmed excessive permissions.
 
-📄 Output: `reports/permission\_analysis.json`
+📄 Output: `reports/permission_analysis.json`
 
 ### 9\. Rule-Based Risk Scoring
 
 Calculates a transparent risk score using factors such as permission risk, usage risk, orphan risk, temporal risk, identity adjustment, potentially unused permissions, and potentially excessive policies.
-📄 Output: `reports/risk\_report.json`
+📄 Output: `reports/risk_report.json`
 
 ### 10\. XGBoost Risk Prediction
 
 An XGBoost model predicts identity risk from features including permission risk, usage risk, number of services, unusual-hour access, sensitive actions, cross-service access, temporal risk, orphan status, administrative/full-access indicators, policy count, and unused-permission percentage.
 
-> ⚖️ The XGBoost score is a risk \*prediction\* — not by itself a command to delete or modify IAM permissions.
+> ⚖️ The XGBoost score is a risk *prediction* — not by itself a command to delete or modify IAM permissions.
 
-📄 Output: `reports/ml\_risk\_predictions.json`
+📄 Output: `reports/ml_risk_predictions.json`
 
 ### 11\. AI Policy Recommendation
 
@@ -167,30 +226,30 @@ Uses an **Ollama-hosted Llama 3.2 3B** model to generate a candidate least-privi
 
 > 🛡️ Deterministic security guardrails ensure raw LLM output is never blindly trusted.
 
-📄 Output: `reports/ai\_recommended\_policies.json`
+📄 Output: `reports/ai_recommended_policies.json`
 
 ### 12\. Policy Validation
 
 Validates the recommended policy using local policy checks and **AWS IAM Access Analyzer**.
-📄 Output: `reports/policy\_validation\_report.json`
+📄 Output: `reports/policy_validation_report.json`
 
 ### 13\. IAM Policy Simulation
 
 Uses the **AWS IAM Policy Simulator** to test whether required IAM actions would be allowed by the recommended policy.
-📄 Output: `reports/ai\_policy\_simulation\_report.json`
+📄 Output: `reports/ai_policy_simulation_report.json`
 
 ### 14\. Verification Controller
 
 Combines observed CloudTrail actions, IAM action mapping, the recommended policy, Access Analyzer results, and IAM simulation to verify the recommendation before deployment review.
-📄 Output: `reports/verification\_controller\_report.json`
+📄 Output: `reports/verification_controller_report.json`
 
 ### 15\. Decision Engine
 
 Combines rule-based risk, XGBoost risk, permission analysis, policy validation, IAM simulation, and verification status to decide whether remediation is required.
 
-> ⚖️ A higher ML risk score alone does \*\*not\*\* automatically trigger IAM modification.
+> ⚖️ A higher ML risk score alone does **not** automatically trigger IAM modification.
 
-📄 Output: `reports/decision\_engine\_report.json`
+📄 Output: `reports/decision_engine_report.json`
 
 ### 16\. Rollback Controller
 
@@ -204,7 +263,7 @@ Verifies that the rollback snapshot correctly represents the target IAM state.
 ### 18\. Deployment Review
 
 Performs final safety checks before deployment: target identity, verification status, Access Analyzer, IAM simulation, recommended policy, action coverage, AI status, wildcard actions, observed actions, and confirmed excessive permissions.
-📄 Output: `reports/deployment\_review\_report.json`
+📄 Output: `reports/deployment_review_report.json`
 
 ### 19\. Human Deployment Approval
 
@@ -235,36 +294,37 @@ Controls the IAM remediation process:
 
 ```mermaid
 flowchart LR
-    A\[Safety Checks] --> B\[Create/Prepare Replacement Policy]
-    B --> C\[Attach Replacement Policy]
-    C --> D\[Verify]
-    D --> E\[Detach Old Policy]
-    E --> F\[Verify Final State]
+    A[Safety Checks] --> B[Create/Prepare Replacement Policy]
+    B --> C[Attach Replacement Policy]
+    C --> D[Verify]
+    D --> E[Detach Old Policy]
+    E --> F[Verify Final State]
 ```
 
 If deployment fails, rollback can restore the previous IAM state. For demonstrations, keep:
 
 ```python
-DRY\_RUN = True
+DRY_RUN = True
 ```
 
 ### 21\. Post-Deployment Verification
 
-After an actual IAM deployment, checks whether the AWS IAM state matches the expected result. If no deployment occurs, the correct status is `POST-DEPLOYMENT VERIFICATION: NOT\_REQUIRED`.
+After an actual IAM deployment, checks whether the AWS IAM state matches the expected result. If no deployment occurs, the correct status is `POST-DEPLOYMENT VERIFICATION: NOT_REQUIRED`.
 
 ## 🗂️ Project Structure
 
 ```text
-D:\\Least\_privilege
+D:\Least_privilege
 │
-├── pipeline.py                          # Orchestrates the full workflow
+├── pipeline.py                          # Orchestrates the full workflow (CLI)
+├── app.py                               # Streamlit dashboard
 ├── scanner/
-│   └── iam\_scanner.py
+│   └── iam_scanner.py
 ├── cloudtrail/
 │   ├── collector.py
 │   └── analyzer.py
-├── cloudtrail\_analysis.py
-├── action\_mapper/
+├── cloudtrail_analysis.py
+├── action_mapper/
 │   └── mapper.py
 ├── identity/
 │   └── classifier.py
@@ -272,28 +332,30 @@ D:\\Least\_privilege
 │   └── detector.py
 ├── temporal/
 │   └── analyzer.py
-├── least\_privilege/
+├── least_privilege/
 │   └── analyzer.py
 ├── risk/
 │   └── scorer.py
 ├── ml/
-│   ├── train\_model.py
-│   └── predict\_risk.py
+│   ├── train_model.py
+│   └── predict_risk.py
 ├── ai/
-│   └── policy\_recommender.py
+│   └── policy_recommender.py
 ├── validation/
-│   ├── policy\_validator.py
-│   ├── policy\_simulator.py
-│   ├── verification\_controller.py
-│   ├── rollback\_controller.py
-│   ├── rollback\_verification.py
-│   ├── deployment\_review.py
-│   ├── deployment\_controller.py
-│   └── post\_deployment\_verification.py
+│   ├── policy_validator.py
+│   ├── policy_simulator.py
+│   ├── verification_controller.py
+│   ├── rollback_controller.py
+│   ├── rollback_verification.py
+│   ├── deployment_review.py
+│   ├── deployment_controller.py
+│   └── post_deployment_verification.py
 ├── decision/
-│   └── decision\_engine.py
+│   └── decision_engine.py
 ├── reports/
 │   └── generated JSON reports
+├── screenshots/
+│   └── dashboard images used in this README
 └── README.md
 ```
 
@@ -306,6 +368,7 @@ D:\\Least\_privilege
 |**AWS IAM Access Analyzer**|IAM policy validation and analysis|
 |**AWS IAM Policy Simulator**|Permission simulation|
 |**Python**|Core application development|
+|**Streamlit**|Interactive dashboard for running and monitoring the pipeline|
 |**Boto3**|Python integration with AWS|
 |**AWS CLI**|AWS configuration and testing|
 |**XGBoost**|Machine-learning-based risk prediction|
@@ -320,12 +383,12 @@ Use a dedicated demonstration identity rather than the scanner identity:
 
 ```mermaid
 flowchart TD
-    A\[Least\_privilege] -->|Scanner identity| B(( ))
-    C\[LeastPrivilegeDemoUser] -->|Target / test identity| D(( ))
-    E\[LeastPrivilegeDeployer] -->|Controlled deployment identity| F(( ))
+    A[Least_privilege] -->|Scanner identity| B(( ))
+    C[LeastPrivilegeDemoUser] -->|Target / test identity| D(( ))
+    E[LeastPrivilegeDeployer] -->|Controlled deployment identity| F(( ))
 ```
 
-> 🔒 \*\*The scanner identity should never be modified by the remediation process.\*\*
+> 🔒 **The scanner identity should never be modified by the remediation process.**
 
 For demonstration purposes, policies can be manually attached to `LeastPrivilegeDemoUser`. A narrow policy can represent the expected workload, while broader policies can be temporarily attached to demonstrate potentially unused or excessive access.
 
@@ -341,12 +404,13 @@ After generating test activity with the demonstration identity, the collector re
 
 |Step|Command|
 |-|-|
-|1. Open the project directory|`cd /d D:\\Least\_privilege`|
+|1. Open the project directory|`cd /d D:\Least_privilege`|
 |2. Verify Python|`python --version`|
 |3. Verify AWS CLI|`aws --version`|
 |4. Verify the AWS profile|`aws sts get-caller-identity --profile leastprivilege`|
 |5. Verify the demonstration profile|`aws sts get-caller-identity --profile leastprivilege-demo`|
-|6. Verify Ollama|Ensure Ollama is installed and the required Llama model is available locally before running the AI recommendation stage|
+|6. Install dashboard dependency (optional)|`pip install streamlit`|
+|7. Verify Ollama|Ensure Ollama is installed and the required Llama model is available locally before running the AI recommendation stage|
 
 ## 🚀 Demonstration Test
 
@@ -367,7 +431,7 @@ aws sts get-caller-identity --profile leastprivilege-demo
 ### Run the complete pipeline
 
 ```cmd
-cd /d D:\\Least\_privilege
+cd /d D:\Least_privilege
 python pipeline.py
 ```
 
@@ -381,40 +445,50 @@ FINAL PIPELINE STATUS: COMPLETED
 
 |Module|Command|
 |-|-|
-|IAM Scanner|`python scanner\\iam\_scanner.py`|
-|CloudTrail Collector|`python cloudtrail\\collector.py`|
-|CloudTrail Analyzer|`python cloudtrail\\analyzer.py`|
-|Behavioral Analysis|`python cloudtrail\_analysis.py`|
-|Action Mapper|`python action\_mapper\\mapper.py`|
-|Identity Classification|`python identity\\classifier.py`|
-|Orphan Detection|`python orphan\\detector.py`|
-|Temporal Analysis|`python temporal\\analyzer.py`|
-|Permission Analysis|`python least\_privilege\\analyzer.py`|
-|Rule-Based Risk Scoring|`python risk\\scorer.py`|
-|XGBoost Risk Prediction|`python ml\\predict\_risk.py`|
-|AI Policy Recommendation\*|`set PYTHONPATH=D:\\Least\_privilege \&\& python ai\\policy\_recommender.py`|
-|Policy Validation|`python validation\\policy\_validator.py`|
-|IAM Policy Simulation|`python validation\\policy\_simulator.py`|
-|Verification|`python validation\\verification\_controller.py`|
-|Decision Engine|`python decision\\decision\_engine.py`|
-|Rollback Controller|`python validation\\rollback\_controller.py`|
-|Rollback Verification|`python validation\\rollback\_verification.py`|
-|Deployment Review|`python validation\\deployment\_review.py`|
-|Deployment Controller|`python validation\\deployment\_controller.py`|
-|Post-Deployment Verification|`python validation\\post\_deployment\_verification.py`|
+|IAM Scanner|`python scanner\iam_scanner.py`|
+|CloudTrail Collector|`python cloudtrail\collector.py`|
+|CloudTrail Analyzer|`python cloudtrail\analyzer.py`|
+|Behavioral Analysis|`python cloudtrail_analysis.py`|
+|Action Mapper|`python action_mapper\mapper.py`|
+|Identity Classification|`python identity\classifier.py`|
+|Orphan Detection|`python orphan\detector.py`|
+|Temporal Analysis|`python temporal\analyzer.py`|
+|Permission Analysis|`python least_privilege\analyzer.py`|
+|Rule-Based Risk Scoring|`python risk\scorer.py`|
+|XGBoost Risk Prediction|`python ml\predict_risk.py`|
+|AI Policy Recommendation*|`set PYTHONPATH=D:\Least_privilege && python ai\policy_recommender.py`|
+|Policy Validation|`python validation\policy_validator.py`|
+|IAM Policy Simulation|`python validation\policy_simulator.py`|
+|Verification|`python validation\verification_controller.py`|
+|Decision Engine|`python decision\decision_engine.py`|
+|Rollback Controller|`python validation\rollback_controller.py`|
+|Rollback Verification|`python validation\rollback_verification.py`|
+|Deployment Review|`python validation\deployment_review.py`|
+|Deployment Controller|`python validation\deployment_controller.py`|
+|Post-Deployment Verification|`python validation\post_deployment_verification.py`|
 
-\* The complete pipeline already handles the project-root Python path — the `PYTHONPATH` step is only needed when running this module directly.
+* The complete pipeline already handles the project-root Python path — the `PYTHONPATH` step is only needed when running this module directly.
 
 ## 🏁 Complete Pipeline
+
+### ⌨️ From the CLI
 
 Recommended command for the full demonstration:
 
 ```cmd
-cd /d D:\\Least\_privilege
+cd /d D:\Least_privilege
 python pipeline.py
 ```
 
 The pipeline executes all project stages sequentially and reports the status of every stage.
+
+### 🖥️ From the Dashboard
+
+```cmd
+streamlit run app.py
+```
+
+Use **Run Pipeline** in the sidebar to execute the same stages with live progress.
 
 ## 🛡️ Safety Design
 
@@ -422,7 +496,7 @@ The pipeline executes all project stages sequentially and reports the status of 
 |-|-|
 |**Scanner protection**|The scanner identity should never be modified by the remediation process|
 |**Human approval**|A human approval checkpoint can be required before deployment|
-|**Dry-run mode**|`DRY\_RUN = True` prevents actual IAM changes during a demonstration|
+|**Dry-run mode**|`DRY_RUN = True` prevents actual IAM changes during a demonstration|
 |**Validation before deployment**|A candidate policy is validated and simulated before deployment|
 |**Rollback**|The existing IAM state can be captured before a real deployment so changes can be reversed if required|
 |**AI guardrails**|Raw LLM output is not blindly trusted — deterministic checks are applied before a recommendation is accepted|
@@ -484,41 +558,41 @@ AWS Changes:     FALSE
 When no confirmed excessive permissions require remediation, the Decision Engine can produce:
 
 ```text
-NO\_REMEDIATION\_REQUIRED
+NO_REMEDIATION_REQUIRED
 ```
 
 In this situation, post-deployment verification is correctly reported as:
 
 ```text
-NOT\_REQUIRED
+NOT_REQUIRED
 ```
 
 because no actual deployment occurred.
 
 ## 📦 Expected Outputs
 
-Reports are generated under `reports\\`:
+Reports are generated under `reports\`:
 
 ```text
 policies.json
-cloudtrail\_logs.json
-usage\_report.json
-cloudtrail\_analysis.json
-observed\_actions.json
-identity\_report.json
-orphan\_report.json
-temporal\_report.json
-permission\_analysis.json
-risk\_report.json
-ml\_risk\_predictions.json
-ai\_recommended\_policies.json
-policy\_validation\_report.json
-ai\_policy\_simulation\_report.json
-verification\_controller\_report.json
-decision\_engine\_report.json
-deployment\_review\_report.json
-deployment\_controller\_report.json
-post\_deployment\_verification\_report.json
+cloudtrail_logs.json
+usage_report.json
+cloudtrail_analysis.json
+observed_actions.json
+identity_report.json
+orphan_report.json
+temporal_report.json
+permission_analysis.json
+risk_report.json
+ml_risk_predictions.json
+ai_recommended_policies.json
+policy_validation_report.json
+ai_policy_simulation_report.json
+verification_controller_report.json
+decision_engine_report.json
+deployment_review_report.json
+deployment_controller_report.json
+post_deployment_verification_report.json
 ```
 
 ## 🏆 Project Outcome
@@ -527,7 +601,7 @@ The Cloud Least Privilege Enforcer provides an integrated workflow:
 
 ```mermaid
 flowchart LR
-    A\[Observe] --> B\[Analyze] --> C\[Assess Risk] --> D\[Recommend] --> E\[Validate] --> F\[Simulate] --> G\[Verify] --> H\[Decide] --> I\[Review] --> J\[Deploy Safely] --> K\[Verify]
+    A[Observe] --> B[Analyze] --> C[Assess Risk] --> D[Recommend] --> E[Validate] --> F[Simulate] --> G[Verify] --> H[Decide] --> I[Review] --> J[Deploy Safely] --> K[Verify]
 ```
 
 The main focus is not simply generating an IAM policy. The system connects **actual cloud behavior**, **permission analysis**, **machine-learning risk prediction**, **AI-assisted recommendation**, **policy validation**, **simulation**, **human oversight**, **rollback preparation**, and **controlled deployment** into one security workflow.
