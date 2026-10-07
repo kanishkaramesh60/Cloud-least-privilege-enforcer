@@ -1,0 +1,2145 @@
+[1mdiff --git a/dashboard.py b/dashboard.py[m
+[1mindex 8589b33..0e94661 100644[m
+[1m--- a/dashboard.py[m
+[1m+++ b/dashboard.py[m
+[36m@@ -1,16 +1,32 @@[m
+ """[m
+[31m-Cloud Least Privilege Enforcer - Multi-page Dashboard[m
+[31m-Place in the SAME folder as pipeline.py.[m
+[32m+[m[32mLeastPrivForge - AI-Driven Cloud Least Privilege Enforcement System[m
+[32m+[m[32mStreamlit Multi-page Dashboard[m
+ [m
+[31m-    pip install -U streamlit boto3 pandas pyyaml[m
+[32m+[m[32mRun locally:[m
+     streamlit run dashboard.py[m
+ [m
+[31m-pipeline.py and all modules are NOT modified. The dashboard runs[m
+[31m-`python pipeline.py` exactly like the CLI (in a background thread), passing the[m
+[31m-AWS details via environment variables, then stores every feature's result[m
+[31m-separately in <project>/dashboard_scans/<scan-id>/scan.json.[m
+[31m-Credentials are never written to disk.[m
+[32m+[m[32mThe dashboard runs pipeline.py as a subprocess and displays:[m
+[32m+[m[32m- AWS connection status[m
+[32m+[m[32m- 21 pipeline features[m
+[32m+[m[32m- Live pipeline output[m
+[32m+[m[32m- Feature-by-feature status[m
+[32m+[m[32m- Risk analysis[m
+[32m+[m[32m- AI recommendation results[m
+[32m+[m[32m- Validation results[m
+[32m+[m[32m- Deployment results[m
+[32m+[m[32m- History[m
+[32m+[m[32m- JSON/YAML downloads[m
+[32m+[m
+[32m+[m[32mDashboard execution is identified using:[m
+[32m+[m[32m    LEAST_PRIVILEGE_DASHBOARD=1[m
+[32m+[m
+[32m+[m[32mThis allows pipeline/deployment code to distinguish browser-based[m
+[32m+[m[32mapproval from normal CMD execution.[m
+[32m+[m
+[32m+[m[32mCredentials are kept in Streamlit session memory and are not written[m
+[32m+[m[32mto disk by this dashboard.[m
+ """[m
+[32m+[m
+ import glob[m
+ import json[m
+ import os[m
+[36m@@ -27,12 +43,16 @@[m [mimport streamlit as st[m
+ [m
+ try:[m
+     import yaml[m
+[31m-except ImportError:  # pragma: no cover[m
+[32m+[m[32mexcept ImportError:[m
+     yaml = None[m
+ [m
+[32m+[m
+[32m+[m[32m# ============================================================[m
+[32m+[m[32m# CONFIGURATION[m
+[32m+[m[32m# ============================================================[m
+[32m+[m
+ DEFAULT_DIR = os.path.dirname(os.path.abspath(__file__))[m
+ [m
+[31m-# group -> feature -> report files (relative to reports/)[m
+ GROUPS = {[m
+     "Discovery": {[m
+         "IAM Scanner": ["policies.json"],[m
+[36m@@ -44,11 +64,13 @@[m [mGROUPS = {[m
+         "Orphan Detection": ["orphan_report.json"],[m
+         "Temporal Analysis": ["temporal_report.json"],[m
+     },[m
+[32m+[m
+     "Risk Analysis": {[m
+         "Permission Analysis": ["permission_analysis.json"],[m
+         "Risk Scoring": ["risk_report.json"],[m
+         "XGBoost Risk Prediction": ["ml_risk_predictions.json"],[m
+     },[m
+[32m+[m
+     "Recommendation & Validation": {[m
+         "AI Policy Recommendation": ["ai_recommended_policies.json"],[m
+         "Policy Validation": ["policy_validation_report.json"],[m
+[36m@@ -56,33 +78,108 @@[m [mGROUPS = {[m
+         "Verification Controller": ["verification_controller_report.json"],[m
+         "Decision Engine": ["decision_engine_report.json"],[m
+     },[m
+[32m+[m
+     "Deployment": {[m
+         "Rollback Controller": ["rollback/*.json"],[m
+         "Rollback Verification": [],[m
+         "Deployment Review": ["deployment_review_report.json"],[m
+         "Deployment Controller": ["deployment_controller_report.json"],[m
+[31m-        "Post-Deployment Verification": ["post_deployment_verification_report.json"],[m
+[32m+[m[32m        "Post-Deployment Verification": [[m
+[32m+[m[32m            "post_deployment_verification_report.json"[m
+[32m+[m[32m        ],[m
+     },[m
+ }[m
+[31m-FEATURES = {n: r for g in GROUPS.values() for n, r in g.items()}[m
+ [m
+[31m-ICON = {"pending": "⏳", "running": "🔄", "done": "✅", "failed": "❌", "warn": "⚠️"}[m
+[31m-COLOR = {"pending": "#64748b", "running": "#2563eb", "done": "#16a34a",[m
+[31m-         "failed": "#dc2626", "warn": "#d97706"}[m
+[32m+[m[32mFEATURES = {[m
+[32m+[m[32m    name: reports[m
+[32m+[m[32m    for group in GROUPS.values()[m
+[32m+[m[32m    for name, reports in group.items()[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[32m+[m[32mICON = {[m
+[32m+[m[32m    "pending": "⏳",[m
+[32m+[m[32m    "running": "🔄",[m
+[32m+[m[32m    "done": "✅",[m
+[32m+[m[32m    "failed": "❌",[m
+[32m+[m[32m    "warn": "⚠️",[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mCOLOR = {[m
+[32m+[m[32m    "pending": "#64748b",[m
+[32m+[m[32m    "running": "#2563eb",[m
+[32m+[m[32m    "done": "#16a34a",[m
+[32m+[m[32m    "failed": "#dc2626",[m
+[32m+[m[32m    "warn": "#d97706",[m
+[32m+[m[32m}[m
+[32m+[m
+ [m
+[31m-st.set_page_config(page_title="Cloud Least Privilege Enforcer", page_icon="🔐", layout="wide")[m
+[31m-st.markdown("""[m
+[32m+[m[32m# ============================================================[m
+[32m+[m[32m# STREAMLIT CONFIGURATION[m
+[32m+[m[32m# ============================================================[m
+[32m+[m
+[32m+[m[32mst.set_page_config([m
+[32m+[m[32m    page_title="LeastPrivForge",[m
+[32m+[m[32m    page_icon="🔐",[m
+[32m+[m[32m    layout="wide",[m
+[32m+[m[32m)[m
+[32m+[m
+[32m+[m[32mst.markdown([m
+[32m+[m[32m    """[m
+ <style>[m
+[31m-.chip-grid{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 14px}[m
+[31m-.chip{padding:6px 12px;border-radius:999px;font-size:13px;color:#fff;white-space:nowrap}[m
+[31m-.card{border:1px solid rgba(128,128,128,.3);border-radius:12px;padding:14px 18px}[m
+[31m-.card h4{margin:0;font-size:13px;opacity:.7;font-weight:500}[m
+[31m-.card p{margin:4px 0 0;font-size:28px;font-weight:700}[m
+[31m-.badge{padding:3px 10px;border-radius:6px;color:#fff;font-weight:600;font-size:13px}[m
+[31m-</style>""", unsafe_allow_html=True)[m
+ [m
+[32m+[m[32m.chip-grid {[m
+[32m+[m[32m    display: flex;[m
+[32m+[m[32m    flex-wrap: wrap;[m
+[32m+[m[32m    gap: 8px;[m
+[32m+[m[32m    margin: 6px 0 14px;[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m.chip {[m
+[32m+[m[32m    padding: 6px 12px;[m
+[32m+[m[32m    border-radius: 999px;[m
+[32m+[m[32m    font-size: 13px;[m
+[32m+[m[32m    color: #fff;[m
+[32m+[m[32m    white-space: nowrap;[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m.card {[m
+[32m+[m[32m    border: 1px solid rgba(128,128,128,.3);[m
+[32m+[m[32m    border-radius: 12px;[m
+[32m+[m[32m    padding: 14px 18px;[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m.card h4 {[m
+[32m+[m[32m    margin: 0;[m
+[32m+[m[32m    font-size: 13px;[m
+[32m+[m[32m    opacity: .7;[m
+[32m+[m[32m    font-weight: 500;[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m.card p {[m
+[32m+[m[32m    margin: 4px 0 0;[m
+[32m+[m[32m    font-size: 28px;[m
+[32m+[m[32m    font-weight: 700;[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m.badge {[m
+[32m+[m[32m    padding: 3px 10px;[m
+[32m+[m[32m    border-radius: 6px;[m
+[32m+[m[32m    color: #fff;[m
+[32m+[m[32m    font-weight: 600;[m
+[32m+[m[32m    font-size: 13px;[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m</style>[m
+[32m+[m[32m""",[m
+[32m+[m[32m    unsafe_allow_html=True,[m
+[32m+[m[32m)[m
+[32m+[m
+[32m+[m
+[32m+[m[32m# ============================================================[m
+[32m+[m[32m# DATA HELPERS[m
+[32m+[m[32m# ============================================================[m
+ [m
+[31m-# ───────────────────────── data helpers (no streamlit calls) ─────────────────────────[m
+ def read_json(path):[m
+     try:[m
+         with open(path, encoding="utf-8") as f:[m
+[36m@@ -92,412 +189,1673 @@[m [mdef read_json(path):[m
+ [m
+ [m
+ def split_log(log):[m
+[31m-    log = re.split(r"={70}\s*\n\s*PIPELINE SUMMARY", log)[0][m
+[31m-    parts = re.split(r"={70}\n([^\n=][^\n]*)\n={70}\nRunning:", log)[m
+[31m-    return {parts[i].strip(): ("Running:" + parts[i + 1]).strip()[m
+[31m-            for i in range(1, len(parts) - 1, 2)}[m
+[32m+[m[32m    log = re.split([m
+[32m+[m[32m        r"={70}\s*\n\s*PIPELINE SUMMARY",[m
+[32m+[m[32m        log[m
+[32m+[m[32m    )[0][m
+ [m
+[32m+[m[32m    parts = re.split([m
+[32m+[m[32m        r"={70}\n([^\n=][^\n]*)\n={70}\nRunning:",[m
+[32m+[m[32m        log[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    return {[m
+[32m+[m[32m        parts[i].strip():[m
+[32m+[m[32m            ("Running:" + parts[i + 1]).strip()[m
+[32m+[m[32m        for i in range(1, len(parts) - 1, 2)[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m
+[32m+[m[32mdef build_scan([m
+[32m+[m[32m    project_dir,[m
+[32m+[m[32m    account,[m
+[32m+[m[32m    arn,[m
+[32m+[m[32m    log,[m
+[32m+[m[32m    returncode[m
+[32m+[m[32m):[m
+ [m
+[31m-def build_scan(project_dir, account, arn, log, returncode):[m
+     sections = split_log(log)[m
+[31m-    status = {n: s for s, n in re.findall(r"^\[(PASS|FAIL)\]\s+(.+)$", log, flags=re.M)}[m
+[32m+[m
+[32m+[m[32m    status = {[m
+[32m+[m[32m        n: s[m
+[32m+[m[32m        for s, n in re.findall([m
+[32m+[m[32m            r"^\[(PASS|FAIL)\]\s+(.+)$",[m
+[32m+[m[32m            log,[m
+[32m+[m[32m            flags=re.M[m
+[32m+[m[32m        )[m
+[32m+[m[32m    }[m
+[32m+[m
+     stages = {}[m
+[32m+[m
+     for name, patterns in FEATURES.items():[m
+[31m-        out = sections.get(name, "")[m
+[32m+[m
+[32m+[m[32m        output = sections.get(name, "")[m
+[32m+[m
+         reports = {}[m
+[31m-        for pat in patterns:[m
+[31m-            for p in sorted(glob.glob(os.path.join(project_dir, "reports", pat))):[m
+[31m-                reports[os.path.basename(p)] = read_json(p)[m
+[32m+[m
+[32m+[m[32m        for pattern in patterns:[m
+[32m+[m
+[32m+[m[32m            for path in sorted([m
+[32m+[m[32m                glob.glob([m
+[32m+[m[32m                    os.path.join([m
+[32m+[m[32m                        project_dir,[m
+[32m+[m[32m                        "reports",[m
+[32m+[m[32m                        pattern[m
+[32m+[m[32m                    )[m
+[32m+[m[32m                )[m
+[32m+[m[32m            ):[m
+[32m+[m
+[32m+[m[32m                reports[[m
+[32m+[m[32m                    os.path.basename(path)[m
+[32m+[m[32m                ] = read_json(path)[m
+[32m+[m
+         stages[name] = {[m
+             "status": status.get(name, "N/A"),[m
+[31m-            "warning": bool(re.search(r"CONTROLLER ERROR|Traceback|Error:", out)),[m
+[31m-            "output": out,[m
+[32m+[m[32m            "warning": bool([m
+[32m+[m[32m                re.search([m
+[32m+[m[32m                    r"CONTROLLER ERROR|Traceback|Error:",[m
+[32m+[m[32m                    output[m
+[32m+[m[32m                )[m
+[32m+[m[32m            ),[m
+[32m+[m[32m            "output": output,[m
+             "reports": reports,[m
+         }[m
+[32m+[m
+     now = datetime.now()[m
+[31m-    return {"id": now.strftime("%Y%m%d_%H%M%S"), "time": now.strftime("%Y-%m-%d %H:%M:%S"),[m
+[31m-            "account": account, "arn": arn, "returncode": returncode,[m
+[31m-            "stages": stages, "full_log": log}[m
+[32m+[m
+[32m+[m[32m    return {[m
+[32m+[m[32m        "id": now.strftime("%Y%m%d_%H%M%S"),[m
+[32m+[m[32m        "time": now.strftime("%Y-%m-%d %H:%M:%S"),[m
+[32m+[m[32m        "account": account,[m
+[32m+[m[32m        "arn": arn,[m
+[32m+[m[32m        "returncode": returncode,[m
+[32m+[m[32m        "stages": stages,[m
+[32m+[m[32m        "full_log": log,[m
+[32m+[m[32m    }[m
+ [m
+ [m
+ def save_scan(project_dir, scan):[m
+[31m-    folder = os.path.join(project_dir, "dashboard_scans", scan["id"])[m
+[32m+[m
+[32m+[m[32m    folder = os.path.join([m
+[32m+[m[32m        project_dir,[m
+[32m+[m[32m        "dashboard_scans",[m
+[32m+[m[32m        scan["id"][m
+[32m+[m[32m    )[m
+[32m+[m
+     os.makedirs(folder, exist_ok=True)[m
+[31m-    with open(os.path.join(folder, "scan.json"), "w", encoding="utf-8") as f:[m
+[31m-        json.dump(scan, f, indent=2, default=str)[m
+[32m+[m
+[32m+[m[32m    path = os.path.join([m
+[32m+[m[32m        folder,[m
+[32m+[m[32m        "scan.json"[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    with open([m
+[32m+[m[32m        path,[m
+[32m+[m[32m        "w",[m
+[32m+[m[32m        encoding="utf-8"[m
+[32m+[m[32m    ) as f:[m
+[32m+[m
+[32m+[m[32m        json.dump([m
+[32m+[m[32m            scan,[m
+[32m+[m[32m            f,[m
+[32m+[m[32m            indent=2,[m
+[32m+[m[32m            default=str[m
+[32m+[m[32m        )[m
+ [m
+ [m
+ def list_saved(project_dir):[m
+[31m-    files = glob.glob(os.path.join(project_dir, "dashboard_scans", "*", "scan.json"))[m
+[31m-    return sorted((os.path.basename(os.path.dirname(f)) for f in files), reverse=True)[m
+[32m+[m
+[32m+[m[32m    files = glob.glob([m
+[32m+[m[32m        os.path.join([m
+[32m+[m[32m            project_dir,[m
+[32m+[m[32m            "dashboard_scans",[m
+[32m+[m[32m            "*",[m
+[32m+[m[32m            "scan.json"[m
+[32m+[m[32m        )[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    return sorted([m
+[32m+[m[32m        ([m
+[32m+[m[32m            os.path.basename([m
+[32m+[m[32m                os.path.dirname(f)[m
+[32m+[m[32m            )[m
+[32m+[m[32m            for f in files[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        reverse=True[m
+[32m+[m[32m    )[m
+ [m
+ [m
+ def plain(data):[m
+[31m-    return json.loads(json.dumps(data, default=str))[m
+[32m+[m[32m    return json.loads([m
+[32m+[m[32m        json.dumps([m
+[32m+[m[32m            data,[m
+[32m+[m[32m            default=str[m
+[32m+[m[32m        )[m
+[32m+[m[32m    )[m
+ [m
+ [m
+ def to_json(data):[m
+[31m-    return json.dumps(plain(data), indent=2, ensure_ascii=False)[m
+[32m+[m
+[32m+[m[32m    return json.dumps([m
+[32m+[m[32m        plain(data),[m
+[32m+[m[32m        indent=2,[m
+[32m+[m[32m        ensure_ascii=False[m
+[32m+[m[32m    )[m
+ [m
+ [m
+ def to_yaml(data):[m
+[32m+[m
+     if yaml is None:[m
+[31m-        return "# PyYAML not installed. Run: pip install pyyaml\n"[m
+[31m-    return yaml.safe_dump(plain(data), sort_keys=False, allow_unicode=True, default_flow_style=False)[m
+[32m+[m[32m        return ([m
+[32m+[m[32m            "# PyYAML is not installed.\n"[m
+[32m+[m[32m            "# Install with: pip install PyYAML\n"[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m    return yaml.safe_dump([m
+[32m+[m[32m        plain(data),[m
+[32m+[m[32m        sort_keys=False,[m
+[32m+[m[32m        allow_unicode=True,[m
+[32m+[m[32m        default_flow_style=False[m
+[32m+[m[32m    )[m
+ [m
+ [m
+[31m-def final_report(scan, include_output=False):[m
+[31m-    feats = {}[m
+[31m-    for name, s in scan["stages"].items():[m
+[31m-        item = {"status": s["status"], "warning": s["warning"], "reports": s["reports"]}[m
+[32m+[m[32mdef final_report([m
+[32m+[m[32m    scan,[m
+[32m+[m[32m    include_output=False[m
+[32m+[m[32m):[m
+[32m+[m
+[32m+[m[32m    features = {}[m
+[32m+[m
+[32m+[m[32m    for name, stage in scan["stages"].items():[m
+[32m+[m
+[32m+[m[32m        item = {[m
+[32m+[m[32m            "status": stage["status"],[m
+[32m+[m[32m            "warning": stage["warning"],[m
+[32m+[m[32m            "reports": stage["reports"],[m
+[32m+[m[32m        }[m
+[32m+[m
+         if include_output:[m
+[31m-            item["console_output"] = s["output"][m
+[31m-        feats[name] = item[m
+[31m-    passed = sum(1 for s in scan["stages"].values() if s["status"] == "PASS")[m
+[32m+[m[32m            item["console_output"] = stage["output"][m
+[32m+[m
+[32m+[m[32m        features[name] = item[m
+[32m+[m
+[32m+[m[32m    passed = sum([m
+[32m+[m[32m        1[m
+[32m+[m[32m        for stage in scan["stages"].values()[m
+[32m+[m[32m        if stage["status"] == "PASS"[m
+[32m+[m[32m    )[m
+[32m+[m
+     return {[m
+[31m-        "scan": {"id": scan["id"], "time": scan["time"], "account": scan["account"],[m
+[31m-                 "arn": scan["arn"], "exit_code": scan["returncode"]},[m
+[31m-        "summary": {"features_total": len(scan["stages"]), "features_passed": passed,[m
+[31m-                    "features_with_warnings": [n for n, s in scan["stages"].items() if s["warning"]]},[m
+[31m-        "features": feats,[m
+[32m+[m[32m        "scan": {[m
+[32m+[m[32m            "id": scan["id"],[m
+[32m+[m[32m            "time": scan["time"],[m
+[32m+[m[32m            "account": scan["account"],[m
+[32m+[m[32m            "arn": scan["arn"],[m
+[32m+[m[32m            "exit_code": scan["returncode"],[m
+[32m+[m[32m        },[m
+[32m+[m
+[32m+[m[32m        "summary": {[m
+[32m+[m[32m            "features_total": len(scan["stages"]),[m
+[32m+[m[32m            "features_passed": passed,[m
+[32m+[m[32m            "features_with_warnings": [[m
+[32m+[m[32m                name[m
+[32m+[m[32m                for name, stage in scan["stages"].items()[m
+[32m+[m[32m                if stage["warning"][m
+[32m+[m[32m            ],[m
+[32m+[m[32m        },[m
+[32m+[m
+[32m+[m[32m        "features": features,[m
+     }[m
+ [m
+ [m
+[31m-# ───────────────────────── background pipeline job ─────────────────────────[m
+[32m+[m[32m# ============================================================[m
+[32m+[m[32m# BACKGROUND PIPELINE[m
+[32m+[m[32m# ============================================================[m
+[32m+[m
+ @st.cache_resource[m
+ def job_store():[m
+[31m-    return {"job": None}[m
+[32m+[m
+[32m+[m[32m    return {[m
+[32m+[m[32m        "job": None[m
+[32m+[m[32m    }[m
+ [m
+ [m
+[31m-def _worker(job, project_dir, env, account, arn, clear_old):[m
+[32m+[m[32mdef _worker([m
+[32m+[m[32m    job,[m
+[32m+[m[32m    project_dir,[m
+[32m+[m[32m    env,[m
+[32m+[m[32m    account,[m
+[32m+[m[32m    arn,[m
+[32m+[m[32m    clear_old[m
+[32m+[m[32m):[m
+[32m+[m
+     try:[m
+[32m+[m
+[32m+[m[32m        # ----------------------------------------------------[m
+[32m+[m[32m        # Clear previous report files[m
+[32m+[m[32m        # ----------------------------------------------------[m
+[32m+[m
+         if clear_old:[m
+[31m-            for f in glob.glob(os.path.join(project_dir, "reports", "**", "*.json"), recursive=True):[m
+[32m+[m
+[32m+[m[32m            for path in glob.glob([m
+[32m+[m[32m                os.path.join([m
+[32m+[m[32m                    project_dir,[m
+[32m+[m[32m                    "reports",[m
+[32m+[m[32m                    "**",[m
+[32m+[m[32m                    "*.json"[m
+[32m+[m[32m                ),[m
+[32m+[m[32m                recursive=True[m
+[32m+[m[32m            ):[m
+[32m+[m
+                 try:[m
+[31m-                    os.remove(f)[m
+[32m+[m[32m                    os.remove(path)[m
+                 except OSError:[m
+                     pass[m
+[31m-        child = {**os.environ, **env, "PYTHONUNBUFFERED": "1", "PYTHONIOENCODING": "utf-8"}[m
+[31m-        child.pop("AWS_PROFILE", None)[m
+[31m-        child.pop("AWS_SESSION_TOKEN", None)[m
+[32m+[m
+[32m+[m[32m        # ----------------------------------------------------[m
+[32m+[m[32m        # Environment for pipeline[m
+[32m+[m[32m        # ----------------------------------------------------[m
+[32m+[m
+[32m+[m[32m        child = {[m
+[32m+[m[32m            **os.environ,[m
+[32m+[m[32m            **env,[m
+[32m+[m
+[32m+[m[32m            "PYTHONUNBUFFERED": "1",[m
+[32m+[m[32m            "PYTHONIOENCODING": "utf-8",[m
+[32m+[m
+[32m+[m[32m            # Important:[m
+[32m+[m[32m            # Tells deployment_controller.py that the[m
+[32m+[m[32m            # pipeline was launched from Streamlit.[m
+[32m+[m[32m            "LEAST_PRIVILEGE_DASHBOARD": "1",[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        # Dashboard passes AWS credentials directly.[m
+[32m+[m[32m        # Avoid an existing local AWS profile overriding them.[m
+[32m+[m[32m        child.pop([m
+[32m+[m[32m            "AWS_PROFILE",[m
+[32m+[m[32m            None[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m        child.pop([m
+[32m+[m[32m            "AWS_SESSION_TOKEN",[m
+[32m+[m[32m            None[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m        # ----------------------------------------------------[m
+[32m+[m[32m        # Start pipeline[m
+[32m+[m[32m        # ----------------------------------------------------[m
+[32m+[m
+         proc = subprocess.Popen([m
+[31m-            [sys.executable, "-u", "pipeline.py"], cwd=project_dir, env=child,[m
+[31m-            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,[m
+[31m-            text=True, encoding="utf-8", errors="replace")[m
+[31m-        prev = ""[m
+[32m+[m[32m            [[m
+[32m+[m[32m                sys.executable,[m
+[32m+[m[32m                "-u",[m
+[32m+[m[32m                "pipeline.py"[m
+[32m+[m[32m            ],[m
+[32m+[m
+[32m+[m[32m            cwd=project_dir,[m
+[32m+[m
+[32m+[m[32m            env=child,[m
+[32m+[m
+[32m+[m[32m            stdin=subprocess.DEVNULL,[m
+[32m+[m
+[32m+[m[32m            stdout=subprocess.PIPE,[m
+[32m+[m
+[32m+[m[32m            stderr=subprocess.STDOUT,[m
+[32m+[m
+[32m+[m[32m            text=True,[m
+[32m+[m
+[32m+[m[32m            encoding="utf-8",[m
+[32m+[m
+[32m+[m[32m            errors="replace",[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m        previous = ""[m
+[32m+[m
+[32m+[m[32m        # ----------------------------------------------------[m
+[32m+[m[32m        # Read live output[m
+[32m+[m[32m        # ----------------------------------------------------[m
+[32m+[m
+         for raw in proc.stdout:[m
+[32m+[m
+             line = raw.rstrip("\n")[m
+[32m+[m
+             job["lines"].append(line)[m
+[31m-            s = line.strip()[m
+[31m-            if s == "Running:" and prev in job["stages"]:[m
+[31m-                job["stages"][prev] = "running"[m
+[31m-                job["current"] = prev[m
+[31m-            m = re.match(r"^(.+) : COMPLETED$", s)[m
+[31m-            if m and m.group(1) in job["stages"]:[m
+[31m-                job["stages"][m.group(1)] = "done"[m
+[31m-            if s and not set(s) <= {"="}:[m
+[31m-                prev = s[m
+[32m+[m
+[32m+[m[32m            stripped = line.strip()[m
+[32m+[m
+[32m+[m[32m            # ----------------------------------------------[m
+[32m+[m[32m            # Detect stage start[m
+[32m+[m[32m            # ----------------------------------------------[m
+[32m+[m
+[32m+[m[32m            if ([m
+[32m+[m[32m                stripped == "Running:"[m
+[32m+[m[32m                and previous in job["stages"][m
+[32m+[m[32m            ):[m
+[32m+[m
+[32m+[m[32m                job["stages"][previous] = "running"[m
+[32m+[m
+[32m+[m[32m                job["current"] = previous[m
+[32m+[m
+[32m+[m[32m            # ----------------------------------------------[m
+[32m+[m[32m            # Detect stage completion[m
+[32m+[m[32m            # ----------------------------------------------[m
+[32m+[m
+[32m+[m[32m            match = re.match([m
+[32m+[m[32m                r"^(.+) : COMPLETED$",[m
+[32m+[m[32m                stripped[m
+[32m+[m[32m            )[m
+[32m+[m
+[32m+[m[32m            if match:[m
+[32m+[m
+[32m+[m[32m                stage_name = match.group(1)[m
+[32m+[m
+[32m+[m[32m                if stage_name in job["stages"]:[m
+[32m+[m
+[32m+[m[32m                    job["stages"][stage_name] = "done"[m
+[32m+[m
+[32m+[m[32m            # ----------------------------------------------[m
+[32m+[m[32m            # Remember previous non-separator line[m
+[32m+[m[32m            # ----------------------------------------------[m
+[32m+[m
+[32m+[m[32m            if ([m
+[32m+[m[32m                stripped[m
+[32m+[m[32m                and not set(stripped) <= {"="}[m
+[32m+[m[32m            ):[m
+[32m+[m
+[32m+[m[32m                previous = stripped[m
+[32m+[m
+         proc.wait()[m
+[31m-        log = "\n".join(job["lines"])[m
+[31m-        scan = build_scan(project_dir, account, arn, log, proc.returncode)[m
+[31m-        for n, st_ in scan["stages"].items():[m
+[31m-            job["stages"][n] = ("warn" if st_["warning"] else[m
+[31m-                                "failed" if st_["status"] == "FAIL" else "done")[m
+[31m-        save_scan(project_dir, scan)[m
+[32m+[m
+[32m+[m[32m        # ----------------------------------------------------[m
+[32m+[m[32m        # Build scan[m
+[32m+[m[32m        # ----------------------------------------------------[m
+[32m+[m
+[32m+[m[32m        log = "\n".join([m
+[32m+[m[32m            job["lines"][m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m        scan = build_scan([m
+[32m+[m[32m            project_dir,[m
+[32m+[m[32m            account,[m
+[32m+[m[32m            arn,[m
+[32m+[m[32m            log,[m
+[32m+[m[32m            proc.returncode[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m        # ----------------------------------------------------[m
+[32m+[m[32m        # Final feature states[m
+[32m+[m[32m        # ----------------------------------------------------[m
+[32m+[m
+[32m+[m[32m        for name, stage in scan["stages"].items():[m
+[32m+[m
+[32m+[m[32m            if stage["warning"]:[m
+[32m+[m
+[32m+[m[32m                job["stages"][name] = "warn"[m
+[32m+[m
+[32m+[m[32m            elif stage["status"] == "FAIL":[m
+[32m+[m
+[32m+[m[32m                job["stages"][name] = "failed"[m
+[32m+[m
+[32m+[m[32m            else:[m
+[32m+[m
+[32m+[m[32m                job["stages"][name] = "done"[m
+[32m+[m
+[32m+[m[32m        # ----------------------------------------------------[m
+[32m+[m[32m        # Save scan[m
+[32m+[m[32m        # ----------------------------------------------------[m
+[32m+[m
+[32m+[m[32m        save_scan([m
+[32m+[m[32m            project_dir,[m
+[32m+[m[32m            scan[m
+[32m+[m[32m        )[m
+[32m+[m
+         job["scan"] = scan[m
+[32m+[m
+         job["returncode"] = proc.returncode[m
+[31m-    except Exception as e:  # keep the UI informed instead of dying silently[m
+[32m+[m
+[32m+[m[32m    except Exception as e:[m
+[32m+[m
+         job["error"] = str(e)[m
+[32m+[m
+     finally:[m
+[32m+[m
+         job["ended"] = datetime.now()[m
+[32m+[m
+         job["running"] = False[m
+ [m
+ [m
+[31m-def start_job(project_dir, env, account, arn, clear_old):[m
+[31m-    job = {"running": True, "stages": {n: "pending" for n in FEATURES}, "lines": [],[m
+[31m-           "current": "", "returncode": None, "scan": None, "error": None,[m
+[31m-           "started": datetime.now(), "ended": None}[m
+[32m+[m[32mdef start_job([m
+[32m+[m[32m    project_dir,[m
+[32m+[m[32m    env,[m
+[32m+[m[32m    account,[m
+[32m+[m[32m    arn,[m
+[32m+[m[32m    clear_old[m
+[32m+[m[32m):[m
+[32m+[m
+[32m+[m[32m    job = {[m
+[32m+[m[32m        "running": True,[m
+[32m+[m
+[32m+[m[32m        "stages": {[m
+[32m+[m[32m            name: "pending"[m
+[32m+[m[32m            for name in FEATURES[m
+[32m+[m[32m        },[m
+[32m+[m
+[32m+[m[32m        "lines": [],[m
+[32m+[m
+[32m+[m[32m        "current": "",[m
+[32m+[m
+[32m+[m[32m        "returncode": None,[m
+[32m+[m
+[32m+[m[32m        "scan": None,[m
+[32m+[m
+[32m+[m[32m        "error": None,[m
+[32m+[m
+[32m+[m[32m        "started": datetime.now(),[m
+[32m+[m
+[32m+[m[32m        "ended": None,[m
+[32m+[m[32m    }[m
+[32m+[m
+     job_store()["job"] = job[m
+[31m-    st.session_state.pop("scan", None)[m
+[31m-    threading.Thread(target=_worker, args=(job, project_dir, env, account, arn, clear_old),[m
+[31m-                     daemon=True).start()[m
+[32m+[m
+[32m+[m[32m    st.session_state.pop([m
+[32m+[m[32m        "scan",[m
+[32m+[m[32m        None[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    thread = threading.Thread([m
+[32m+[m[32m        target=_worker,[m
+[32m+[m
+[32m+[m[32m        args=([m
+[32m+[m[32m            job,[m
+[32m+[m[32m            project_dir,[m
+[32m+[m[32m            env,[m
+[32m+[m[32m            account,[m
+[32m+[m[32m            arn,[m
+[32m+[m[32m            clear_old,[m
+[32m+[m[32m        ),[m
+[32m+[m
+[32m+[m[32m        daemon=True,[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    thread.start()[m
+ [m
+ [m
+ def current_scan():[m
+[32m+[m
+     if st.session_state.get("scan"):[m
+[32m+[m
+         return st.session_state.scan[m
+[32m+[m
+     job = job_store()["job"][m
+[31m-    return job["scan"] if job and job.get("scan") else None[m
+ [m
+[32m+[m[32m    if ([m
+[32m+[m[32m        job[m
+[32m+[m[32m        and job.get("scan")[m
+[32m+[m[32m    ):[m
+[32m+[m
+[32m+[m[32m        return job["scan"][m
+[32m+[m
+[32m+[m[32m    return None[m
+[32m+[m
+[32m+[m
+[32m+[m[32m# ============================================================[m
+[32m+[m[32m# UI HELPERS[m
+[32m+[m[32m# ============================================================[m
+[32m+[m
+[32m+[m[32mdef card([m
+[32m+[m[32m    col,[m
+[32m+[m[32m    title,[m
+[32m+[m[32m    value[m
+[32m+[m[32m):[m
+ [m
+[31m-# ───────────────────────── ui helpers ─────────────────────────[m
+[31m-def card(col, title, value):[m
+[31m-    col.markdown(f'<div class="card"><h4>{title}</h4><p>{value}</p></div>', unsafe_allow_html=True)[m
+[32m+[m[32m    col.markdown([m
+[32m+[m[32m        f"""[m
+[32m+[m[32m        <div class="card">[m
+[32m+[m[32m            <h4>{title}</h4>[m
+[32m+[m[32m            <p>{value}</p>[m
+[32m+[m[32m        </div>[m
+[32m+[m[32m        """,[m
+[32m+[m[32m        unsafe_allow_html=True[m
+[32m+[m[32m    )[m
+ [m
+ [m
+ def chips(stages):[m
+[31m-    html = "".join(f'<span class="chip" style="background:{COLOR[s]}">{ICON[s]} {n}</span>'[m
+[31m-                   for n, s in stages.items())[m
+[31m-    st.markdown(f'<div class="chip-grid">{html}</div>', unsafe_allow_html=True)[m
+[32m+[m
+[32m+[m[32m    html = ""[m
+[32m+[m
+[32m+[m[32m    for name, status in stages.items():[m
+[32m+[m
+[32m+[m[32m        html += ([m
+[32m+[m[32m            f'<span class="chip" '[m
+[32m+[m[32m            f'style="background:{COLOR[status]}">'[m
+[32m+[m[32m            f'{ICON[status]} {name}'[m
+[32m+[m[32m            f'</span>'[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m    st.markdown([m
+[32m+[m[32m        f'<div class="chip-grid">{html}</div>',[m
+[32m+[m[32m        unsafe_allow_html=True[m
+[32m+[m[32m    )[m
+ [m
+ [m
+ def records_of(data):[m
+[31m-    if isinstance(data, list) and data and all(isinstance(x, dict) for x in data):[m
+[32m+[m
+[32m+[m[32m    if ([m
+[32m+[m[32m        isinstance(data, list)[m
+[32m+[m[32m        and data[m
+[32m+[m[32m        and all([m
+[32m+[m[32m            isinstance(x, dict)[m
+[32m+[m[32m            for x in data[m
+[32m+[m[32m        )[m
+[32m+[m[32m    ):[m
+[32m+[m
+         return data[m
+[32m+[m
+     if isinstance(data, dict):[m
+[31m-        for v in data.values():[m
+[31m-            if isinstance(v, list) and v and all(isinstance(x, dict) for x in v):[m
+[31m-                return v[m
+[32m+[m
+[32m+[m[32m        for value in data.values():[m
+[32m+[m
+[32m+[m[32m            if ([m
+[32m+[m[32m                isinstance(value, list)[m
+[32m+[m[32m                and value[m
+[32m+[m[32m                and all([m
+[32m+[m[32m                    isinstance(x, dict)[m
+[32m+[m[32m                    for x in value[m
+[32m+[m[32m                )[m
+[32m+[m[32m            ):[m
+[32m+[m
+[32m+[m[32m                return value[m
+[32m+[m
+     return None[m
+ [m
+ [m
+ def render(data):[m
+[32m+[m
+     if data is None:[m
+[32m+[m
+         st.info("No data.")[m
+[32m+[m
+         return[m
+[31m-    rec = records_of(data)[m
+[31m-    if rec:[m
+[32m+[m
+[32m+[m[32m    records = records_of(data)[m
+[32m+[m
+[32m+[m[32m    if records:[m
+[32m+[m
+         try:[m
+[31m-            st.dataframe(pd.json_normalize(rec), use_container_width=True)[m
+[32m+[m
+[32m+[m[32m            st.dataframe([m
+[32m+[m[32m                pd.json_normalize(records),[m
+[32m+[m[32m                use_container_width=True[m
+[32m+[m[32m            )[m
+[32m+[m
+         except Exception:[m
+[32m+[m
+             pass[m
+[31m-    with st.expander("Raw JSON", expanded=rec is None):[m
+[32m+[m
+[32m+[m[32m    with st.expander([m
+[32m+[m[32m        "Raw JSON",[m
+[32m+[m[32m        expanded=records is None[m
+[32m+[m[32m    ):[m
+[32m+[m
+         st.json(data)[m
+ [m
+ [m
+[31m-def export_buttons(data, base, key):[m
+[31m-    c1, c2, _ = st.columns([1, 1, 3])[m
+[31m-    c1.download_button("⬇ Download JSON", to_json(data), f"{base}.json", "application/json",[m
+[31m-                       key=f"{key}_j", use_container_width=True)[m
+[31m-    c2.download_button("⬇ Download YAML", to_yaml(data), f"{base}.yaml", "text/yaml",[m
+[31m-                       key=f"{key}_y", use_container_width=True)[m
+[32m+[m[32mdef export_buttons([m
+[32m+[m[32m    data,[m
+[32m+[m[32m    base,[m
+[32m+[m[32m    key[m
+[32m+[m[32m):[m
+[32m+[m
+[32m+[m[32m    c1, c2, _ = st.columns([m
+[32m+[m[32m        [1, 1, 3][m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    c1.download_button([m
+[32m+[m[32m        "⬇ Download JSON",[m
+[32m+[m
+[32m+[m[32m        to_json(data),[m
+[32m+[m
+[32m+[m[32m        f"{base}.json",[m
+[32m+[m
+[32m+[m[32m        "application/json",[m
+[32m+[m
+[32m+[m[32m        key=f"{key}_json",[m
+[32m+[m
+[32m+[m[32m        use_container_width=True,[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    c2.download_button([m
+[32m+[m[32m        "⬇ Download YAML",[m
+[32m+[m
+[32m+[m[32m        to_yaml(data),[m
+[32m+[m
+[32m+[m[32m        f"{base}.yaml",[m
+[32m+[m
+[32m+[m[32m        "text/yaml",[m
+[32m+[m
+[32m+[m[32m        key=f"{key}_yaml",[m
+[32m+[m
+[32m+[m[32m        use_container_width=True,[m
+[32m+[m[32m    )[m
+ [m
+ [m
+ def need_scan():[m
+[31m-    st.info("No scan results yet. Go to **Run Pipeline** to start a scan, or open one from **History**.")[m
+[31m-    st.page_link(pipeline_page, label="Go to Run Pipeline", icon="▶️")[m
+ [m
+[32m+[m[32m    st.info([m
+[32m+[m[32m        "No scan results yet. "[m
+[32m+[m[32m        "Go to **Run Pipeline** to start a scan, "[m
+[32m+[m[32m        "or open one from **History**."[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    st.page_link([m
+[32m+[m[32m        pipeline_page,[m
+[32m+[m[32m        label="Go to Run Pipeline",[m
+[32m+[m[32m        icon="▶️"[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m
+[32m+[m[32m# ============================================================[m
+[32m+[m[32m# CONNECT AWS[m
+[32m+[m[32m# ============================================================[m
+ [m
+[31m-# ───────────────────────── pages ─────────────────────────[m
+ def page_connect():[m
+[31m-    st.title("🔌 Connect AWS Account")[m
+[31m-    st.session_state.setdefault("project_dir", DEFAULT_DIR)[m
+[31m-    st.session_state.project_dir = st.text_input("Project folder (contains pipeline.py)",[m
+[31m-                                                 st.session_state.project_dir)[m
+[31m-    if not os.path.isfile(os.path.join(st.session_state.project_dir, "pipeline.py")):[m
+[31m-        st.error("pipeline.py not found in this folder.")[m
+[32m+[m
+[32m+[m[32m    st.title([m
+[32m+[m[32m        "🔌 Connect AWS Account"[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    # --------------------------------------------------------[m
+[32m+[m[32m    # Always use repository root[m
+[32m+[m[32m    # --------------------------------------------------------[m
+[32m+[m
+[32m+[m[32m    st.session_state.setdefault([m
+[32m+[m[32m        "project_dir",[m
+[32m+[m[32m        DEFAULT_DIR[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    project_dir = DEFAULT_DIR[m
+[32m+[m
+[32m+[m[32m    st.caption([m
+[32m+[m[32m        f"Project directory: `{project_dir}`"[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    if not os.path.isfile([m
+[32m+[m[32m        os.path.join([m
+[32m+[m[32m            project_dir,[m
+[32m+[m[32m            "pipeline.py"[m
+[32m+[m[32m        )[m
+[32m+[m[32m    ):[m
+[32m+[m
+[32m+[m[32m        st.error([m
+[32m+[m[32m            "pipeline.py was not found in the project directory."[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m        return[m
+[32m+[m
+[32m+[m[32m    # --------------------------------------------------------[m
+[32m+[m[32m    # Existing connection[m
+[32m+[m[32m    # --------------------------------------------------------[m
+ [m
+     if "env" in st.session_state:[m
+[31m-        st.success(f"Connected · Account **{st.session_state.account}** · `{st.session_state.arn}`")[m
+[31m-        if st.button("Disconnect"):[m
+[31m-            for k in ("env", "account", "arn"):[m
+[31m-                st.session_state.pop(k, None)[m
+[32m+[m
+[32m+[m[32m        st.success([m
+[32m+[m[32m            f"Connected · Account "[m
+[32m+[m[32m            f"**{st.session_state.account}** · "[m
+[32m+[m[32m            f"`{st.session_state.arn}`"[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m        if st.button([m
+[32m+[m[32m            "Disconnect"[m
+[32m+[m[32m        ):[m
+[32m+[m
+[32m+[m[32m            for key in ([m
+[32m+[m[32m                "env",[m
+[32m+[m[32m                "account",[m
+[32m+[m[32m                "arn"[m
+[32m+[m[32m            ):[m
+[32m+[m
+[32m+[m[32m                st.session_state.pop([m
+[32m+[m[32m                    key,[m
+[32m+[m[32m                    None[m
+[32m+[m[32m                )[m
+[32m+[m
+             st.rerun()[m
+[31m-        st.page_link(pipeline_page, label="Continue to Run Pipeline", icon="▶️")[m
+[32m+[m
+[32m+[m[32m        st.page_link([m
+[32m+[m[32m            pipeline_page,[m
+[32m+[m[32m            label="Continue to Run Pipeline",[m
+[32m+[m[32m            icon="▶️"[m
+[32m+[m[32m        )[m
+[32m+[m
+         return[m
+ [m
+[31m-    st.caption("Credentials stay in memory and are passed only to the pipeline process. Nothing is saved to disk.")[m
+[31m-    with st.form("aws"):[m
+[31m-        region = st.text_input("Region", "ap-south-1")[m
+[31m-        ak = st.text_input("Access Key ID")[m
+[31m-        sk = st.text_input("Secret Access Key", type="password")[m
+[31m-        go = st.form_submit_button("Verify & connect", type="primary")[m
+[31m-    if go:[m
+[31m-        if not ak or not sk:[m
+[31m-            st.error("Access Key ID and Secret Access Key are required.")[m
+[32m+[m[32m    st.info([m
+[32m+[m[32m        "AWS credentials are kept in the Streamlit session "[m
+[32m+[m[32m        "and passed to the pipeline process. They are not "[m
+[32m+[m[32m        "written to project files by this dashboard."[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    # --------------------------------------------------------[m
+[32m+[m[32m    # AWS connection form[m
+[32m+[m[32m    # --------------------------------------------------------[m
+[32m+[m
+[32m+[m[32m    with st.form("aws_connection"):[m
+[32m+[m
+[32m+[m[32m        region = st.text_input([m
+[32m+[m[32m            "AWS Region",[m
+[32m+[m[32m            value="ap-south-1"[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m        access_key = st.text_input([m
+[32m+[m[32m            "Access Key ID"[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m        secret_key = st.text_input([m
+[32m+[m[32m            "Secret Access Key",[m
+[32m+[m[32m            type="password"[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m        connect = st.form_submit_button([m
+[32m+[m[32m            "Verify & Connect",[m
+[32m+[m[32m            type="primary"[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m    if connect:[m
+[32m+[m
+[32m+[m[32m        if not access_key or not secret_key:[m
+[32m+[m
+[32m+[m[32m            st.error([m
+[32m+[m[32m                "Access Key ID and Secret Access Key are required."[m
+[32m+[m[32m            )[m
+[32m+[m
+             return[m
+[32m+[m
+         try:[m
+[31m-            s = boto3.Session(aws_access_key_id=ak.strip(), aws_secret_access_key=sk.strip(),[m
+[31m-                              region_name=region.strip())[m
+[31m-            who = s.client("sts").get_caller_identity()[m
+[31m-            st.session_state.env = {"AWS_ACCESS_KEY_ID": ak.strip(), "AWS_SECRET_ACCESS_KEY": sk.strip(),[m
+[31m-                                    "AWS_DEFAULT_REGION": region.strip(), "AWS_REGION": region.strip()}[m
+[31m-            st.session_state.account, st.session_state.arn = who["Account"], who["Arn"][m
+[32m+[m
+[32m+[m[32m            session = boto3.Session([m
+[32m+[m[32m                aws_access_key_id=access_key.strip(),[m
+[32m+[m
+[32m+[m[32m                aws_secret_access_key=secret_key.strip(),[m
+[32m+[m
+[32m+[m[32m                region_name=region.strip()[m
+[32m+[m[32m            )[m
+[32m+[m
+[32m+[m[32m            caller = session.client([m
+[32m+[m[32m                "sts"[m
+[32m+[m[32m            ).get_caller_identity()[m
+[32m+[m
+[32m+[m[32m            st.session_state.env = {[m
+[32m+[m[32m                "AWS_ACCESS_KEY_ID":[m
+[32m+[m[32m                    access_key.strip(),[m
+[32m+[m
+[32m+[m[32m                "AWS_SECRET_ACCESS_KEY":[m
+[32m+[m[32m                    secret_key.strip(),[m
+[32m+[m
+[32m+[m[32m                "AWS_DEFAULT_REGION":[m
+[32m+[m[32m                    region.strip(),[m
+[32m+[m
+[32m+[m[32m                "AWS_REGION":[m
+[32m+[m[32m                    region.strip(),[m
+[32m+[m[32m            }[m
+[32m+[m
+[32m+[m[32m            st.session_state.account = ([m
+[32m+[m[32m                caller["Account"][m
+[32m+[m[32m            )[m
+[32m+[m
+[32m+[m[32m            st.session_state.arn = ([m
+[32m+[m[32m                caller["Arn"][m
+[32m+[m[32m            )[m
+[32m+[m
+             st.rerun()[m
+[32m+[m
+         except Exception as e:[m
+[31m-            st.error(f"Authentication failed: {e}")[m
+ [m
+[32m+[m[32m            st.error([m
+[32m+[m[32m                f"AWS authentication failed: {e}"[m
+[32m+[m[32m            )[m
+[32m+[m
+[32m+[m
+[32m+[m[32m# ============================================================[m
+[32m+[m[32m# RUN PIPELINE[m
+[32m+[m[32m# ============================================================[m
+ [m
+ def page_pipeline():[m
+[31m-    st.title("▶️ Run Pipeline")[m
+[32m+[m
+[32m+[m[32m    st.title([m
+[32m+[m[32m        "▶️ Run Pipeline"[m
+[32m+[m[32m    )[m
+[32m+[m
+     job = job_store()["job"][m
+ [m
+[31m-    # ---- progress at the TOP ----[m
+[32m+[m[32m    # --------------------------------------------------------[m
+[32m+[m[32m    # Progress[m
+[32m+[m[32m    # --------------------------------------------------------[m
+[32m+[m
+     if job:[m
+[32m+[m
+         stages = job["stages"][m
+[31m-        done = sum(1 for v in stages.values() if v in ("done", "failed", "warn"))[m
+[32m+[m
+[32m+[m[32m        completed = sum([m
+[32m+[m[32m            value in ([m
+[32m+[m[32m                "done",[m
+[32m+[m[32m                "failed",[m
+[32m+[m[32m                "warn"[m
+[32m+[m[32m            )[m
+[32m+[m[32m            for value in stages.values()[m
+[32m+[m[32m        )[m
+[32m+[m
+         total = len(stages)[m
+[31m-        end = job["ended"] or datetime.now()[m
+[31m-        elapsed = int((end - job["started"]).total_seconds())[m
+[31m-        st.progress(done / total, text=f"{done}/{total} features complete"[m
+[31m-                    + (f" · now running: {job['current']}" if job["running"] else ""))[m
+[31m-        c = st.columns(4)[m
+[31m-        card(c[0], "Completed", f"{done}/{total}")[m
+[31m-        card(c[1], "Running", job["current"] if job["running"] else "—")[m
+[31m-        card(c[2], "Elapsed", f"{elapsed // 60}m {elapsed % 60}s")[m
+[31m-        card(c[3], "State", "Running…" if job["running"] else ("Error" if job["error"] else "Finished"))[m
+[32m+[m
+[32m+[m[32m        end_time = ([m
+[32m+[m[32m            job["ended"][m
+[32m+[m[32m            or datetime.now()[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m        elapsed = int([m
+[32m+[m[32m            ([m
+[32m+[m[32m                end_time[m
+[32m+[m[32m                - job["started"][m
+[32m+[m[32m            ).total_seconds()[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m        st.progress([m
+[32m+[m[32m            completed / total,[m
+[32m+[m[32m            text=([m
+[32m+[m[32m                f"{completed}/{total} features complete"[m
+[32m+[m[32m                +[m
+[32m+[m[32m                ([m
+[32m+[m[32m                    f" · Running: {job['current']}"[m
+[32m+[m[32m                    if job["running"][m
+[32m+[m[32m                    else ""[m
+[32m+[m[32m                )[m
+[32m+[m[32m            )[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m        columns = st.columns(4)[m
+[32m+[m
+[32m+[m[32m        card([m
+[32m+[m[32m            columns[0],[m
+[32m+[m[32m            "Completed",[m
+[32m+[m[32m            f"{completed}/{total}"[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m        card([m
+[32m+[m[32m            columns[1],[m
+[32m+[m[32m            "Running",[m
+[32m+[m[32m            job["current"][m
+[32m+[m[32m            if job["running"][m
+[32m+[m[32m            else "—"[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m        card([m
+[32m+[m[32m            columns[2],[m
+[32m+[m[32m            "Elapsed",[m
+[32m+[m[32m            f"{elapsed // 60}m {elapsed % 60}s"[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m        card([m
+[32m+[m[32m            columns[3],[m
+[32m+[m[32m            "State",[m
+[32m+[m[32m            "Running…"[m
+[32m+[m[32m            if job["running"][m
+[32m+[m[32m            else ([m
+[32m+[m[32m                "Error"[m
+[32m+[m[32m                if job["error"][m
+[32m+[m[32m                else "Finished"[m
+[32m+[m[32m            )[m
+[32m+[m[32m        )[m
+[32m+[m
+         st.write("")[m
+[32m+[m
+         chips(stages)[m
+[32m+[m
+     else:[m
+[31m-        st.caption("No run yet. Progress of each feature will appear here once you start.")[m
+[31m-        chips({n: "pending" for n in FEATURES})[m
+ [m
+[31m-    # ---- controls ----[m
+[31m-    running = bool(job and job["running"])[m
+[31m-    connected = "env" in st.session_state[m
+[32m+[m[32m        st.caption([m
+[32m+[m[32m            "No pipeline run yet. "[m
+[32m+[m[32m            "Start a run to see live feature status."[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m        chips([m
+[32m+[m[32m            {[m
+[32m+[m[32m                name: "pending"[m
+[32m+[m[32m                for name in FEATURES[m
+[32m+[m[32m            }[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m    # --------------------------------------------------------[m
+[32m+[m[32m    # Controls[m
+[32m+[m[32m    # --------------------------------------------------------[m
+[32m+[m
+[32m+[m[32m    running = bool([m
+[32m+[m[32m        job[m
+[32m+[m[32m        and job["running"][m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    connected = ([m
+[32m+[m[32m        "env"[m
+[32m+[m[32m        in st.session_state[m
+[32m+[m[32m    )[m
+[32m+[m
+     if not connected and not running:[m
+[31m-        st.warning("Connect an AWS account first.")[m
+[31m-        st.page_link(connect_page, label="Go to Connect AWS Account", icon="🔌")[m
+[32m+[m
+[32m+[m[32m        st.warning([m
+[32m+[m[32m            "Connect an AWS account first."[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m        st.page_link([m
+[32m+[m[32m            connect_page,[m
+[32m+[m[32m            label="Go to Connect AWS Account",[m
+[32m+[m[32m            icon="🔌"[m
+[32m+[m[32m        )[m
+[32m+[m
+     else:[m
+[31m-        clear_old = st.checkbox("Clear previous pipeline reports before running", value=True,[m
+[31m-                                disabled=running, help="Results stay saved in dashboard_scans/.")[m
+[31m-        if st.button("▶ Run full pipeline", type="primary", disabled=running or not connected):[m
+[31m-            start_job(st.session_state.project_dir, st.session_state.env,[m
+[31m-                      st.session_state.account, st.session_state.arn, clear_old)[m
+[32m+[m
+[32m+[m[32m        clear_old = st.checkbox([m
+[32m+[m[32m            "Clear previous pipeline reports before running",[m
+[32m+[m[32m            value=True,[m
+[32m+[m[32m            disabled=running,[m
+[32m+[m[32m            help=([m
+[32m+[m[32m                "Results remain available "[m
+[32m+[m[32m                "in dashboard_scans/."[m
+[32m+[m[32m            )[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m        if st.button([m
+[32m+[m[32m            "▶ Run Full Pipeline",[m
+[32m+[m[32m            type="primary",[m
+[32m+[m[32m            disabled=([m
+[32m+[m[32m                running[m
+[32m+[m[32m                or not connected[m
+[32m+[m[32m            )[m
+[32m+[m[32m        ):[m
+[32m+[m
+[32m+[m[32m            start_job([m
+[32m+[m[32m                DEFAULT_DIR,[m
+[32m+[m[32m                st.session_state.env,[m
+[32m+[m[32m                st.session_state.account,[m
+[32m+[m[32m                st.session_state.arn,[m
+[32m+[m[32m                clear_old[m
+[32m+[m[32m            )[m
+[32m+[m
+             st.rerun()[m
+ [m
+[31m-    # ---- results / log ----[m
+[32m+[m[32m    # --------------------------------------------------------[m
+[32m+[m[32m    # Results[m
+[32m+[m[32m    # --------------------------------------------------------[m
+[32m+[m
+     if job:[m
+[32m+[m
+         if job["error"]:[m
+[31m-            st.error(f"Pipeline runner error: {job['error']}")[m
+[32m+[m
+[32m+[m[32m            st.error([m
+[32m+[m[32m                f"Pipeline runner error: "[m
+[32m+[m[32m                f"{job['error']}"[m
+[32m+[m[32m            )[m
+[32m+[m
+         if job["scan"]:[m
+[32m+[m
+             scan = job["scan"][m
+[31m-            (st.error if scan["returncode"] else st.success)([m
+[31m-                "Pipeline finished" + (f" with exit code {scan['returncode']}" if scan["returncode"] else " successfully")[m
+[31m-                + ". Open any feature page from the sidebar to see its result.")[m
+[31m-            st.subheader("Final output")[m
+[31m-            export_buttons(final_report(scan), f"least_privilege_report_{scan['id']}", "final")[m
+[31m-        with st.expander("Live console output", expanded=running):[m
+[31m-            st.code("\n".join(job["lines"][-60:]) or "Starting…", language="text")[m
+[32m+[m
+[32m+[m[32m            if scan["returncode"] == 0:[m
+[32m+[m
+[32m+[m[32m                st.success([m
+[32m+[m[32m                    "Pipeline finished successfully."[m
+[32m+[m[32m                )[m
+[32m+[m
+[32m+[m[32m            else:[m
+[32m+[m
+[32m+[m[32m                st.error([m
+[32m+[m[32m                    f"Pipeline finished with "[m
+[32m+[m[32m                    f"exit code {scan['returncode']}."[m
+[32m+[m[32m                )[m
+[32m+[m
+[32m+[m[32m            st.subheader([m
+[32m+[m[32m                "Final Output"[m
+[32m+[m[32m            )[m
+[32m+[m
+[32m+[m[32m            export_buttons([m
+[32m+[m[32m                final_report(scan),[m
+[32m+[m[32m                f"least_privilege_report_{scan['id']}",[m
+[32m+[m[32m                "final_report"[m
+[32m+[m[32m            )[m
+[32m+[m
+[32m+[m[32m        # ----------------------------------------------------[m
+[32m+[m[32m        # Live console[m
+[32m+[m[32m        # ----------------------------------------------------[m
+[32m+[m
+[32m+[m[32m        with st.expander([m
+[32m+[m[32m            "Live Console Output",[m
+[32m+[m[32m            expanded=running[m
+[32m+[m[32m        ):[m
+[32m+[m
+[32m+[m[32m            st.code([m
+[32m+[m[32m                "\n".join([m
+[32m+[m[32m                    job["lines"][-100:][m
+[32m+[m[32m                )[m
+[32m+[m[32m                or "Starting…",[m
+[32m+[m[32m                language="text"[m
+[32m+[m[32m            )[m
+[32m+[m
+[32m+[m[32m    # --------------------------------------------------------[m
+[32m+[m[32m    # Automatic refresh[m
+[32m+[m[32m    # --------------------------------------------------------[m
+[32m+[m
+     if running:[m
+[32m+[m
+         time.sleep(1)[m
+[32m+[m
+         st.rerun()[m
+ [m
+ [m
+[32m+[m[32m# ============================================================[m
+[32m+[m[32m# OVERVIEW[m
+[32m+[m[32m# ============================================================[m
+[32m+[m
+ def page_overview():[m
+[31m-    st.title("📊 Dashboard")[m
+[32m+[m
+[32m+[m[32m    st.title([m
+[32m+[m[32m        "📊 Dashboard"[m
+[32m+[m[32m    )[m
+[32m+[m
+     scan = current_scan()[m
+[32m+[m
+     if not scan:[m
+[32m+[m
+         return need_scan()[m
+[31m-    st.caption(f"Scan `{scan['id']}` · {scan['time']} · Account {scan['account']}")[m
+[32m+[m
+[32m+[m[32m    st.caption([m
+[32m+[m[32m        f"Scan `{scan['id']}` · "[m
+[32m+[m[32m        f"{scan['time']} · "[m
+[32m+[m[32m        f"Account {scan['account']}"[m
+[32m+[m[32m    )[m
+[32m+[m
+     stages = scan["stages"][m
+[31m-    passed = sum(1 for s in stages.values() if s["status"] == "PASS")[m
+[31m-    warns = sum(1 for s in stages.values() if s["warning"])[m
+[31m-[m
+[31m-    risk = None[m
+[31m-    for data in stages["Risk Scoring"]["reports"].values():[m
+[31m-        risk = records_of(data)[m
+[31m-    df = pd.json_normalize(risk) if risk else None[m
+[31m-    name_c = score_c = level_c = None[m
+[31m-    if df is not None:[m
+[31m-        cols = {c.lower(): c for c in df.columns}[m
+[31m-        name_c = next((cols[c] for c in cols if c in ("identity", "user", "name", "identity_name")), None)[m
+[31m-        score_c = next((cols[c] for c in cols if "total" in c and "risk" in c), None)[m
+[31m-        level_c = next((cols[c] for c in cols if "level" in c), None)[m
+[31m-[m
+[31m-    c = st.columns(4)[m
+[31m-    card(c[0], "Features passed", f"{passed}/{len(stages)}")[m
+[31m-    card(c[1], "Warnings", warns)[m
+[31m-    card(c[2], "Identities scored", len(df) if df is not None else "—")[m
+[31m-    high = int((df[level_c].astype(str).str.lower() == "high").sum()) if df is not None and level_c else "—"[m
+[31m-    card(c[3], "High-risk identities", high)[m
+[32m+[m
+[32m+[m[32m    passed = sum([m
+[32m+[m[32m        stage["status"] == "PASS"[m
+[32m+[m[32m        for stage in stages.values()[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    warnings = sum([m
+[32m+[m[32m        stage["warning"][m
+[32m+[m[32m        for stage in stages.values()[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    # --------------------------------------------------------[m
+[32m+[m[32m    # Risk data[m
+[32m+[m[32m    # --------------------------------------------------------[m
+[32m+[m
+[32m+[m[32m    risk_records = None[m
+[32m+[m
+[32m+[m[32m    for data in stages[[m
+[32m+[m[32m        "Risk Scoring"[m
+[32m+[m[32m    ]["reports"].values():[m
+[32m+[m
+[32m+[m[32m        risk_records = records_of(data)[m
+[32m+[m
+[32m+[m[32m    dataframe = ([m
+[32m+[m[32m        pd.json_normalize(risk_records)[m
+[32m+[m[32m        if risk_records[m
+[32m+[m[32m        else None[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    name_column = None[m
+[32m+[m[32m    score_column = None[m
+[32m+[m[32m    level_column = None[m
+[32m+[m
+[32m+[m[32m    if dataframe is not None:[m
+[32m+[m
+[32m+[m[32m        columns = {[m
+[32m+[m[32m            column.lower(): column[m
+[32m+[m[32m            for column in dataframe.columns[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        name_column = next([m
+[32m+[m[32m            ([m
+[32m+[m[32m                columns[column][m
+[32m+[m[32m                for column in columns[m
+[32m+[m[32m                if column in ([m
+[32m+[m[32m                    "identity",[m
+[32m+[m[32m                    "user",[m
+[32m+[m[32m                    "name",[m
+[32m+[m[32m                    "identity_name"[m
+[32m+[m[32m                )[m
+[32m+[m[32m            ),[m
+[32m+[m[32m            None[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m        score_column = next([m
+[32m+[m[32m            ([m
+[32m+[m[32m                columns[column][m
+[32m+[m[32m                for column in columns[m
+[32m+[m[32m                if ([m
+[32m+[m[32m                    "total" in column[m
+[32m+[m[32m                    and "risk" in column[m
+[32m+[m[32m                )[m
+[32m+[m[32m            ),[m
+[32m+[m[32m            None[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m        level_column = next([m
+[32m+[m[32m            ([m
+[32m+[m[32m                columns[column][m
+[32m+[m[32m                for column in columns[m
+[32m+[m[32m                if "level" in column[m
+[32m+[m[32m            ),[m
+[32m+[m[32m            None[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m    # --------------------------------------------------------[m
+[32m+[m[32m    # Metrics[m
+[32m+[m[32m    # --------------------------------------------------------[m
+[32m+[m
+[32m+[m[32m    columns = st.columns(4)[m
+[32m+[m
+[32m+[m[32m    card([m
+[32m+[m[32m        columns[0],[m
+[32m+[m[32m        "Features Passed",[m
+[32m+[m[32m        f"{passed}/{len(stages)}"[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    card([m
+[32m+[m[32m        columns[1],[m
+[32m+[m[32m        "Warnings",[m
+[32m+[m[32m        warnings[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    card([m
+[32m+[m[32m        columns[2],[m
+[32m+[m[32m        "Identities Scored",[m
+[32m+[m[32m        ([m
+[32m+[m[32m            len(dataframe)[m
+[32m+[m[32m            if dataframe is not None[m
+[32m+[m[32m            else "—"[m
+[32m+[m[32m        )[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    if ([m
+[32m+[m[32m        dataframe is not None[m
+[32m+[m[32m        and level_column[m
+[32m+[m[32m    ):[m
+[32m+[m
+[32m+[m[32m        high_risk = int([m
+[32m+[m[32m            ([m
+[32m+[m[32m                dataframe[level_column][m
+[32m+[m[32m                .astype(str)[m
+[32m+[m[32m                .str.lower()[m
+[32m+[m[32m                == "high"[m
+[32m+[m[32m            ).sum()[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m    else:[m
+[32m+[m
+[32m+[m[32m        high_risk = "—"[m
+[32m+[m
+[32m+[m[32m    card([m
+[32m+[m[32m        columns[3],[m
+[32m+[m[32m        "High-Risk Identities",[m
+[32m+[m[32m        high_risk[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    # --------------------------------------------------------[m
+[32m+[m[32m    # Decision[m
+[32m+[m[32m    # --------------------------------------------------------[m
+ [m
+     st.write("")[m
+[31m-    m = re.search(r"DECISION:\s*(\S+)", stages["Decision Engine"]["output"])[m
+[31m-    if m:[m
+[31m-        st.markdown(f"**Decision engine:** <span class='badge' style='background:#2563eb'>{m.group(1)}</span>",[m
+[31m-                    unsafe_allow_html=True)[m
+[31m-    if df is not None and name_c and score_c:[m
+[31m-        st.subheader("Risk score by identity")[m
+[31m-        st.bar_chart(df.set_index(name_c)[score_c])[m
+[31m-[m
+[31m-    st.subheader("Feature status")[m
+[31m-    chips({n: ("warn" if s["warning"] else "failed" if s["status"] == "FAIL" else "done")[m
+[31m-           for n, s in stages.items()})[m
+[31m-    st.subheader("Final output")[m
+[31m-    inc = st.checkbox("Include console output in export", value=False)[m
+[31m-    export_buttons(final_report(scan, inc), f"least_privilege_report_{scan['id']}", "ov")[m
+[32m+[m
+[32m+[m[32m    decision_match = re.search([m
+[32m+[m[32m        r"DECISION:\s*(\S+)",[m
+[32m+[m[32m        stages[[m
+[32m+[m[32m            "Decision Engine"[m
+[32m+[m[32m        ]["output"][m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    if decision_match:[m
+[32m+[m
+[32m+[m[32m        decision = decision_match.group(1)[m
+[32m+[m
+[32m+[m[32m        st.markdown([m
+[32m+[m[32m            f"""[m
+[32m+[m[32m            **Decision Engine:**[m
+[32m+[m[32m            <span class="badge"[m
+[32m+[m[32m            style="background:#2563eb">[m
+[32m+[m[32m            {decision}[m
+[32m+[m[32m            </span>[m
+[32m+[m[32m            """,[m
+[32m+[m[32m            unsafe_allow_html=True[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m    # --------------------------------------------------------[m
+[32m+[m[32m    # Risk chart[m
+[32m+[m[32m    # --------------------------------------------------------[m
+[32m+[m
+[32m+[m[32m    if ([m
+[32m+[m[32m        dataframe is not None[m
+[32m+[m[32m        and name_column[m
+[32m+[m[32m        and score_column[m
+[32m+[m[32m    ):[m
+[32m+[m
+[32m+[m[32m        st.subheader([m
+[32m+[m[32m            "Risk Score by Identity"[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m        st.bar_chart([m
+[32m+[m[32m            dataframe.set_index([m
+[32m+[m[32m                name_column[m
+[32m+[m[32m            )[score_column][m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m    # --------------------------------------------------------[m
+[32m+[m[32m    # Feature status[m
+[32m+[m[32m    # --------------------------------------------------------[m
+[32m+[m
+[32m+[m[32m    st.subheader([m
+[32m+[m[32m        "Feature Status"[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    chips([m
+[32m+[m[32m        {[m
+[32m+[m[32m            name:[m
+[32m+[m[32m                ([m
+[32m+[m[32m                    "warn"[m
+[32m+[m[32m                    if stage["warning"][m
+[32m+[m[32m                    else[m
+[32m+[m[32m                    "failed"[m
+[32m+[m[32m                    if stage["status"] == "FAIL"[m
+[32m+[m[32m                    else "done"[m
+[32m+[m[32m                )[m
+[32m+[m
+[32m+[m[32m            for name, stage[m
+[32m+[m[32m            in stages.items()[m
+[32m+[m[32m        }[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    # --------------------------------------------------------[m
+[32m+[m[32m    # Export[m
+[32m+[m[32m    # --------------------------------------------------------[m
+[32m+[m
+[32m+[m[32m    st.subheader([m
+[32m+[m[32m        "Final Output"[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    include_output = st.checkbox([m
+[32m+[m[32m        "Include console output in export",[m
+[32m+[m[32m        value=False[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    export_buttons([m
+[32m+[m[32m        final_report([m
+[32m+[m[32m            scan,[m
+[32m+[m[32m            include_output[m
+[32m+[m[32m        ),[m
+[32m+[m[32m        f"least_privilege_report_{scan['id']}",[m
+[32m+[m[32m        "overview_report"[m
+[32m+[m[32m    )[m
+ [m
+ [m
+[32m+[m[32m# ============================================================[m
+[32m+[m[32m# FEATURE PAGE[m
+[32m+[m[32m# ============================================================[m
+[32m+[m
+ def make_feature_page(name):[m
+[32m+[m
+     def page():[m
+[32m+[m
+         st.title(name)[m
+[32m+[m
+         scan = current_scan()[m
+[32m+[m
+         if not scan:[m
+[32m+[m
+             return need_scan()[m
+[31m-        s = scan["stages"][name][m
+[31m-        stt = "warn" if s["warning"] else "failed" if s["status"] == "FAIL" else "done"[m
+[31m-        st.markdown(f"<span class='badge' style='background:{COLOR[stt]}'>{ICON[stt]} "[m
+[31m-                    f"{s['status'] if not s['warning'] else 'ERROR IN OUTPUT'}</span> "[m
+[31m-                    f"&nbsp; Scan `{scan['id']}`", unsafe_allow_html=True)[m
+[31m-        if s["warning"]:[m
+[31m-            st.warning("An error message appears in this feature's console output.")[m
+[31m-        t1, t2, t3 = st.tabs(["Report", "Console output", "Export"])[m
+[31m-        with t1:[m
+[31m-            if not s["reports"]:[m
+[31m-                st.info("This feature produces no report file. See Console output.")[m
+[31m-            for fname, data in s["reports"].items():[m
+[31m-                st.subheader(fname)[m
+[32m+[m
+[32m+[m[32m        stage = scan["stages"][name][m
+[32m+[m
+[32m+[m[32m        if stage["warning"]:[m
+[32m+[m
+[32m+[m[32m            status = "warn"[m
+[32m+[m
+[32m+[m[32m        elif stage["status"] == "FAIL":[m
+[32m+[m
+[32m+[m[32m            status = "failed"[m
+[32m+[m
+[32m+[m[32m        else:[m
+[32m+[m
+[32m+[m[32m            status = "done"[m
+[32m+[m
+[32m+[m[32m        st.markdown([m
+[32m+[m[32m            f"""[m
+[32m+[m[32m            <span class="badge"[m
+[32m+[m[32m            style="background:{COLOR[status]}">[m
+[32m+[m[32m            {ICON[status]}[m
+[32m+[m[32m            {[m
+[32m+[m[32m                stage["status"][m
+[32m+[m[32m                if not stage["warning"][m
+[32m+[m[32m                else "ERROR IN OUTPUT"[m
+[32m+[m[32m            }[m
+[32m+[m[32m            </span>[m
+[32m+[m
+[32m+[m[32m            &nbsp; Scan `{scan['id']}`[m
+[32m+[m[32m            """,[m
+[32m+[m[32m            unsafe_allow_html=True[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m        if stage["warning"]:[m
+[32m+[m
+[32m+[m[32m            st.warning([m
+[32m+[m[32m                "An error message appears in "[m
+[32m+[m[32m                "this feature's console output."[m
+[32m+[m[32m            )[m
+[32m+[m
+[32m+[m[32m        tab_report, tab_console, tab_export = st.tabs([m
+[32m+[m[32m            [[m
+[32m+[m[32m                "Report",[m
+[32m+[m[32m                "Console Output",[m
+[32m+[m[32m                "Export"[m
+[32m+[m[32m            ][m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m        # ----------------------------------------------------[m
+[32m+[m[32m        # Report[m
+[32m+[m[32m        # ----------------------------------------------------[m
+[32m+[m
+[32m+[m[32m        with tab_report:[m
+[32m+[m
+[32m+[m[32m            if not stage["reports"]:[m
+[32m+[m
+[32m+[m[32m                st.info([m
+[32m+[m[32m                    "This feature produces no report file. "[m
+[32m+[m[32m                    "See Console Output."[m
+[32m+[m[32m                )[m
+[32m+[m
+[32m+[m[32m            for filename, data in stage[[m
+[32m+[m[32m                "reports"[m
+[32m+[m[32m            ].items():[m
+[32m+[m
+[32m+[m[32m                st.subheader([m
+[32m+[m[32m                    filename[m
+[32m+[m[32m                )[m
+[32m+[m
+                 render(data)[m
+[31m-        with t2:[m
+[31m-            st.code(s["output"] or "No console output captured.", language="text")[m
+[31m-        with t3:[m
+[31m-            export_buttons({"feature": name, "status": s["status"], "reports": s["reports"],[m
+[31m-                            "console_output": s["output"]},[m
+[31m-                           name.lower().replace(" ", "_").replace("-", "_"), f"f_{name}")[m
+[32m+[m
+[32m+[m[32m        # ----------------------------------------------------[m
+[32m+[m[32m        # Console[m
+[32m+[m[32m        # ----------------------------------------------------[m
+[32m+[m
+[32m+[m[32m        with tab_console:[m
+[32m+[m
+[32m+[m[32m            st.code([m
+[32m+[m[32m                stage["output"][m
+[32m+[m[32m                or "No console output captured.",[m
+[32m+[m[32m                language="text"[m
+[32m+[m[32m            )[m
+[32m+[m
+[32m+[m[32m        # ----------------------------------------------------[m
+[32m+[m[32m        # Export[m
+[32m+[m[32m        # ----------------------------------------------------[m
+[32m+[m
+[32m+[m[32m        with tab_export:[m
+[32m+[m
+[32m+[m[32m            export_buttons([m
+[32m+[m[32m                {[m
+[32m+[m[32m                    "feature": name,[m
+[32m+[m[32m                    "status": stage["status"],[m
+[32m+[m[32m                    "reports": stage["reports"],[m
+[32m+[m[32m                    "console_output": stage["output"],[m
+[32m+[m[32m                },[m
+[32m+[m
+[32m+[m[32m                name.lower()[m
+[32m+[m[32m                    .replace(" ", "_")[m
+[32m+[m[32m                    .replace("-", "_"),[m
+[32m+[m
+[32m+[m[32m                f"feature_{name}"[m
+[32m+[m[32m            )[m
+[32m+[m
+     return page[m
+ [m
+ [m
+[32m+[m[32m# ============================================================[m
+[32m+[m[32m# HISTORY[m
+[32m+[m[32m# ============================================================[m
+[32m+[m
+ def page_history():[m
+[31m-    st.title("🗂 History")[m
+[31m-    saved = list_saved(st.session_state.get("project_dir", DEFAULT_DIR))[m
+[32m+[m
+[32m+[m[32m    st.title([m
+[32m+[m[32m        "🗂 History"[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    saved = list_saved([m
+[32m+[m[32m        DEFAULT_DIR[m
+[32m+[m[32m    )[m
+[32m+[m
+     if not saved:[m
+[31m-        st.info("No saved scans yet.")[m
+[32m+[m
+[32m+[m[32m        st.info([m
+[32m+[m[32m            "No saved scans yet."[m
+[32m+[m[32m        )[m
+[32m+[m
+         return[m
+[31m-    pick = st.selectbox("Saved scans", saved)[m
+[31m-    if st.button("Open this scan", type="primary"):[m
+[31m-        st.session_state.scan = read_json(os.path.join([m
+[31m-            st.session_state.get("project_dir", DEFAULT_DIR), "dashboard_scans", pick, "scan.json"))[m
+[31m-        st.success("Scan loaded. Open the Dashboard or any feature page.")[m
+ [m
+[32m+[m[32m    selected = st.selectbox([m
+[32m+[m[32m        "Saved Scans",[m
+[32m+[m[32m        saved[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    if st.button([m
+[32m+[m[32m        "Open This Scan",[m
+[32m+[m[32m        type="primary"[m
+[32m+[m[32m    ):[m
+[32m+[m
+[32m+[m[32m        path = os.path.join([m
+[32m+[m[32m            DEFAULT_DIR,[m
+[32m+[m[32m            "dashboard_scans",[m
+[32m+[m[32m            selected,[m
+[32m+[m[32m            "scan.json"[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m        scan = read_json(path)[m
+[32m+[m
+[32m+[m[32m        if scan:[m
+[32m+[m
+[32m+[m[32m            st.session_state.scan = scan[m
+[32m+[m
+[32m+[m[32m            st.success([m
+[32m+[m[32m                "Scan loaded successfully."[m
+[32m+[m[32m            )[m
+[32m+[m
+[32m+[m[32m            st.info([m
+[32m+[m[32m                "Open Dashboard or a feature "[m
+[32m+[m[32m                "from the sidebar."[m
+[32m+[m[32m            )[m
+[32m+[m
+[32m+[m[32m        else:[m
+[32m+[m
+[32m+[m[32m            st.error([m
+[32m+[m[32m                "Unable to read the selected scan."[m
+[32m+[m[32m            )[m
+[32m+[m
+[32m+[m
+[32m+[m[32m# ============================================================[m
+[32m+[m[32m# DOWNLOADS[m
+[32m+[m[32m# ============================================================[m
+ [m
+ def page_downloads():[m
+[31m-    st.title("⬇ Downloads")[m
+[32m+[m
+[32m+[m[32m    st.title([m
+[32m+[m[32m        "⬇ Downloads"[m
+[32m+[m[32m    )[m
+[32m+[m
+     scan = current_scan()[m
+[32m+[m
+     if not scan:[m
+[32m+[m
+         return need_scan()[m
+[31m-    inc = st.checkbox("Include console output of each feature", value=False)[m
+[31m-    rep = final_report(scan, inc)[m
+[31m-    st.markdown("**Final report (all features)**")[m
+[31m-    export_buttons(rep, f"least_privilege_report_{scan['id']}", "dl_all")[m
+[31m-    with st.expander("Preview (YAML)"):[m
+[31m-        st.code(to_yaml(rep)[:6000], language="yaml")[m
+[31m-    st.markdown("**Per-feature files**")[m
+[31m-    for name, s in scan["stages"].items():[m
+[32m+[m
+[32m+[m[32m    include_output = st.checkbox([m
+[32m+[m[32m        "Include console output of each feature",[m
+[32m+[m[32m        value=False[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    report = final_report([m
+[32m+[m[32m        scan,[m
+[32m+[m[32m        include_output[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    st.markdown([m
+[32m+[m[32m        "**Final Report — All Features**"[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    export_buttons([m
+[32m+[m[32m        report,[m
+[32m+[m[32m        f"least_privilege_report_{scan['id']}",[m
+[32m+[m[32m        "download_all"[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    with st.expander([m
+[32m+[m[32m        "Preview YAML"[m
+[32m+[m[32m    ):[m
+[32m+[m
+[32m+[m[32m        st.code([m
+[32m+[m[32m            to_yaml(report)[:6000],[m
+[32m+[m[32m            language="yaml"[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m    st.markdown([m
+[32m+[m[32m        "**Per-Feature Files**"[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    for name, stage in scan[[m
+[32m+[m[32m        "stages"[m
+[32m+[m[32m    ].items():[m
+[32m+[m
+         with st.expander(name):[m
+[31m-            export_buttons({"feature": name, "status": s["status"], "reports": s["reports"]},[m
+[31m-                           name.lower().replace(" ", "_").replace("-", "_"), f"dl_{name}")[m
+ [m
+[32m+[m[32m            export_buttons([m
+[32m+[m[32m                {[m
+[32m+[m[32m                    "feature": name,[m
+[32m+[m[32m                    "status": stage["status"],[m
+[32m+[m[32m                    "reports": stage["reports"],[m
+[32m+[m[32m                },[m
+[32m+[m
+[32m+[m[32m                name.lower()[m
+[32m+[m[32m                    .replace(" ", "_")[m
+[32m+[m[32m                    .replace("-", "_"),[m
+[32m+[m
+[32m+[m[32m                f"download_{name}"[m
+[32m+[m[32m            )[m
+[32m+[m
+[32m+[m
+[32m+[m[32m# ============================================================[m
+[32m+[m[32m# NAVIGATION[m
+[32m+[m[32m# ============================================================[m
+[32m+[m
+[32m+[m[32mconnect_page = st.Page([m
+[32m+[m[32m    page_connect,[m
+[32m+[m[32m    title="Connect AWS Account",[m
+[32m+[m[32m    icon="🔌",[m
+[32m+[m[32m    url_path="connect"[m
+[32m+[m[32m)[m
+[32m+[m
+[32m+[m[32mpipeline_page = st.Page([m
+[32m+[m[32m    page_pipeline,[m
+[32m+[m[32m    title="Run Pipeline",[m
+[32m+[m[32m    icon="▶️",[m
+[32m+[m[32m    url_path="pipeline"[m
+[32m+[m[32m)[m
+ [m
+[31m-# ───────────────────────── navigation ─────────────────────────[m
+[31m-connect_page = st.Page(page_connect, title="Connect AWS Account", icon="🔌", url_path="connect")[m
+[31m-pipeline_page = st.Page(page_pipeline, title="Run Pipeline", icon="▶️", url_path="pipeline")[m
+ nav = {[m
+[31m-    "Setup": [connect_page, pipeline_page],[m
+[31m-    "Overview": [st.Page(page_overview, title="Dashboard", icon="📊", url_path="dashboard")],[m
+[32m+[m
+[32m+[m[32m    "Setup": [[m
+[32m+[m[32m        connect_page,[m
+[32m+[m[32m        pipeline_page[m
+[32m+[m[32m    ],[m
+[32m+[m
+[32m+[m[32m    "Overview": [[m
+[32m+[m[32m        st.Page([m
+[32m+[m[32m            page_overview,[m
+[32m+[m[32m            title="Dashboard",[m
+[32m+[m[32m            icon="📊",[m
+[32m+[m[32m            url_path="dashboard"[m
+[32m+[m[32m        )[m
+[32m+[m[32m    ][m
+ }[m
+[31m-for group, feats in GROUPS.items():[m
+[31m-    nav[group] = [st.Page(make_feature_page(n), title=n, icon="🔹",[m
+[31m-                          url_path=re.sub(r"[^a-z0-9]+", "-", n.lower()).strip("-"))[m
+[31m-                  for n in feats][m
+[31m-nav["Results"] = [st.Page(page_downloads, title="Downloads", icon="⬇", url_path="downloads"),[m
+[31m-                  st.Page(page_history, title="History", icon="🗂", url_path="history")][m
+[32m+[m
+[32m+[m
+[32m+[m[32mfor group, features in GROUPS.items():[m
+[32m+[m
+[32m+[m[32m    nav[group] = [[m
+[32m+[m
+[32m+[m[32m        st.Page([m
+[32m+[m[32m            make_feature_page(name),[m
+[32m+[m[32m            title=name,[m
+[32m+[m[32m            icon="🔹",[m
+[32m+[m[32m            url_path=re.sub([m
+[32m+[m[32m                r"[^a-z0-9]+",[m
+[32m+[m[32m                "-",[m
+[32m+[m[32m                name.lower()[m
+[32m+[m[32m            ).strip("-")[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m        for name in features[m
+[32m+[m[32m    ][m
+[32m+[m
+[32m+[m
+[32m+[m[32mnav["Results"] = [[m
+[32m+[m
+[32m+[m[32m    st.Page([m
+[32m+[m[32m        page_downloads,[m
+[32m+[m[32m        title="Downloads",[m
+[32m+[m[32m        icon="⬇",[m
+[32m+[m[32m        url_path="downloads"[m
+[32m+[m[32m    ),[m
+[32m+[m
+[32m+[m[32m    st.Page([m
+[32m+[m[32m        page_history,[m
+[32m+[m[32m        title="History",[m
+[32m+[m[32m        icon="🗂",[m
+[32m+[m[32m        url_path="history"[m
+[32m+[m[32m    )[m
+[32m+[m[32m][m
+[32m+[m
+[32m+[m
+[32m+[m[32m# ============================================================[m
+[32m+[m[32m# SIDEBAR[m
+[32m+[m[32m# ============================================================[m
+ [m
+ with st.sidebar:[m
+[31m-    st.markdown("### 🔐 Least Privilege Enforcer")[m
+[32m+[m
+[32m+[m[32m    st.markdown([m
+[32m+[m[32m        "### 🔐 LeastPrivForge"[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    st.caption([m
+[32m+[m[32m        "AI-Driven Cloud Least Privilege "[m
+[32m+[m[32m        "Enforcement System"[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m[32m    st.divider()[m
+[32m+[m
+     if "env" in st.session_state:[m
+[31m-        st.caption(f"Connected: {st.session_state.account}")[m
+[32m+[m
+[32m+[m[32m        st.success([m
+[32m+[m[32m            f"Connected: "[m
+[32m+[m[32m            f"{st.session_state.account}"[m
+[32m+[m[32m        )[m
+[32m+[m
+     else:[m
+[31m-        st.caption("Not connected")[m
+ [m
+[31m-st.navigation(nav).run()[m
+[32m+[m[32m        st.warning([m
+[32m+[m[32m            "Not connected"[m
+[32m+[m[32m        )[m
+[32m+[m
+[32m+[m[32m    st.caption([m
+[32m+[m[32m        "21-stage security pipeline"[m
+[32m+[m[32m    )[m
+[32m+[m
+[32m+[m
+[32m+[m[32m# ============================================================[m
+[32m+[m[32m# RUN APPLICATION[m
+[32m+[m[32m# ============================================================[m
+[32m+[m
+[32m+[m[32mst.navigation(nav).run()[m
+\ No newline at end of file[m
+[1mdiff --git a/requirements.txt b/requirements.txt[m
+[1mindex 5e99112..a8b5f9c 100644[m
+[1m--- a/requirements.txt[m
+[1m+++ b/requirements.txt[m
+[36m@@ -1,14 +1,9 @@[m
+[31m-# AWS integration[m
+[32m+[m[32mstreamlit[m
+ boto3==1.40.29[m
+[31m-[m
+[31m-# Data processing[m
+ pandas==2.3.2[m
+ numpy==2.3.3[m
+[31m-[m
+[31m-# Machine learning / XGBoost risk prediction[m
+ scikit-learn==1.7.2[m
+ xgboost==3.0.5[m
+ joblib==1.5.2[m
+[31m-[m
+[31m-# Local AI policy recommendation[m
+[31m-ollama==0.5.3[m
+\ No newline at end of file[m
+[32m+[m[32mollama==0.5.3[m
+[32m+[m[32mPyYAML[m
+\ No newline at end of file[m

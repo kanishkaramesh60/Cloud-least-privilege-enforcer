@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        LeastPrivForge
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <header>
+
+        <h1>
+            LeastPrivForge
+        </h1>
+
+        <p>
+            AI-Driven Cloud Least Privilege Enforcement System
+        </p>
+
+    </header>
+
+
+    <section class="controls">
+
+        <button
+            onclick="startPipeline()"
+            id="startButton"
+        >
+            ▶ Start Security Scan
+        </button>
+
+        <button
+            onclick="stopPipeline()"
+            id="stopButton"
+        >
+            ■ Stop
+        </button>
+
+        <span id="status">
+            IDLE
+        </span>
+
+    </section>
+
+
+    <section class="pipeline">
+
+        <h2>
+            Security Pipeline
+        </h2>
+
+        <div id="pipelineStages">
+
+            <div class="stage">
+                IAM Scanner
+                <span>Pending</span>
+            </div>
+
+            <div class="stage">
+                CloudTrail Collector
+                <span>Pending</span>
+            </div>
+
+            <div class="stage">
+                CloudTrail Analyzer
+                <span>Pending</span>
+            </div>
+
+            <div class="stage">
+                CloudTrail Behavioral Analysis
+                <span>Pending</span>
+            </div>
+
+            <div class="stage">
+                Action Mapper
+                <span>Pending</span>
+            </div>
+
+            <div class="stage">
+                Identity Classification
+                <span>Pending</span>
+            </div>
+
+            <div class="stage">
+                Orphan Detection
+                <span>Pending</span>
+            </div>
+
+            <div class="stage">
+                Temporal Analysis
+                <span>Pending</span>
+            </div>
+
+            <div class="stage">
+                Permission Analysis
+                <span>Pending</span>
+            </div>
+
+            <div class="stage">
+                Risk Scoring
+                <span>Pending</span>
+            </div>
+
+            <div class="stage">
+                XGBoost Risk Prediction
+                <span>Pending</span>
+            </div>
+
+            <div class="stage">
+                AI Policy Recommendation
+                <span>Pending</span>
+            </div>
+
+            <div class="stage">
+                Policy Validation
+                <span>Pending</span>
+            </div>
+
+            <div class="stage">
+                IAM Policy Simulation
+                <span>Pending</span>
+            </div>
+
+            <div class="stage">
+                Verification Controller
+                <span>Pending</span>
+            </div>
+
+            <div class="stage">
+                Decision Engine
+                <span>Pending</span>
+            </div>
+
+            <div class="stage">
+                Rollback Controller
+                <span>Pending</span>
+            </div>
+
+            <div class="stage">
+                Rollback Verification
+                <span>Pending</span>
+            </div>
+
+            <div class="stage">
+                Deployment Review
+                <span>Pending</span>
+            </div>
+
+            <div class="stage">
+                Deployment Controller
+                <span>Pending</span>
+            </div>
+
+            <div class="stage">
+                Post-Deployment Verification
+                <span>Pending</span>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="console">
+
+        <h2>
+            Live Pipeline Output
+        </h2>
+
+        <pre id="consoleOutput">
+Waiting for pipeline...
+        </pre>
+
+    </section>
+
+
+    <section class="reports">
+
+        <h2>
+            Reports
+        </h2>
+
+        <div id="reports">
+            No reports available.
+        </div>
+
+    </section>
+
+</div>
+
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+
+</html>

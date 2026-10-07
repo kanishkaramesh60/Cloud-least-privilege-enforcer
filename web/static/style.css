@@ -1,0 +1,168 @@
+body {
+
+    margin: 0;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    background:
+        #0b1120;
+
+    color:
+        #e5e7eb;
+}
+
+
+.container {
+
+    width: 90%;
+
+    max-width: 1200px;
+
+    margin: auto;
+
+    padding: 30px;
+}
+
+
+header {
+
+    text-align: center;
+
+    margin-bottom: 30px;
+}
+
+
+header h1 {
+
+    font-size: 42px;
+
+    margin-bottom: 8px;
+}
+
+
+header p {
+
+    color: #94a3b8;
+
+    font-size: 18px;
+}
+
+
+.controls {
+
+    display: flex;
+
+    gap: 15px;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+}
+
+
+button {
+
+    padding: 12px 20px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+}
+
+
+#startButton {
+
+    background: #22c55e;
+
+    color: white;
+}
+
+
+#stopButton {
+
+    background: #ef4444;
+
+    color: white;
+}
+
+
+#status {
+
+    padding: 10px 16px;
+
+    border-radius: 8px;
+
+    background: #1e293b;
+}
+
+
+.pipeline,
+.console,
+.reports {
+
+    background: #111827;
+
+    border-radius: 12px;
+
+    padding: 20px;
+
+    margin-bottom: 25px;
+}
+
+
+.stage {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: 13px;
+
+    margin: 7px 0;
+
+    background: #1f2937;
+
+    border-radius: 7px;
+}
+
+
+.stage span {
+
+    color: #94a3b8;
+}
+
+
+.console pre {
+
+    height: 350px;
+
+    overflow-y: auto;
+
+    background: #020617;
+
+    padding: 15px;
+
+    border-radius: 8px;
+
+    color: #22c55e;
+
+    white-space: pre-wrap;
+}
+
+
+.report-item {
+
+    padding: 10px;
+
+    margin: 5px 0;
+
+    background: #1f2937;
+
+    border-radius: 6px;
+}
